@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.xross.tools.xunit.editor.UnitDiagramGraphicalEditor"
+            default="true"
+            contributorClass="com.xross.tools.xunit.editor.UnitActionBarContributor"
+            extensions="xunit"
+            icon="icons/chain.ico"
+            id="com.ebay.tools.xross.editor.UnitDiagramGraphicalEditor"
+            name="Xross Unit Diagram Editor">
+         <contentTypeBinding
+               contentTypeId="com.ebay.tools.xross.xunit">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.ebay.tools.xross"
+            name="Xross Tools">
+      </category>
+      <wizard
+            category="com.ebay.tools.xross"
+            class="com.xross.tools.xunit.editor.NewXunitWizard"
+            icon="icons/chain.ico"
+            id="com.ebay.tools.xross.editor.newWizard"
+            name="New Xross Unit Wizard">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            alias-for="xu"
+            base-type="org.eclipse.core.runtime.xml"
+            file-extensions="xunit"
+            id="com.ebay.tools.xross.xunit"
+            name="Xross Unit"
+            priority="high">
+      </content-type>
+   </extension>
+</plugin>
