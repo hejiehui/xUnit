@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.ebay.tools.xross.feature"
+      id="com.xross.tools.xunit.feature"
       label="Xross tools"
       version="1.0.0.qualifier"
       provider-name="he, jiehui">
 
-   <description url="http://wiki2.arch.ebay.com/display/TOOLSDEV/Innovation">
+   <description>
       Include editor and runtime for decision tree and xross unit.
-
 Xross unit can build system by flow diagram.
 Decision tree can model complex logic by a decision tree diagram.
-
-For more detail:
-http://wiki2.arch.ebay.com/display/TOOLSDEV/Innovation
    </description>
 
    <copyright>
@@ -22,7 +18,7 @@ http://wiki2.arch.ebay.com/display/TOOLSDEV/Innovation
    <license>
       For free use. 
 Author: Jerry He
-e-mail: jiehe@ebay.com  he_jiehui@yahoo.com.cn
+e-mail: he_jiehui@yahoo.com.cn
    </license>
 
    <plugin
