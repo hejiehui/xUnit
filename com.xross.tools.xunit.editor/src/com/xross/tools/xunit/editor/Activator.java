@@ -24,7 +24,7 @@ import com.xross.tools.xunit.editor.model.ValidatorNode;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID	= "com.ebay.tools.xross.editor";	//$NON-NLS-1$
+	public static final String PLUGIN_ID	= "com.xross.tools.xunit.editor";	//$NON-NLS-1$
 	
 	public static final String HOME = "icons/";
 	public static final String ICO = ".ico";
