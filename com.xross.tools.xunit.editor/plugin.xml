@@ -10,24 +10,24 @@
             contributorClass="com.xross.tools.xunit.editor.UnitActionBarContributor"
             extensions="xunit"
             icon="icons/chain.ico"
-            id="com.ebay.tools.xross.editor.UnitDiagramGraphicalEditor"
+            id="com.xross.tools.editor.UnitDiagramGraphicalEditor"
             name="Xross Unit Diagram Editor">
          <contentTypeBinding
-               contentTypeId="com.ebay.tools.xross.xunit">
+               contentTypeId="com.xross.tools.xunit">
          </contentTypeBinding>
       </editor>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            id="com.ebay.tools.xross"
+            id="com.xross.tools"
             name="Xross Tools">
       </category>
       <wizard
-            category="com.ebay.tools.xross"
+            category="com.xross.tools"
             class="com.xross.tools.xunit.editor.NewXunitWizard"
             icon="icons/chain.ico"
-            id="com.ebay.tools.xross.editor.newWizard"
+            id="com.xross.tools.xunit.editor.newWizard"
             name="New Xross Unit Wizard">
       </wizard>
    </extension>
@@ -37,7 +37,7 @@
             alias-for="xu"
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="xunit"
-            id="com.ebay.tools.xross.xunit"
+            id="com.xross.tools.xunit"
             name="Xross Unit"
             priority="high">
       </content-type>
