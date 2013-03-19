@@ -179,9 +179,6 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     }
     
     private UnitNodeDiagram getFromXML(InputStream is) throws Exception {
-//		ObjectInputStream ois = new ObjectInputStream(is);
-//		return (UnitNodeDiagram)ois.readObject();
-
     	Document doc= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is); 
     	return diagramFactory.getFromDocument(doc);
     }
