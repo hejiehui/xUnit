@@ -110,9 +110,6 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     }
     
     private void writeAsXML(OutputStream out) throws Exception{
-//    	ObjectOutputStream out = new ObjectOutputStream(os);
-//    	out.writeObject(diagram);
-//    	out.close();	
     	TransformerFactory tFactory =TransformerFactory.newInstance();
     	Transformer transformer = tFactory.newTransformer();
     	DOMSource source = new DOMSource(diagramFactory.writeToDocument(diagram));
