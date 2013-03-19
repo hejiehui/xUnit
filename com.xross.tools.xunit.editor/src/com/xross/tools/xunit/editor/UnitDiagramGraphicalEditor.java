@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.EventObject;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -19,6 +20,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.RootEditPart;
+import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -51,6 +53,12 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     
     private UnitNodeDiagramFactory diagramFactory = new UnitNodeDiagramFactory();
     
+    private CommandStackListener commandStackListener = new CommandStackListener() {
+        public void commandStackChanged(EventObject event) {
+                firePropertyChange(PROP_DIRTY);
+        }
+    };
+
     public UnitDiagramGraphicalEditor() {
         setEditDomain(new DefaultEditDomain(this));
     }
@@ -62,6 +70,7 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
         getGraphicalViewer().setEditPartFactory(new UnitNodePartFactory());
         getGraphicalViewer().setContextMenu(new UnitContextMenuProvider(getGraphicalViewer(), this));
         initActions(root);
+        getCommandStack().addCommandStackListener(commandStackListener);
     }
     
     private void initActions(ScalableFreeformRootEditPart root){
@@ -146,6 +155,11 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     		e.printStackTrace();
     	} 
     }
+    
+	public boolean isDirty() {
+		return getCommandStack().isDirty();
+	}
+
 
     public boolean isSaveAsAllowed() {
         return true;
