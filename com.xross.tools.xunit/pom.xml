@@ -37,6 +37,22 @@
 		</plugins>
 	</build>
 	<distributionManagement>
+		<repository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>nexus</id>
+			<url>
+				http://maven.dev.sh.ctripcorp.com:8081/nexus/content/repositories/sysdevrelease/
+			</url>
+		</repository>
+		<snapshotRepository>
+			<uniqueVersion>false</uniqueVersion>
+			<id>nexus</id>
+			<url>
+				http://maven.dev.sh.ctripcorp.com:8081/nexus/content/repositories/sysdevsnapshot/
+			</url>
+		</snapshotRepository>
+	</distributionManagement>
+	<!--   <distributionManagement>
 		<snapshotRepository>
 			<id>xross-snapshot-repo</id>
 			<name>Nexus Snapshot Repository</name>
@@ -47,5 +63,5 @@
 			<name>Nexus Release Repository</name>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
-	</distributionManagement>
+	</distributionManagement> -->
 </project>
