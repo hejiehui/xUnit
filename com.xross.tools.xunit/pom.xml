@@ -34,6 +34,18 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<distributionManagement>
@@ -52,16 +64,9 @@
 			</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<!--   <distributionManagement>
-		<snapshotRepository>
-			<id>xross-snapshot-repo</id>
-			<name>Nexus Snapshot Repository</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-		</snapshotRepository>
-		<repository>
-			<id>xross-releases-repo</id>
-			<name>Nexus Release Repository</name>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-	</distributionManagement> -->
+	<!-- <distributionManagement> <snapshotRepository> <id>xross-snapshot-repo</id> 
+		<name>Nexus Snapshot Repository</name> <url>https://oss.sonatype.org/content/repositories/snapshots/</url> 
+		</snapshotRepository> <repository> <id>xross-releases-repo</id> <name>Nexus 
+		Release Repository</name> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
+		</repository> </distributionManagement> -->
 </project>
