@@ -8,7 +8,7 @@ public abstract class StructurePrimaryNode extends PrimaryNode {
 	public StructurePrimaryNode(String name, BehaviorType type){
 		super(name, type);
 	}
-
+/*	should not allow user specify structure type. TODO remove structure type
 	public IPropertyDescriptor[] getAdditionalPropertyDescriptors(){
 		IPropertyDescriptor[] descriptors = new IPropertyDescriptor[]{
 				getDescriptor(PROP_STRUCTURE_TYPE, StructureType.names),
@@ -29,5 +29,5 @@ public abstract class StructurePrimaryNode extends PrimaryNode {
 			setStructureType(StructureType.getType((Integer)value));
 		else
 			super.setPropertyValue(propName, value);
-	}
+	}*/
 }
