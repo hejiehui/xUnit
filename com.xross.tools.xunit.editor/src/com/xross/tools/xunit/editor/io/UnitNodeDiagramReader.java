@@ -150,8 +150,10 @@ public class UnitNodeDiagramReader implements UnitConstants{
 		if(unit instanceof CompositeUnitNode)
 			unit.setType(BehaviorType.valueOf(getAttribute(node, TYPE)));
 		
+		/*
 		if(unit instanceof StructurePrimaryNode)
 			unit.setStructureType(StructureType.valueOf(getAttribute(node, STRUCTURE_TYPE)));
+		*/
 	}
 	
 	private UnitNode createChildNode(Node node, String name){

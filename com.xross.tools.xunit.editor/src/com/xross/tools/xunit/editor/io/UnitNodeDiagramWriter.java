@@ -134,9 +134,10 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 
 		if(unit instanceof CompositeUnitNode)
 			node.setAttribute(TYPE, unit.getType().name());
-		
+		/*
 		if(unit instanceof StructurePrimaryNode)
 			node.setAttribute(STRUCTURE_TYPE, unit.getStructureType().name());
+		*/
 	}
 
 	private Element createProcessorNode(Document doc, UnitNode unit){
