@@ -23,8 +23,6 @@ import com.xross.tools.xunit.editor.model.LocatorNode;
 import com.xross.tools.xunit.editor.model.PostValidationLoopNode;
 import com.xross.tools.xunit.editor.model.PreValidationLoopNode;
 import com.xross.tools.xunit.editor.model.ProcessorNode;
-import com.xross.tools.xunit.editor.model.StructurePrimaryNode;
-import com.xross.tools.xunit.editor.model.StructureType;
 import com.xross.tools.xunit.editor.model.UnitConfigure;
 import com.xross.tools.xunit.editor.model.UnitConstants;
 import com.xross.tools.xunit.editor.model.UnitNode;
@@ -149,11 +147,6 @@ public class UnitNodeDiagramReader implements UnitConstants{
 
 		if(unit instanceof CompositeUnitNode)
 			unit.setType(BehaviorType.valueOf(getAttribute(node, TYPE)));
-		
-		/*
-		if(unit instanceof StructurePrimaryNode)
-			unit.setStructureType(StructureType.valueOf(getAttribute(node, STRUCTURE_TYPE)));
-		*/
 	}
 	
 	private UnitNode createChildNode(Node node, String name){

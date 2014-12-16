@@ -70,7 +70,6 @@ public abstract class BaseNodePart extends AbstractGraphicalEditPart implements 
 		append(sb, PROP_CLASS, node.getClassName());
 		append(sb, PROP_REFERENCE, node.getReferenceName());
 		append(sb, PROP_BEHAVIOR_TYPE, node.getType().name());
-		append(sb, PROP_STRUCTURE_TYPE, node.getStructureType().name());
 		append(sb, PROP_DESCRIPTION, node.getDescription());
 
 		return sb.toString();

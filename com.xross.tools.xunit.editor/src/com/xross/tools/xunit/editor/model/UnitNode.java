@@ -23,7 +23,6 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	private String description;
 	
 	private BehaviorType type = BehaviorType.processor;
-	private StructureType structureType = StructureType.primary;
 	
 	private String className = MSG_DEFAULT;
 	private String referenceName;
@@ -62,15 +61,6 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	 */
 	public void setType(BehaviorType type) {
 		this.type = type;
-		firePropertyChange(PROP_NODE);
-	}
-	
-	public StructureType getStructureType() {
-		return structureType;
-	}
-
-	public void setStructureType(StructureType structureType) {
-		this.structureType = structureType;
 		firePropertyChange(PROP_NODE);
 	}
 	
@@ -124,8 +114,6 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 			return helper.getValue(className);
 		if (PROP_BEHAVIOR_TYPE.equals(propName))
 			return type.ordinal();
-		if (PROP_STRUCTURE_TYPE.equals(propName))
-			return structureType.ordinal();
 		if (PROP_REFERENCE.equals(propName))
 			return helper.getIndex(getReferenceValues(), referenceName);
 
@@ -141,8 +129,6 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 			setClassName((String)value);
 		if (PROP_BEHAVIOR_TYPE.equals(propName))
 			setType(BehaviorType.getType((Integer)value));
-		if (PROP_STRUCTURE_TYPE.equals(propName))
-			setStructureType(StructureType.getType((Integer)value));
 		if (PROP_REFERENCE.equals(propName))
 			setReferenceName(getReferenceValues()[(Integer)value]);
 	}

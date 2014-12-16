@@ -2,7 +2,7 @@ package com.xross.tools.xunit.editor.model;
 
 import com.xross.tools.xunit.BehaviorType;
 
-public class ConverterNode extends StructurePrimaryNode {
+public class ConverterNode extends PrimaryNode {
 	public ConverterNode(){
 		this(BehaviorType.converter.name());
 	}

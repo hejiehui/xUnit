@@ -12,6 +12,7 @@ import com.xross.tools.xunit.BehaviorType;
  */
 public abstract class CompositeUnitNode extends UnitNode {
 	private boolean vertical;
+	private StructureType structureType = StructureType.primary;
 	
 	public CompositeUnitNode(String name, StructureType structureType){
 		this(name, structureType, false);
@@ -19,10 +20,14 @@ public abstract class CompositeUnitNode extends UnitNode {
 	
 	public CompositeUnitNode(String name, StructureType structureType, boolean vertical){
 		super(name);
-		super.setStructureType(structureType);
 		this.vertical = vertical;
+		this.structureType = structureType;
 	}
 	
+	public StructureType getStructureType() {
+		return structureType;
+	}
+
 	public boolean isVertical() {
 		return vertical;
 	}
@@ -34,11 +39,6 @@ public abstract class CompositeUnitNode extends UnitNode {
 	public String[] getReferenceValues(){
 		return helper.getReferenceNames(getType(), getStructureType(), getName());
 	}
-	
-	/**
-	 * Do not allow structure type to be changed for compiste node
-	 */
-	public final void setStructureType(StructureType type){}
 	
 	public IPropertyDescriptor[] getAdditionalPropertyDescriptors(){
 		IPropertyDescriptor[] descriptors = new IPropertyDescriptor[]{

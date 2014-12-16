@@ -35,7 +35,7 @@ public class UnitNodeHelper implements UnitConstants {
 				continue;
 			if(name.equals(excluded))
 				continue;
-			if(!(unit instanceof StructurePrimaryNode))
+			if(!(unit instanceof PrimaryNode))
 				continue;
 			if(isValid(unit.getReferenceName()))
 				continue;

@@ -16,7 +16,6 @@ import com.xross.tools.xunit.editor.model.LocatorNode;
 import com.xross.tools.xunit.editor.model.PostValidationLoopNode;
 import com.xross.tools.xunit.editor.model.PreValidationLoopNode;
 import com.xross.tools.xunit.editor.model.ProcessorNode;
-import com.xross.tools.xunit.editor.model.StructurePrimaryNode;
 import com.xross.tools.xunit.editor.model.UnitConfigure;
 import com.xross.tools.xunit.editor.model.UnitConstants;
 import com.xross.tools.xunit.editor.model.UnitNode;
@@ -134,10 +133,6 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 
 		if(unit instanceof CompositeUnitNode)
 			node.setAttribute(TYPE, unit.getType().name());
-		/*
-		if(unit instanceof StructurePrimaryNode)
-			node.setAttribute(STRUCTURE_TYPE, unit.getStructureType().name());
-		*/
 	}
 
 	private Element createProcessorNode(Document doc, UnitNode unit){

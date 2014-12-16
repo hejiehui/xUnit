@@ -28,5 +28,5 @@ public abstract class PrimaryNode extends UnitNode {
 	/**
 	 * Do not allow type to be changed for primary type
 	 */
-	public void setType(BehaviorType type){}
+	public final void setType(BehaviorType type){}
 }
