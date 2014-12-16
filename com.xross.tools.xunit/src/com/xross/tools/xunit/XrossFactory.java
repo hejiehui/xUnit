@@ -2,16 +2,22 @@ package com.xross.tools.xunit;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import com.xross.tools.xunit.def.AdapterDef;
 import com.xross.tools.xunit.def.BiBranchDef;
@@ -27,22 +33,43 @@ import com.xross.tools.xunit.def.ValidatorDef;
 public class XrossFactory implements XrossUnitConstants {
 	private UnitConfigure configure = new UnitConfigure();
 	
-	public static XrossFactory createFromXML(String path){
-		FileInputStream in = null;
+	public static XrossFactory load(URL url) throws Exception {
+        return load(url.openStream());
+	}
+	
+	/**
+	 * It will first check model file from file path, if it does not exist, it will try classpath then. 
+	 * @param path
+	 * @return
+	 * @throws Exception
+	 */
+	public static XrossFactory load(String path) throws Exception {
+		InputStream in;
+		File f = new File(path);
+		if(f.exists())
+			in = new FileInputStream(f);
+		else {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			if (classLoader == null) {
+				classLoader = XrossFactory.class.getClassLoader();
+			}
+			in = classLoader.getResource(path).openStream();
+		}
+		
+		return load(in);
+	}
+	
+	public static XrossFactory load(InputStream in) throws Exception {
 		XrossFactory factory = null;
 		try{
-			in = new FileInputStream(new File(path));
 			Document doc= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
 			factory = getFromDocument(doc);
-			in.close();
-		}catch(Throwable e){
-			if(in != null)
-				try{
+		} finally {
+			try{
+				if(in != null)
 					in.close();
-				}catch(Throwable e1){
-					
-				}
-			e.printStackTrace();
+			}catch(Throwable e1){
+			}
 		}
 		return factory;
 	}
