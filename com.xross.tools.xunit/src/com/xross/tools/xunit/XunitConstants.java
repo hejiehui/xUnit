@@ -1,6 +1,6 @@
 package com.xross.tools.xunit;
 
-public interface XrossUnitConstants {
+public interface XunitConstants {
 	String XUNIT = "xunit";
 	String PACKAGE_ID = "packageId";
 	String CONFIGURE = "configure";

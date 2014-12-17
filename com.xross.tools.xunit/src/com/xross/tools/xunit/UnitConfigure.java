@@ -3,7 +3,7 @@ package com.xross.tools.xunit;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UnitConfigure implements XrossUnitConstants {
+public class UnitConfigure implements XunitConstants {
 	private Map<String, Map<String, String>> categories = new HashMap<String, Map<String, String>>();
 	
 	void setVale(String key, String value){

@@ -30,10 +30,10 @@ import com.xross.tools.xunit.def.UnitDef;
 import com.xross.tools.xunit.def.UnitDefRepo;
 import com.xross.tools.xunit.def.ValidatorDef;
 
-public class XrossFactory implements XrossUnitConstants {
+public class XunitFactory implements XunitConstants {
 	private UnitConfigure configure = new UnitConfigure();
 	
-	public static XrossFactory load(URL url) throws Exception {
+	public static XunitFactory load(URL url) throws Exception {
         return load(url.openStream());
 	}
 	
@@ -43,7 +43,7 @@ public class XrossFactory implements XrossUnitConstants {
 	 * @return
 	 * @throws Exception
 	 */
-	public static XrossFactory load(String path) throws Exception {
+	public static XunitFactory load(String path) throws Exception {
 		InputStream in;
 		File f = new File(path);
 		if(f.exists())
@@ -51,7 +51,7 @@ public class XrossFactory implements XrossUnitConstants {
 		else {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			if (classLoader == null) {
-				classLoader = XrossFactory.class.getClassLoader();
+				classLoader = XunitFactory.class.getClassLoader();
 			}
 			in = classLoader.getResource(path).openStream();
 		}
@@ -59,8 +59,8 @@ public class XrossFactory implements XrossUnitConstants {
 		return load(in);
 	}
 	
-	public static XrossFactory load(InputStream in) throws Exception {
-		XrossFactory factory = null;
+	public static XunitFactory load(InputStream in) throws Exception {
+		XunitFactory factory = null;
 		try{
 			Document doc= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in);
 			factory = getFromDocument(doc);
@@ -100,8 +100,8 @@ public class XrossFactory implements XrossUnitConstants {
 		return (Converter )getUnit(id);
 	}
 
-	private static XrossFactory getFromDocument(Document doc){
-		XrossFactory factory = new XrossFactory();
+	private static XunitFactory getFromDocument(Document doc){
+		XunitFactory factory = new XunitFactory();
 		Element root = doc.getDocumentElement();
 		factory.packageId = root.getAttribute(PACKAGE_ID);
 		factory.name = root.getAttribute(NAME);
