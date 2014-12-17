@@ -4,7 +4,7 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.graphics.Color;
 
-import com.xross.tools.xunit.XrossUnitConstants;
+import com.xross.tools.xunit.XunitConstants;
 import com.xross.tools.xunit.impl.BiBranchImpl;
 import com.xross.tools.xunit.impl.BranchImpl;
 import com.xross.tools.xunit.impl.ChainImpl;
@@ -13,7 +13,7 @@ import com.xross.tools.xunit.impl.PostValidationLoopImpl;
 import com.xross.tools.xunit.impl.PreValidationLoopImpl;
 
 //TODO move common constants into runtime
-public interface UnitConstants extends XrossUnitConstants {
+public interface UnitConstants extends XunitConstants {
 	Color ADAPTER_TITLE_COLOR = ColorConstants.darkGreen;
 	Color DECORATOR_TITLE_COLOR = ColorConstants.lightGray;
 	

@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.gef.EditPart;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -31,6 +32,7 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	private List<UnitNodeConnection> outputs = new ArrayList<UnitNodeConnection>();
 
 	protected UnitNodeHelper helper;
+	protected EditPart part;
 	
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	
@@ -146,6 +148,10 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	
 	public void setHelper(UnitNodeHelper helper){
 		this.helper = helper;
+	}
+	
+	public void setPart(EditPart part){
+		this.part = part;
 	}
 	
 	public String getName() {

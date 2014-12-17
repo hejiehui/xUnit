@@ -36,8 +36,10 @@ public class UnitNodePartFactory implements EditPartFactory {
 		else if (model instanceof UnitNodeConnection)
 			part = new UnitNodeConnectionPart();
 
-		if(model instanceof UnitNode)
+		if(model instanceof UnitNode){
 			((UnitNode)model).setHelper(helper);
+			((UnitNode)model).setPart(part);
+		}
 		
 		part.setModel(model);
 		

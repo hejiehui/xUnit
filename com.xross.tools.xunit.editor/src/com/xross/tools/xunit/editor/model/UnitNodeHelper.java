@@ -3,6 +3,8 @@ package com.xross.tools.xunit.editor.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.gef.EditPart;
+
 import com.xross.tools.xunit.BehaviorType;
 
 public class UnitNodeHelper implements UnitConstants {
@@ -11,9 +13,19 @@ public class UnitNodeHelper implements UnitConstants {
 		this.diagram = diagram;
 	}
 	
-	public String[] getReferenceNames(BehaviorType type, String excluded){
+	private String getTopLevelNodeName(EditPart curPart) {
+		String excluded = null;
+		while(curPart.getModel() != diagram) {
+			if(curPart.getModel() instanceof UnitNode)
+				excluded = ((UnitNode)curPart.getModel()).getName();
+			curPart = curPart.getParent();
+		}
+		return getValue(excluded);
+	}
+	
+	public String[] getReferenceNames(BehaviorType type, EditPart curPart){
 		List<String> names = new ArrayList<String>();
-		excluded = getValue(excluded);
+		String excluded = getTopLevelNodeName(curPart);
 		names.add(EMPTY_VALUE);
 		for(UnitNode unit: diagram.getUnits()){
 			String name = unit.getName();
@@ -25,9 +37,9 @@ public class UnitNodeHelper implements UnitConstants {
 		return names.toArray(new String[names.size()]);
 	}
 	
-	public String[] getReferenceNames(BehaviorType type, StructureType structureType, String excluded){
+	public String[] getReferenceNames(BehaviorType type, StructureType structureType, EditPart curPart){
 		List<String> names = new ArrayList<String>();
-		excluded = getValue(excluded);
+		String excluded = getTopLevelNodeName(curPart);//getValue(excluded);
 		names.add(EMPTY_VALUE);
 		for(UnitNode unit: diagram.getUnits()){
 			String name = unit.getName();
