@@ -3,7 +3,9 @@ package com.xross.tools.xunit.editor.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
@@ -30,6 +32,7 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	
 	private List<UnitNodeConnection> inputs = new ArrayList<UnitNodeConnection>();
 	private List<UnitNodeConnection> outputs = new ArrayList<UnitNodeConnection>();
+	private UnitNodeProperties properties = new UnitNodeProperties();
 
 	protected UnitNodeHelper helper;
 	protected EditPart part;
@@ -49,7 +52,10 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
     	return getDefaultImplName();
 	}
 	
-	
+	public UnitNodeProperties getProperties() {
+		return properties;
+	}
+
 	/**
 	 * DecoratorNode class will override this method to getType from
 	 * decoratee
@@ -86,7 +92,7 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 				getDescriptor(PROP_REFERENCE, getReferenceValues()),
 		};
 		
-		return descriptors;
+		return combine(descriptors, properties.getPropertyDescriptors());
 	}
 	
 	public IPropertyDescriptor[] getAdditionalPropertyDescriptors(){
@@ -100,10 +106,13 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 		IPropertyDescriptor[] p1 = getBasicPropertyDescriptors();
 		IPropertyDescriptor[] p2 = getAdditionalPropertyDescriptors();
 		
+		return combine(p1, p2);
+	}
+	
+	private IPropertyDescriptor[] combine(IPropertyDescriptor[] p1, IPropertyDescriptor[] p2) {
 		IPropertyDescriptor[] descriptors = new IPropertyDescriptor[p1.length + p2.length];
 		System.arraycopy(p1, 0, descriptors, 0, p1.length);
 		System.arraycopy(p2, 0, descriptors, p1.length, p2.length);
-		
 		return descriptors;
 	}
 	
@@ -119,7 +128,7 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 		if (PROP_REFERENCE.equals(propName))
 			return helper.getIndex(getReferenceValues(), referenceName);
 
-		return null;
+		return properties.getPropertyValue(propName);
 	}
 
 	public void setPropertyValue(Object propName, Object value){
@@ -133,6 +142,7 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 			setType(BehaviorType.getType((Integer)value));
 		if (PROP_REFERENCE.equals(propName))
 			setReferenceName(getReferenceValues()[(Integer)value]);
+		properties.setPropertyValue(propName, value);
 	}
 	
 	public Object getEditableValue(){

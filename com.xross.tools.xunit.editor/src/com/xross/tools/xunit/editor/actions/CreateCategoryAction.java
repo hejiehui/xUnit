@@ -7,11 +7,13 @@ import com.xross.tools.xunit.editor.commands.AddCategoryCommand;
 import com.xross.tools.xunit.editor.model.UnitConfigure;
 
 public class CreateCategoryAction extends BaseDialogAction {
-	public CreateCategoryAction(IWorkbenchPart part){
+	private UnitConfigure configure;
+	public CreateCategoryAction(IWorkbenchPart part, UnitConfigure configure){
 		super(part, CREATE_CATEGORY, CREATE_CATEGORY, "");
+		this.configure = configure;
 	}
 
-	protected Command createCommand(UnitConfigure configure, String value) {
+	protected Command createCommand(String value) {
 		return new AddCategoryCommand(configure, value);
 	}
 }

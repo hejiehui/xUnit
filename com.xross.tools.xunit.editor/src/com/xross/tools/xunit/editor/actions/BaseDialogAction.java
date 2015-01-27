@@ -34,7 +34,7 @@ public abstract class BaseDialogAction extends WorkbenchPartAction implements Un
 		return true;
 	}
 	
-	abstract protected Command createCommand(UnitConfigure configure, String value); 
+	abstract protected Command createCommand(String value); 
 	
 	public void run() {
 		InputDialog dlg = new InputDialog(
@@ -44,9 +44,6 @@ public abstract class BaseDialogAction extends WorkbenchPartAction implements Un
 		if (dlg.open() != Window.OK)
 			return;
 		
-		UnitDiagramGraphicalEditor editor = (UnitDiagramGraphicalEditor)getWorkbenchPart();
-		UnitNodeDiagram diagram = (UnitNodeDiagram)editor.getRootEditPart().getContents().getModel();
-
-		execute(createCommand(diagram.getConfigure(), dlg.getValue()));
+		execute(createCommand(dlg.getValue()));
 	}
 }

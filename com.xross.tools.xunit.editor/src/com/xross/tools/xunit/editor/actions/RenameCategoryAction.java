@@ -8,13 +8,15 @@ import com.xross.tools.xunit.editor.model.UnitConfigure;
 
 public class RenameCategoryAction extends BaseDialogAction {
 	private String oldName;
-	public RenameCategoryAction(IWorkbenchPart part, String oldName){
+	private UnitConfigure configure;
+	public RenameCategoryAction(IWorkbenchPart part, String oldName, UnitConfigure configure){
 		super(part, RENAME_CATEGORY, RENAME_CATEGORY, oldName);
 		this.oldName = oldName;
 		setText(oldName);
+		this.configure = configure;
 	}
 
-	protected Command createCommand(UnitConfigure configure, String value) {
+	protected Command createCommand(String value) {
 		return new RenameCategoryCommand(configure, oldName, value);
 	}
 }

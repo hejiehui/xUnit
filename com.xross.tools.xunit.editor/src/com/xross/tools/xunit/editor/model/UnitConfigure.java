@@ -1,7 +1,7 @@
 package com.xross.tools.xunit.editor.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +22,7 @@ public class UnitConfigure implements UnitConstants, IPropertySource {
 	}
 	
 	// The structure is category-->property
-	private Map<String, Map<String, String>> categories = new HashMap<String, Map<String, String>>();
+	private Map<String, Map<String, String>> categories = new LinkedHashMap<String, Map<String, String>>();
 
 	public boolean isSimple(){
 		return categories.size() == 1 && categories.containsKey(DEFAULT_CATEGORY);
@@ -60,7 +60,7 @@ public class UnitConfigure implements UnitConstants, IPropertySource {
 	}
 	
 	public void addCategory(String catName){
-		categories.put(catName, new HashMap<String, String>());
+		categories.put(catName, new LinkedHashMap<String, String>());
 	}
 	
 	public void renameCategory(String oldName, String newName){
