@@ -7,6 +7,7 @@ public interface XunitConstants {
 	String CATEGORY = "category";
 	String DEFAULT_CATEGORY = "default";
 	String ENTRY = "entry";
+	String PROPERTY = "property";
 	String VALUE = "value";
 	String NAME = "name";
 	String CLASS = "class";
