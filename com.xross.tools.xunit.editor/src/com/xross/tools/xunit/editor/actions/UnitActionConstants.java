@@ -10,6 +10,10 @@ public interface UnitActionConstants {
 	String RENAME_PROPERTY= "Rename property";
 	String REMOVE_PROPERTY= "Remove property";	
 	
+	String CREATE_NODE_PROPERTY = "Create node property";
+	String RENAME_NODE_PROPERTY= "Rename node property";
+	String REMOVE_NODE_PROPERTY= "Remove node property";
+	
 	String ASSIGN_CLASS = "Assign implementation class";
 	String OPEN_CLASS = "Open implementation class";
 	String ASSIGN_DEFAULT_CLASS = "Set implementation to \"default\"";

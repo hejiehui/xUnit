@@ -135,6 +135,7 @@ public class UnitNodeDiagramReader implements UnitConstants{
 			return null;
 
 		setAttributes(unit, node);
+		setProperties(unit, node);
 		
 		return unit;
 	}
@@ -147,6 +148,17 @@ public class UnitNodeDiagramReader implements UnitConstants{
 
 		if(unit instanceof CompositeUnitNode)
 			unit.setType(BehaviorType.valueOf(getAttribute(node, TYPE)));
+	}
+	
+	private void setProperties(UnitNode unit, Node node){
+		NodeList children = node.getChildNodes();
+		Node propertyNode;
+		for(int i = 0; i < children.getLength(); i++){
+			if(!children.item(i).getNodeName().equalsIgnoreCase(PROPERTY))
+				continue;
+			propertyNode = children.item(i);
+			unit.getProperties().addProperty(getAttribute(propertyNode, KEY), getAttribute(propertyNode, VALUE));
+		}
 	}
 	
 	private UnitNode createChildNode(Node node, String name){

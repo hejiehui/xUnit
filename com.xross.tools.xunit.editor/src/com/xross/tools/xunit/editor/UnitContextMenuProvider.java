@@ -18,8 +18,10 @@ import com.xross.tools.xunit.editor.actions.CreateNodePropertyAction;
 import com.xross.tools.xunit.editor.actions.OpenClassAction;
 import com.xross.tools.xunit.editor.actions.RemoveCategoryAction;
 import com.xross.tools.xunit.editor.actions.RemoveEntryAction;
+import com.xross.tools.xunit.editor.actions.RemoveNodePropertyAction;
 import com.xross.tools.xunit.editor.actions.RenameCategoryAction;
 import com.xross.tools.xunit.editor.actions.RenameEntryAction;
+import com.xross.tools.xunit.editor.actions.RenameNodePropertyAction;
 import com.xross.tools.xunit.editor.actions.UnitActionConstants;
 import com.xross.tools.xunit.editor.model.UnitConfigure;
 import com.xross.tools.xunit.editor.model.UnitConstants;
@@ -56,6 +58,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     	menu.add(new OpenClassAction(editor, nodePart));
     	menu.add(new Separator());
     	menu.add(new AssignDefaultAction(editor, node));
+
     	menu.add(new Separator());
     	MenuManager sub = new MenuManager(ASSIGN_REFERENCE);
     	for(String name: node.getReferenceValues()){
@@ -64,8 +67,24 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     		sub.add(new AssignReferenceNameAction(editor, node, name));
     	}
     	menu.add(sub);
+    	
     	menu.add(new Separator());
     	menu.add(new CreateNodePropertyAction(editor, node.getProperties()));
+    	MenuManager subRemove = new MenuManager(REMOVE_NODE_PROPERTY);
+    	for(String name: node.getProperties().getNames()){
+    		if(EMPTY_VALUE.equals(name))
+    			continue;
+    		subRemove.add(new RemoveNodePropertyAction(editor, node.getProperties(), name));
+    	}
+    	menu.add(subRemove);
+
+    	MenuManager subRename = new MenuManager(RENAME_NODE_PROPERTY);
+    	for(String name: node.getProperties().getNames()){
+    		if(EMPTY_VALUE.equals(name))
+    			continue;
+    		subRename.add(new RenameNodePropertyAction(editor, name, node.getProperties()));
+    	}
+    	menu.add(subRename);
     }
     
     private void getSimpleActions(IMenuManager menu){
@@ -83,7 +102,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
 
  		entrySub = new MenuManager(REMOVE_PROPERTY);
  		for(String key: configure.getEntryNames(DEFAULT_CATEGORY))
- 			entrySub.add(new RemoveEntryAction(editor, DEFAULT_CATEGORY, key));
+ 			entrySub.add(new RemoveEntryAction(editor, DEFAULT_CATEGORY, key, configure));
  		menu.add(entrySub);
  		
      	menu.add(new Separator());
@@ -134,7 +153,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
      	for(String catName: configure.getCategoryNames()){
      		MenuManager entrySub = new MenuManager(REMOVE_PROPERTY + " from " + catName);
      		for(String key: configure.getEntryNames(catName))
-     			entrySub.add(new RemoveEntryAction(editor, catName, key));
+     			entrySub.add(new RemoveEntryAction(editor, catName, key, configure));
      		menu.add(entrySub);
      	}
     }

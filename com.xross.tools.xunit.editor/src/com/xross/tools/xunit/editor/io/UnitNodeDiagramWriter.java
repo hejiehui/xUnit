@@ -1,5 +1,7 @@
 package com.xross.tools.xunit.editor.io;
 
+import java.util.Set;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
@@ -20,6 +22,7 @@ import com.xross.tools.xunit.editor.model.UnitConfigure;
 import com.xross.tools.xunit.editor.model.UnitConstants;
 import com.xross.tools.xunit.editor.model.UnitNode;
 import com.xross.tools.xunit.editor.model.UnitNodeDiagram;
+import com.xross.tools.xunit.editor.model.UnitNodeProperties;
 import com.xross.tools.xunit.editor.model.ValidatorNode;
 
 public class UnitNodeDiagramWriter implements UnitConstants{
@@ -121,6 +124,7 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 			return null;
 
 		setAttributes(node, unit);
+		setProperties(doc, node, unit.getProperties());
 		
 		return node;
 	}
@@ -133,6 +137,20 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 
 		if(unit instanceof CompositeUnitNode)
 			node.setAttribute(TYPE, unit.getType().name());
+	}
+	
+	// TODO merge entry and property
+	private void setProperties(Document doc, Element node, UnitNodeProperties properties){
+		Set<String> names = properties.getNames();
+		if(names.size() == 0)
+			return;
+		
+		for(String key: names){
+			Element propertyNode = (Element)doc.createElement(PROPERTY);
+			propertyNode.setAttribute(KEY, key);
+			propertyNode.setAttribute(VALUE, properties.getProperty(key));
+			node.appendChild(propertyNode);
+		}
 	}
 
 	private Element createProcessorNode(Document doc, UnitNode unit){

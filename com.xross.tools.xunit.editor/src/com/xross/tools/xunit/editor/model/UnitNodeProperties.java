@@ -53,7 +53,7 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
 		List<IPropertyDescriptor> descciptors = new ArrayList<IPropertyDescriptor>();
 		
 		for(String name: properties.keySet()){
-			PropertyDescriptor descriptor = new TextPropertyDescriptor(name, name);
+			PropertyDescriptor descriptor = new TextPropertyDescriptor(new PropertyId(name), name);
 			descriptor.setCategory("Properties");
 			descciptors.add(descriptor);
 		}
@@ -61,7 +61,10 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
 	}
 
 	public Object getPropertyValue(Object id) {
-		return properties.get(id);
+		if(id instanceof PropertyId)
+			return properties.get(((PropertyId)id).name);
+		
+		return null;
 	}
 
 	public boolean isPropertySet(Object id) {
@@ -72,6 +75,12 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
 	}
 
 	public void setPropertyValue(Object id, Object value) {
-		properties.put((String)id, (String)value);
+		if(id instanceof PropertyId)
+			properties.put(((PropertyId)id).name, (String)value);
+	}
+	
+	private class PropertyId {
+		String name;
+		PropertyId(String name) {this.name = name;}
 	}
 }

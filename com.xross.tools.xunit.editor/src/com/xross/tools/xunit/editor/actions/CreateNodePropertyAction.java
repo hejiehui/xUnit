@@ -9,7 +9,7 @@ import com.xross.tools.xunit.editor.model.UnitNodeProperties;
 public class CreateNodePropertyAction extends BaseDialogAction {
 	private UnitNodeProperties properties;
 	public CreateNodePropertyAction(IWorkbenchPart part, UnitNodeProperties properties){
-		super(part, CREATE_PROPERTY, CREATE_PROPERTY, "");
+		super(part, CREATE_NODE_PROPERTY, CREATE_NODE_PROPERTY, "");
 		this.properties = properties;
 		setText(CREATE_PROPERTY);
 	}
