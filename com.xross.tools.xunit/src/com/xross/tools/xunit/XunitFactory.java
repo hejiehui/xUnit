@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -193,8 +194,24 @@ public class XunitFactory implements XunitConstants {
 		unitDef.setClassName(getAttribute(node, CLASS));
 		unitDef.setReferenceName(getAttribute(node, REFERENCE));
 		unitDef.setType(getType(node));
+		unitDef.setProperties(getProperties(node));
 		
 		return unitDef;
+	}
+	
+	private LinkedHashMap<String, String> getProperties(Node node){
+		NodeList children = node.getChildNodes();
+		Node entryNode;
+		LinkedHashMap<String, String> properties = new LinkedHashMap<String, String>();
+		
+		for(int i = 0; i < children.getLength(); i++){
+			if(!children.item(i).getNodeName().equalsIgnoreCase(PROPERTY))
+				continue;
+			entryNode = children.item(i);
+			properties.put(getAttribute(entryNode, KEY), getAttribute(entryNode, VALUE));
+		}
+		
+		return properties;
 	}
 	
 	private BehaviorType getType(Node node){

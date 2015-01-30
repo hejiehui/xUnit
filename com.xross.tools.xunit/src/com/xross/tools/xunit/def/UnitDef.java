@@ -1,6 +1,9 @@
 package com.xross.tools.xunit.def;
 
+import java.util.LinkedHashMap;
+
 import com.xross.tools.xunit.BehaviorType;
+import com.xross.tools.xunit.PropertiesAware;
 import com.xross.tools.xunit.Unit;
 import com.xross.tools.xunit.UnitConfigureAware;
 import com.xross.tools.xunit.impl.DefaultUnitImpl;
@@ -15,6 +18,7 @@ public class UnitDef {
 	private String className;
 	private String referenceName;
 	private String key;
+	private LinkedHashMap<String, String> properties;
 	
 	public void setUnitDefRepo(UnitDefRepo repo){
 		this.repo = repo;
@@ -75,6 +79,10 @@ public class UnitDef {
 	public void setReferenceName(String referenceName) {
 		this.referenceName = referenceName;
 	}
+	
+	public void setProperties(LinkedHashMap<String, String> properties) {
+		this.properties = properties;
+	}
 
 	private boolean isEmpty(String str){
 		if(str == null || str.trim().length() == 0)
@@ -92,6 +100,11 @@ public class UnitDef {
 			if(unit instanceof UnitConfigureAware){
 				UnitConfigureAware aware = (UnitConfigureAware)unit;
 				aware.setConfigure(repo.getConfigure());
+			}
+			
+			if(unit instanceof PropertiesAware){
+				PropertiesAware aware = (PropertiesAware)unit;
+				aware.setProperties(new LinkedHashMap<String, String>(properties));
 			}
 			return unit;
 		}
