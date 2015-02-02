@@ -4,18 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.xross.tools.xunit.Unit;
-import com.xross.tools.xunit.UnitConfigure;
 
 public class UnitDefRepo {
-	private UnitConfigure configure;
+	private Map<String, String> applicationProperties;
 	private Map<String, UnitDef> defRepo = new HashMap<String, UnitDef>();
 	
-	public UnitDefRepo(UnitConfigure configure){
-		this.configure = configure;
+	public UnitDefRepo(Map<String, String> applicationProperties) {
+		this.applicationProperties = applicationProperties;
 	}
 	
-	public UnitConfigure getConfigure() {
-		return configure;
+	public Map<String, String> getApplicationProperties() {
+		return applicationProperties;
 	}
 	
 	public void put(String key, UnitDef unitDef){
@@ -29,5 +28,4 @@ public class UnitDefRepo {
 	public Unit getUnit(String id) throws Exception{
 		return defRepo.get(id).getInstance();
 	}
-	
 }

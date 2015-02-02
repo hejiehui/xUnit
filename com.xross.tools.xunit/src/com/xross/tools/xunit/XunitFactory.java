@@ -2,23 +2,21 @@ package com.xross.tools.xunit;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.xross.tools.xunit.def.AdapterDef;
 import com.xross.tools.xunit.def.BiBranchDef;
@@ -32,8 +30,6 @@ import com.xross.tools.xunit.def.UnitDefRepo;
 import com.xross.tools.xunit.def.ValidatorDef;
 
 public class XunitFactory implements XunitConstants {
-	private UnitConfigure configure = new UnitConfigure();
-	
 	public static XunitFactory load(URL url) throws Exception {
         return load(url.openStream());
 	}
@@ -87,8 +83,16 @@ public class XunitFactory implements XunitConstants {
 	
 	private String packageId;
 	private String name;
-	private UnitDefRepo defRepo = new UnitDefRepo(configure);
+	private UnitDefRepo defRepo;
 	
+	public String getPackageId() {
+		return packageId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
 	public Unit getUnit(String id) throws Exception{
 		return defRepo.getUnit(id);
 	}
@@ -106,32 +110,17 @@ public class XunitFactory implements XunitConstants {
 		Element root = doc.getDocumentElement();
 		factory.packageId = root.getAttribute(PACKAGE_ID);
 		factory.name = root.getAttribute(NAME);
-		factory.createConfigure(doc);
+		factory.defRepo = new UnitDefRepo(factory.createApplicationProperties(doc));
 		factory.readUnits(doc);
 		
 		return factory;
 	}
 	
-	private void createConfigure(Document doc){
-		if(doc.getElementsByTagName(CONFIGURE).getLength() == 0)
-			return;
+	private Map<String, String> createApplicationProperties(Document doc){
+		if(doc.getElementsByTagName(PROPERTIES).getLength() == 0)
+			return Collections.emptyMap();
 		
-		NodeList catNodes = doc.getElementsByTagName(CONFIGURE).item(0).getChildNodes();
-		for(int i = 0; i < catNodes.getLength(); i++){
-			createCategory(catNodes.item(i));
-		}
-	}
-	
-	private void createCategory(Node node){
-		String catName = getAttribute(node, NAME);
-		NodeList children = node.getChildNodes();
-		Node entryNode;
-		for(int i = 0; i < children.getLength(); i++){
-			if(!children.item(i).getNodeName().equalsIgnoreCase(ENTRY))
-				continue;
-			entryNode = children.item(i);
-			configure.setVale(catName, getAttribute(entryNode, KEY), getAttribute(entryNode, VALUE));
-		}
+		return getProperties(doc.getElementsByTagName(PROPERTIES).item(0));
 	}
 	
 	private void readUnits(Document doc){

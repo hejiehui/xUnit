@@ -3,7 +3,7 @@ package com.xross.tools.xunit;
 public interface XunitConstants {
 	String XUNIT = "xunit";
 	String PACKAGE_ID = "packageId";
-	String CONFIGURE = "configure";
+	String PROPERTIES = "properties";
 	String CATEGORY = "category";
 	String DEFAULT_CATEGORY = "default";
 	String ENTRY = "entry";

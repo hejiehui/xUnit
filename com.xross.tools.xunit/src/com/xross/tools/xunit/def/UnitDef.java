@@ -3,9 +3,9 @@ package com.xross.tools.xunit.def;
 import java.util.LinkedHashMap;
 
 import com.xross.tools.xunit.BehaviorType;
-import com.xross.tools.xunit.PropertiesAware;
+import com.xross.tools.xunit.UnitPropertiesAware;
 import com.xross.tools.xunit.Unit;
-import com.xross.tools.xunit.UnitConfigureAware;
+import com.xross.tools.xunit.ApplicationPropertiesAware;
 import com.xross.tools.xunit.impl.DefaultUnitImpl;
 
 public class UnitDef {
@@ -97,14 +97,16 @@ public class UnitDef {
 	protected Unit createInstance() throws Exception{
 		if(!isEmpty(className)){
 			Unit unit = (Unit)Class.forName(className).newInstance();
-			if(unit instanceof UnitConfigureAware){
-				UnitConfigureAware aware = (UnitConfigureAware)unit;
-				aware.setConfigure(repo.getConfigure());
+			if(unit instanceof ApplicationPropertiesAware){
+				ApplicationPropertiesAware aware = (ApplicationPropertiesAware)unit;
+				// Make a copy
+				aware.setApplicationProperties(new LinkedHashMap<String, String>(repo.getApplicationProperties()));
 			}
 			
-			if(unit instanceof PropertiesAware){
-				PropertiesAware aware = (PropertiesAware)unit;
-				aware.setProperties(new LinkedHashMap<String, String>(properties));
+			if(unit instanceof UnitPropertiesAware){
+				UnitPropertiesAware aware = (UnitPropertiesAware)unit;
+				// Make a copy
+				aware.setUnitProperties(new LinkedHashMap<String, String>(properties));
 			}
 			return unit;
 		}

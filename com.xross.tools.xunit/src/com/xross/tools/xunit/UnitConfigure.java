@@ -3,6 +3,7 @@ package com.xross.tools.xunit;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public class UnitConfigure implements XunitConstants {
 	private Map<String, Map<String, String>> categories = new HashMap<String, Map<String, String>>();
 	
