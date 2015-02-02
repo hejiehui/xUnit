@@ -3,9 +3,7 @@ package com.xross.tools.xunit.editor.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;

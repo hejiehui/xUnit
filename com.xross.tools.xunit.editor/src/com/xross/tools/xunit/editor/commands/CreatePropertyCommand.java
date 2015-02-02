@@ -4,12 +4,12 @@ import org.eclipse.gef.commands.Command;
 
 import com.xross.tools.xunit.editor.model.UnitNodeProperties;
 
-public class AddNodePropertyCommand extends Command {
+public class CreatePropertyCommand extends Command {
 	private UnitNodeProperties properties;
 	private String key;
 	private boolean executed;
 	
-	public AddNodePropertyCommand(
+	public CreatePropertyCommand(
 			UnitNodeProperties properties, 
 			String key){
 		this.properties = properties;

@@ -35,7 +35,7 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 
 			appendDescription(doc, root, model);
 			appendImports(doc, root, model);
-			root.appendChild(createConfigure(doc, model.getConfigure()));
+			root.appendChild(createAppProperties(doc, model.getProperties()));
 			
 			Element unitsNode = (Element)doc.createElement(UNITS);
 			root.appendChild(unitsNode);
@@ -74,23 +74,9 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 		}
 	}
 	
-	private Element createConfigure(Document doc, UnitConfigure configure){
-		Element node = (Element)doc.createElement(CONFIGURE);
-		for(String catName: configure.getCategoryNames()){
-			node.appendChild(createCategory(doc, configure, catName));
-		}
-		return node;
-	}
-	
-	private Element createCategory(Document doc, UnitConfigure configure, String catName){
-		Element node = (Element)doc.createElement(CATEGORY);
-		node.setAttribute(NAME, catName);
-		for(String key: configure.getEntryNames(catName)){
-			Element entryNode = (Element)doc.createElement(ENTRY);
-			entryNode.setAttribute(KEY, key);
-			entryNode.setAttribute(VALUE, configure.getEntry(catName, key));
-			node.appendChild(entryNode);
-		}
+	private Element createAppProperties(Document doc, UnitNodeProperties properties){
+		Element node = (Element)doc.createElement(PROPERTIES);
+		setProperties(doc, node, properties);
 		return node;
 	}
 	
@@ -139,7 +125,6 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 			node.setAttribute(TYPE, unit.getType().name());
 	}
 	
-	// TODO merge entry and property
 	private void setProperties(Document doc, Element node, UnitNodeProperties properties){
 		Set<String> names = properties.getNames();
 		if(names.size() == 0)

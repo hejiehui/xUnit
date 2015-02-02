@@ -17,7 +17,7 @@ public class UnitNodeDiagram implements UnitNodeContainer, IPropertySource {
 	private String packageId;
 	private String name;
 	private String description;
-	private UnitConfigure configure = new UnitConfigure();
+	private UnitNodeProperties properties = new UnitNodeProperties();
 	
 	private List<UnitNode> units = new ArrayList<UnitNode>();
 	private List<String> imports = new ArrayList<String>();
@@ -118,14 +118,14 @@ public class UnitNodeDiagram implements UnitNodeContainer, IPropertySource {
 		return true;
 	}
 
-	public void setConfigure(UnitConfigure configure) {
-		this.configure = configure;
+	public UnitNodeProperties getProperties() {
+		return properties;
 	}
 
-	public UnitConfigure getConfigure(){
-		return configure;
+	public void setProperties(UnitNodeProperties properties) {
+		this.properties = properties;
 	}
-	
+
 	@Override
 	public int getFixedSize() {
 		return -1;
@@ -146,7 +146,7 @@ public class UnitNodeDiagram implements UnitNodeContainer, IPropertySource {
 //		p1[0].setCategory(CATEGORY_COMMON);
 //		p1[1].setCategory(CATEGORY_COMMON);
 		
-		IPropertyDescriptor[] p2 = configure.getPropertyDescriptors();
+		IPropertyDescriptor[] p2 = properties.getPropertyDescriptors();
 		
 		IPropertyDescriptor[] descriptors = new IPropertyDescriptor[p1.length + p2.length];
 		System.arraycopy(p1, 0, descriptors, 0, p1.length);
@@ -167,33 +167,28 @@ public class UnitNodeDiagram implements UnitNodeContainer, IPropertySource {
 			if (PACKAGE_ID.equals(propName))
 				return packageId;
 		}
-		return configure.getPropertyValue(id);
+		return properties.getPropertyValue(id);
 	}
 
 	@Override
 	public boolean isPropertySet(Object id) {
-		return configure.isPropertySet(id);
+		return properties.isPropertySet(id);
 	}
 
 	@Override
 	public void resetPropertyValue(Object id) {
-		configure.resetPropertyValue(id);
+		properties.resetPropertyValue(id);
 	}
 
 	@Override
 	public void setPropertyValue(Object id, Object value) {
-		if(id instanceof String){
-			String propName = (String)id;
-			String propValue = (String)value;
-			
-			if (PROP_NAME.equals(propName))
-				name = propValue;
-			else if (PROP_DESCRIPTION.equals(propName))
-				description = propValue;
-			else if (PACKAGE_ID.equals(propName))
-				packageId = propValue;
-		}
-		else
-			configure.setPropertyValue(id, value);
+		if (PROP_NAME.equals(id))
+			setName((String)value);
+		else if (PROP_DESCRIPTION.equals(id))
+			setDescription((String)value);
+		else if (PACKAGE_ID.equals(id))
+			setPackageId((String)value);
+		
+		properties.setPropertyValue(id, value);
 	}
 }

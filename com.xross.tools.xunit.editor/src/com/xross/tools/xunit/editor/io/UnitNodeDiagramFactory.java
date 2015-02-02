@@ -43,9 +43,7 @@ import com.xross.tools.xunit.editor.model.UnitNodeDiagram;
 
 public class UnitNodeDiagramFactory implements UnitConstants{
 	public UnitNodeDiagram getEmptyDiagram(){
-		UnitNodeDiagram pkg = new UnitNodeDiagram();
-		pkg.getConfigure().addCategory(DEFAULT_CATEGORY);
-		return pkg;
+		return new UnitNodeDiagram();
 	}
 	private UnitNodeDiagramReader reader = new UnitNodeDiagramReader();
 	private UnitNodeDiagramWriter writer = new UnitNodeDiagramWriter();

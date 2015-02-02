@@ -4,13 +4,13 @@ import org.eclipse.gef.commands.Command;
 
 import com.xross.tools.xunit.editor.model.UnitNodeProperties;
 
-public class RenameNodePropertyCommand extends Command {
+public class RenamePropertyCommand extends Command {
 	private UnitNodeProperties properties;
 	private String newName;
 	private String oldName;
 	private boolean executed;
 	
-	public RenameNodePropertyCommand(
+	public RenamePropertyCommand(
 			UnitNodeProperties properties, 
 			String oldName,
 			String newName){

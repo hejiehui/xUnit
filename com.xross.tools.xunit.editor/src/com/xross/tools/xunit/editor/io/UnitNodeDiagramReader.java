@@ -23,10 +23,10 @@ import com.xross.tools.xunit.editor.model.LocatorNode;
 import com.xross.tools.xunit.editor.model.PostValidationLoopNode;
 import com.xross.tools.xunit.editor.model.PreValidationLoopNode;
 import com.xross.tools.xunit.editor.model.ProcessorNode;
-import com.xross.tools.xunit.editor.model.UnitConfigure;
 import com.xross.tools.xunit.editor.model.UnitConstants;
 import com.xross.tools.xunit.editor.model.UnitNode;
 import com.xross.tools.xunit.editor.model.UnitNodeDiagram;
+import com.xross.tools.xunit.editor.model.UnitNodeProperties;
 import com.xross.tools.xunit.editor.model.ValidatorNode;
 
 public class UnitNodeDiagramReader implements UnitConstants{
@@ -47,36 +47,18 @@ public class UnitNodeDiagramReader implements UnitConstants{
 		model.setPackageId(root.getAttribute(PACKAGE_ID));
 		model.setName(root.getAttribute(NAME));
 		model.setDescription(root.getAttribute(DESCRIPTION));
-		model.setConfigure(createConfigure(doc));
+		model.setProperties(createAppProperties(doc));
 
 		model.getUnits().addAll(readUnits(doc));
 		
 		return model;
 	}
 	
-	private UnitConfigure createConfigure(Document doc) {
-		UnitConfigure configure = new UnitConfigure();
-		if(doc.getElementsByTagName(CONFIGURE).getLength() == 0)
-			return configure;
-		
-		NodeList catNodes = doc.getElementsByTagName(CONFIGURE).item(0).getChildNodes();
-		for(int i = 0; i < catNodes.getLength(); i++){
-			createCategory(configure, catNodes.item(i));
-		}
+	private UnitNodeProperties createAppProperties(Document doc) {
+		UnitNodeProperties configure = new UnitNodeProperties();
+		if(doc.getElementsByTagName(PROPERTIES).getLength() != 0)
+			setProperties(configure, doc.getElementsByTagName(PROPERTIES).item(0));
 		return configure;
-	}
-	
-	private void createCategory(UnitConfigure configure, Node node){
-		String catName = getAttribute(node, NAME);
-		configure.addCategory(catName);
-		NodeList children = node.getChildNodes();
-		Node entryNode;
-		for(int i = 0; i < children.getLength(); i++){
-			if(!children.item(i).getNodeName().equalsIgnoreCase(ENTRY))
-				continue;
-			entryNode = children.item(i);
-			configure.addEntry(catName, getAttribute(entryNode, KEY), getAttribute(entryNode, VALUE));
-		}
 	}
 
 	private List<UnitNode> readUnits(Document doc){
@@ -135,7 +117,7 @@ public class UnitNodeDiagramReader implements UnitConstants{
 			return null;
 
 		setAttributes(unit, node);
-		setProperties(unit, node);
+		setProperties(unit.getProperties(), node);
 		
 		return unit;
 	}
@@ -150,14 +132,14 @@ public class UnitNodeDiagramReader implements UnitConstants{
 			unit.setType(BehaviorType.valueOf(getAttribute(node, TYPE)));
 	}
 	
-	private void setProperties(UnitNode unit, Node node){
+	private void setProperties(UnitNodeProperties properties, Node node){
 		NodeList children = node.getChildNodes();
 		Node propertyNode;
 		for(int i = 0; i < children.getLength(); i++){
 			if(!children.item(i).getNodeName().equalsIgnoreCase(PROPERTY))
 				continue;
 			propertyNode = children.item(i);
-			unit.getProperties().addProperty(getAttribute(propertyNode, KEY), getAttribute(propertyNode, VALUE));
+			properties.addProperty(getAttribute(propertyNode, KEY), getAttribute(propertyNode, VALUE));
 		}
 	}
 	
