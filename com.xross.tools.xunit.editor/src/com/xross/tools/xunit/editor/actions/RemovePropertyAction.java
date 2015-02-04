@@ -3,7 +3,7 @@ package com.xross.tools.xunit.editor.actions;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.xross.tools.xunit.editor.commands.RemoveNodePropertyCommand;
+import com.xross.tools.xunit.editor.commands.RemovePropertyCommand;
 import com.xross.tools.xunit.editor.model.UnitNodeProperties;
 
 public class RemovePropertyAction extends WorkbenchPartAction implements UnitActionConstants {
@@ -26,6 +26,6 @@ public class RemovePropertyAction extends WorkbenchPartAction implements UnitAct
 	}
 	
 	public void run() {
-		execute(new RemoveNodePropertyCommand(properties, key));
+		execute(new RemovePropertyCommand(properties, key));
 	}
 }

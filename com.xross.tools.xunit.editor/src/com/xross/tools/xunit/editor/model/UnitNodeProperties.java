@@ -46,7 +46,7 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
 	}
 	
 	public String removeProperty(String name){
-		return properties.get(name);
+		return properties.remove(name);
 	}	
 	
 	public IPropertyDescriptor[] getPropertyDescriptors() {

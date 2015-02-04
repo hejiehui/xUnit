@@ -4,12 +4,12 @@ import org.eclipse.gef.commands.Command;
 
 import com.xross.tools.xunit.editor.model.UnitNodeProperties;
 
-public class RemoveNodePropertyCommand extends Command {
+public class RemovePropertyCommand extends Command {
 	private UnitNodeProperties properties;
 	private String key;
 	private String value; 
 	
-	public RemoveNodePropertyCommand(
+	public RemovePropertyCommand(
 			UnitNodeProperties properties, 
 			String key){
 		this.properties = properties;
