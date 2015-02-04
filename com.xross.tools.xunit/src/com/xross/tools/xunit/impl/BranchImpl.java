@@ -6,7 +6,6 @@ import java.util.Map;
 import com.xross.tools.xunit.Branch;
 import com.xross.tools.xunit.Context;
 import com.xross.tools.xunit.Locator;
-import com.xross.tools.xunit.Processor;
 import com.xross.tools.xunit.Unit;
 
 public class BranchImpl extends BaseCompositeImpl implements Branch {
@@ -17,7 +16,7 @@ public class BranchImpl extends BaseCompositeImpl implements Branch {
 		this.locator = locator;
 	}
 	public void add(String key, Unit unit){
-		unitMap.put(key, (Processor)unit);
+		unitMap.put(key, unit);
 	}
 	
 	protected Unit locateUnit(Context ctx){
