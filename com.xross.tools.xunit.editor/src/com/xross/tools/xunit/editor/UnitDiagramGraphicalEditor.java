@@ -1,16 +1,10 @@
 package com.xross.tools.xunit.editor;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.EventObject;
 
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
@@ -40,8 +34,8 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
-import org.w3c.dom.Document;
 
+import com.xross.tools.common.XmlHelper;
 import com.xross.tools.xunit.editor.io.UnitNodeDiagramFactory;
 import com.xross.tools.xunit.editor.model.UnitNodeDiagram;
 import com.xross.tools.xunit.editor.parts.UnitNodePartFactory;
@@ -96,12 +90,9 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
 
     public void doSave(IProgressMonitor monitor) {
 		try {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			writeAsXML(out);
 			IFile file = ((IFileEditorInput)getEditorInput()).getFile();
-			file.setContents(new ByteArrayInputStream(out.toByteArray()), 
+			file.setContents(new ByteArrayInputStream(writeAsXML().getBytes()), 
 							true, false, monitor);
-			out.close();
 			getCommandStack().markSaveLocation();
 		}
 		catch (Exception e) {
@@ -109,12 +100,8 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
 		}
     }
     
-    private void writeAsXML(OutputStream out) throws Exception{
-    	TransformerFactory tFactory =TransformerFactory.newInstance();
-    	Transformer transformer = tFactory.newTransformer();
-    	DOMSource source = new DOMSource(diagramFactory.writeToDocument(diagram));
-    	StreamResult result = new StreamResult(out);
-    	transformer.transform(source, result);
+    private String writeAsXML() throws Exception{
+        return XmlHelper.format(diagramFactory.writeToDocument(diagram));
     }
 
     public void doSaveAs() {
@@ -132,10 +119,7 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     	WorkspaceModifyOperation op= new WorkspaceModifyOperation() {
     		public void execute(final IProgressMonitor monitor) throws CoreException {
     			try {
-    				ByteArrayOutputStream out = new ByteArrayOutputStream();
-    				writeAsXML(out);
-    				file.create(new ByteArrayInputStream(out.toByteArray()), true, monitor);
-    				out.close();
+    				file.create(new ByteArrayInputStream(writeAsXML().getBytes("utf-8")), true, monitor);
     			} 
     			catch (Exception e) {
     				e.printStackTrace();
@@ -179,8 +163,7 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     }
     
     private UnitNodeDiagram getFromXML(InputStream is) throws Exception {
-    	Document doc= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is); 
-    	return diagramFactory.getFromDocument(doc);
+    	return diagramFactory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is));
     }
 
     public Object getAdapter(Class type) {

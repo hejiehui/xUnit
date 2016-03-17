@@ -18,7 +18,6 @@ import com.xross.tools.xunit.editor.model.LocatorNode;
 import com.xross.tools.xunit.editor.model.PostValidationLoopNode;
 import com.xross.tools.xunit.editor.model.PreValidationLoopNode;
 import com.xross.tools.xunit.editor.model.ProcessorNode;
-import com.xross.tools.xunit.editor.model.UnitConfigure;
 import com.xross.tools.xunit.editor.model.UnitConstants;
 import com.xross.tools.xunit.editor.model.UnitNode;
 import com.xross.tools.xunit.editor.model.UnitNodeDiagram;

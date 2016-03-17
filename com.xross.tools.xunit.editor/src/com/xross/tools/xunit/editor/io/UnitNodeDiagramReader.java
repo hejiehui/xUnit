@@ -66,7 +66,8 @@ public class UnitNodeDiagramReader implements UnitConstants{
 		
 		List<UnitNode> units = new ArrayList<UnitNode>();
 		for(int i = 0; i < unitNodes.getLength(); i++){
-			units.add(createUnitNode(unitNodes.item(i)));
+			if(isValidNode(unitNodes.item(i)))
+				units.add(createUnitNode(unitNodes.item(i)));
 		}
 		
 		return units;
@@ -81,7 +82,7 @@ public class UnitNodeDiagramReader implements UnitConstants{
 			return unit;
 			
 		if(WRAPPED_UNITS.contains(node.getNodeName()))
-			unit = createUnitNode(node.getChildNodes().item(0));
+			unit = createUnitNode(getFirstValidNode(node));
 
 		return unit;
 	}
@@ -199,7 +200,8 @@ public class UnitNodeDiagramReader implements UnitConstants{
 		
 		NodeList children = node.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
-			chain.addUnit(createUnitNode(children.item(i)));
+			if(isValidNode(children.item(i)))
+				chain.addUnit(createUnitNode(children.item(i)));
 		}
 
 		return chain;
@@ -221,7 +223,7 @@ public class UnitNodeDiagramReader implements UnitConstants{
 
 		NodeList children = node.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
-			if(!children.item(i).getNodeName().equalsIgnoreCase(BRANCH_UNIT))
+			if(!isValidNode(children.item(i), BRANCH_UNIT))
 				continue;
 
 			Node found = children.item(i);
@@ -259,5 +261,23 @@ public class UnitNodeDiagramReader implements UnitConstants{
 //				return map.item(i).getNodeValue();
 
 //		return null;
+	}
+	
+	private boolean isValidNode(Node node) {
+		return !node.getNodeName().equals("#text");
+	}
+	
+	private boolean isValidNode(Node node, String name) {
+		return node.getNodeName().equals(name);
+	}
+	
+	private Node getFirstValidNode(Node node) {
+		NodeList children = node.getChildNodes();
+		for(int i = 0; i < children.getLength(); i++){
+			if(isValidNode(children.item(i)))
+				return children.item(i);
+		}
+		
+		return null;
 	}
 }
