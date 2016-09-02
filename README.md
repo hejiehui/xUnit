@@ -28,7 +28,7 @@ Xross unit 编辑器是一个灵活的系统构建器。
     	void process(Context ctx);
     }
 
-[processor](https://github.com/hejiehui/xUnit/blob/master/doc/processor.PNG)
+![processor](https://github.com/hejiehui/xUnit/blob/master/doc/processor.PNG)
 
 ### converter
 对传入的context进行转换，转变为新的Context。也可以返回原来的Context
@@ -37,7 +37,7 @@ Xross unit 编辑器是一个灵活的系统构建器。
     	Context convert(Context inputCtx);
     }
 
-[converter](https://github.com/hejiehui/xUnit/blob/master/doc/converter.PNG)
+![converter](https://github.com/hejiehui/xUnit/blob/master/doc/converter.PNG)
 
 ### validator
 对Context进行true或者false的判断
@@ -58,23 +58,23 @@ Xross unit 编辑器是一个灵活的系统构建器。
 ## 结构组件
 ### chain
 对内部的unit顺序调度处理
-[chain](https://github.com/hejiehui/xUnit/blob/master/doc/chain.PNG)
+![chain](https://github.com/hejiehui/xUnit/blob/master/doc/chain.PNG)
 
 ### if-else
 通过Validator决定调用内部那个unit
-[ifelse](https://github.com/hejiehui/xUnit/blob/master/doc/if-else.PNG)
+![ifelse](https://github.com/hejiehui/xUnit/blob/master/doc/if-else.PNG)
 
 ### branch
 通过Locator判断调度内部那个unit
-[branch](https://github.com/hejiehui/xUnit/blob/master/doc/branch.PNG)
+![branch](https://github.com/hejiehui/xUnit/blob/master/doc/branch.PNG)
 
 ### while
 通过Validator判断的while结构
-[while](https://github.com/hejiehui/xUnit/blob/master/doc/while.PNG)
+![while](https://github.com/hejiehui/xUnit/blob/master/doc/while.PNG)
 
 ### do while loop
 通过Validator判断的do while结构
-[dowhile](https://github.com/hejiehui/xUnit/blob/master/doc/do-while.PNG)
+![dowhile](https://github.com/hejiehui/xUnit/blob/master/doc/do-while.PNG)
 
 ### decorator
 在操作前后处理
@@ -93,7 +93,7 @@ Xross unit 编辑器是一个灵活的系统构建器。
 	    void after(Context ctx);
     }
 
-[decorator](https://github.com/hejiehui/xUnit/blob/master/doc/decorator.PNG)
+![decorator](https://github.com/hejiehui/xUnit/blob/master/doc/decorator.PNG)
 
 ### adapter
 将某种unit的行为转换为另一种
@@ -102,7 +102,7 @@ Xross unit 编辑器是一个灵活的系统构建器。
     	void setUnit(Unit unit);
     }
 
-[adapter](https://github.com/hejiehui/xUnit/blob/master/doc/adaptor.PNG)
+![adapter](https://github.com/hejiehui/xUnit/blob/master/doc/adaptor.PNG)
 
 # 编辑方法
 直接选择需要的组件，点击编辑器特定的区域
