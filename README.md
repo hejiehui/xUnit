@@ -16,7 +16,7 @@ Xross unit 编辑器是一个灵活的系统构建器。
 1. 模型归模型，代码归代码，查看代码仅需双击进入
 1. 可以在应用或构建单元层次上面配置参数
 
-[overview](https://github.com/hejiehui/xUnit/blob/master/doc/overview.png) 
+![overview](https://github.com/hejiehui/xUnit/blob/master/doc/overview.png) 
 
 
 # 组件
@@ -79,47 +79,47 @@ Xross unit 编辑器是一个灵活的系统构建器。
 ## 构建蓝图
 你可以一直和PM, PD, QA一起优化修改讨论
 
-[top](https://github.com/hejiehui/xUnit/blob/master/doc/top_design.png)
+![top](https://github.com/hejiehui/xUnit/blob/master/doc/top_design.png)
 
 ## 创建组件单元
 函数式接口易于实现和测试
 
-[impl](https://github.com/hejiehui/xUnit/blob/master/doc/implement.png)
+![impl](https://github.com/hejiehui/xUnit/blob/master/doc/implement.png)
 
 ## 配置
 结合代码和系统蓝图，配置参数
 
-[assigne](https://github.com/hejiehui/xUnit/blob/master/doc/assign.png)
+![assigne](https://github.com/hejiehui/xUnit/blob/master/doc/assign.png)
 
 ## 运行
 通过factory load模型文件，创建Contex并调用指定的unit
 
-[run](https://github.com/hejiehui/xUnit/blob/master/doc/run.png)
+![run](https://github.com/hejiehui/xUnit/blob/master/doc/run.png)
 
 # 实际案例
 ## 简单模型
-[uc1](https://github.com/hejiehui/xUnit/blob/master/doc/uc1.png)
+![uc1](https://github.com/hejiehui/xUnit/blob/master/doc/uc1.png)
 
 ## 同一模型文件案例
 同一文件内部可以实现主图和子图引用
 
 ### 主图
-[entry](https://github.com/hejiehui/xUnit/blob/master/doc/uc_entry.png)
+![entry](https://github.com/hejiehui/xUnit/blob/master/doc/uc_entry.png)
 
 ### 子图1
-[biz](https://github.com/hejiehui/xUnit/blob/master/doc/uc_biz.png)
-[assign](https://github.com/hejiehui/xUnit/blob/master/doc/us_biz_assign.png)
+![biz](https://github.com/hejiehui/xUnit/blob/master/doc/uc_biz.png)
+![assign](https://github.com/hejiehui/xUnit/blob/master/doc/us_biz_assign.png)
 
 ### 子图2
-[resp](https://github.com/hejiehui/xUnit/blob/master/doc/uc_response.png)
-[assign](https://github.com/hejiehui/xUnit/blob/master/doc/uc_response_assign.png)
+![resp](https://github.com/hejiehui/xUnit/blob/master/doc/uc_response.png)
+![assign](https://github.com/hejiehui/xUnit/blob/master/doc/uc_response_assign.png)
 
 ## 不同文件文件案例
 这个是用户自创的方式，未来系统缺省会提供缺省实现
 主图和子图在不同文件，通过通用的dispatcher来实现结合
 
 ### 案例1
-[uc1](https://github.com/hejiehui/xUnit/blob/master/doc/uc_user_ref.png)
+![uc1](https://github.com/hejiehui/xUnit/blob/master/doc/uc_user_ref.png)
 
 ### 案例2
-[uc2](https://github.com/hejiehui/xUnit/blob/master/doc/uc_station_ref.png)
+![uc2](https://github.com/hejiehui/xUnit/blob/master/doc/uc_station_ref.png)
