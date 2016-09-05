@@ -4,7 +4,7 @@ Bundle-Name: xUnit
 Bundle-SymbolicName: com.xrosstools.xunit
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: he, jiehui
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.xrosstools.xunit,
  com.xrosstools.xunit.def,
  com.xrosstools.xunit.impl
