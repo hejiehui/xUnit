@@ -5,29 +5,29 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.xross.tools.xunit.editor.UnitDiagramGraphicalEditor"
+            class="com.xrosstools.xunit.editor.UnitDiagramGraphicalEditor"
             default="true"
-            contributorClass="com.xross.tools.xunit.editor.UnitActionBarContributor"
+            contributorClass="com.xrosstools.xunit.editor.UnitActionBarContributor"
             extensions="xunit"
             icon="icons/chain.ico"
-            id="com.xross.tools.editor.UnitDiagramGraphicalEditor"
+            id="com.xrosstools.editor.UnitDiagramGraphicalEditor"
             name="Xross Unit Diagram Editor">
          <contentTypeBinding
-               contentTypeId="com.xross.tools.xunit">
+               contentTypeId="com.xrosstools.xunit">
          </contentTypeBinding>
       </editor>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            id="com.xross.tools"
+            id="com.xrosstools"
             name="Xross Tools">
       </category>
       <wizard
-            category="com.xross.tools"
-            class="com.xross.tools.xunit.editor.NewXunitWizard"
+            category="com.xrosstools"
+            class="com.xrosstools.xunit.editor.NewXunitWizard"
             icon="icons/chain.ico"
-            id="com.xross.tools.xunit.editor.newWizard"
+            id="com.xrosstools.xunit.editor.newWizard"
             name="New Xross Unit Wizard">
       </wizard>
    </extension>
@@ -37,7 +37,7 @@
             alias-for="xu"
             base-type="org.eclipse.core.runtime.xml"
             file-extensions="xunit"
-            id="com.xross.tools.xunit"
+            id="com.xrosstools.xunit"
             name="Xross Unit"
             priority="high">
       </content-type>
