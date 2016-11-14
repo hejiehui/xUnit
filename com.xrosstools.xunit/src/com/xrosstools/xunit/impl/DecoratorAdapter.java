@@ -40,7 +40,7 @@ public abstract class DecoratorAdapter implements Processor, Converter, Validato
 	public final Context convert(Context inputCtx) {
 		before(inputCtx);
 		Context output = ((Converter)unit).convert(inputCtx);
-		after(inputCtx);
+		after(output);
 		return output;
 	}
 
