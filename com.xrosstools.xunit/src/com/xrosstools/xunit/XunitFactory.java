@@ -127,6 +127,9 @@ public class XunitFactory implements XunitConstants {
 		NodeList unitNodes = doc.getElementsByTagName(UNITS).item(0).getChildNodes();
 		
 		for(int i = 0; i < unitNodes.getLength(); i++){
+			if(!isValidNode(unitNodes.item(i))) 
+				continue;
+			
 			String key = getAttribute(unitNodes.item(i), NAME);
 			UnitDef unitDef = createUnitNode(unitNodes.item(i));
 			defRepo.put(key, unitDef);
@@ -142,7 +145,7 @@ public class XunitFactory implements XunitConstants {
 			return unitDef;
 			
 		if(WRAPPED_UNITS.contains(node.getNodeName()))
-			unitDef = createUnitNode(node.getChildNodes().item(0));
+			unitDef = createUnitNode(getFirstValidNode(node));
 
 		return unitDef;
 	}
@@ -194,8 +197,9 @@ public class XunitFactory implements XunitConstants {
 		LinkedHashMap<String, String> properties = new LinkedHashMap<String, String>();
 		
 		for(int i = 0; i < children.getLength(); i++){
-			if(!children.item(i).getNodeName().equalsIgnoreCase(PROPERTY))
+			if(!isValidNode(children.item(i), PROPERTY))
 				continue;
+			
 			entryNode = children.item(i);
 			properties.put(getAttribute(entryNode, KEY), getAttribute(entryNode, VALUE));
 		}
@@ -221,8 +225,9 @@ public class XunitFactory implements XunitConstants {
 		NodeList children = node.getChildNodes();
 		Node found = null;
 		for(int i = 0; i < children.getLength(); i++){
-			if(!children.item(i).getNodeName().equalsIgnoreCase(name))
+			if(!isValidNode(children.item(i), name))
 				continue;
+			
 			found = children.item(i);
 			break;
 		}
@@ -281,6 +286,9 @@ public class XunitFactory implements XunitConstants {
 		
 		NodeList children = node.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
+			if(!isValidNode(children.item(i))) 
+				continue;
+			
 			chainDef.addUnitDef(createUnitNode(children.item(i)));
 		}
 
@@ -303,7 +311,7 @@ public class XunitFactory implements XunitConstants {
 
 		NodeList children = node.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
-			if(!children.item(i).getNodeName().equalsIgnoreCase(BRANCH_UNIT))
+			if(!isValidNode(children.item(i), BRANCH_UNIT))
 				continue;
 
 			Node found = children.item(i);
@@ -336,6 +344,24 @@ public class XunitFactory implements XunitConstants {
 			if(attributeName.equals(map.item(i).getNodeName()))
 				return map.item(i).getNodeValue();
 
+		return null;
+	}
+	
+	private boolean isValidNode(Node node) {
+		return !node.getNodeName().equals("#text");
+	}
+	
+	private boolean isValidNode(Node node, String name) {
+		return node.getNodeName().equals(name);
+	}
+	
+	private Node getFirstValidNode(Node node) {
+		NodeList children = node.getChildNodes();
+		for(int i = 0; i < children.getLength(); i++){
+			if(isValidNode(children.item(i)))
+				return children.item(i);
+		}
+		
 		return null;
 	}
 }

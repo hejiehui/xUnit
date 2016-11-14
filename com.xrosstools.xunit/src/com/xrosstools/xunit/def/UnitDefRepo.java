@@ -26,6 +26,8 @@ public class UnitDefRepo {
 	}
 	
 	public Unit getUnit(String id) throws Exception{
+		if(!defRepo.containsKey(id))
+			throw new RuntimeException("Can not found unit \"" + id + "\"");
 		return defRepo.get(id).getInstance();
 	}
 }
