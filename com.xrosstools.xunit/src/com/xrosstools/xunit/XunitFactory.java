@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -124,14 +126,11 @@ public class XunitFactory implements XunitConstants {
 	}
 	
 	private void readUnits(Document doc){
-		NodeList unitNodes = doc.getElementsByTagName(UNITS).item(0).getChildNodes();
+		List<Node> unitNodes = getValidChildNodes(doc.getElementsByTagName(UNITS).item(0));
 		
-		for(int i = 0; i < unitNodes.getLength(); i++){
-			if(!isValidNode(unitNodes.item(i))) 
-				continue;
-			
-			String key = getAttribute(unitNodes.item(i), NAME);
-			UnitDef unitDef = createUnitNode(unitNodes.item(i));
+		for(int i = 0; i < unitNodes.size(); i++){
+			String key = getAttribute(unitNodes.get(i), NAME);
+			UnitDef unitDef = createUnitNode(unitNodes.get(i));
 			defRepo.put(key, unitDef);
 		}
 	}
@@ -192,15 +191,15 @@ public class XunitFactory implements XunitConstants {
 	}
 	
 	private LinkedHashMap<String, String> getProperties(Node node){
-		NodeList children = node.getChildNodes();
+		List<Node> children = getValidChildNodes(node);
 		Node entryNode;
 		LinkedHashMap<String, String> properties = new LinkedHashMap<String, String>();
 		
-		for(int i = 0; i < children.getLength(); i++){
-			if(!isValidNode(children.item(i), PROPERTY))
+		for(int i = 0; i < children.size(); i++){
+			if(!isValidNode(children.get(i), PROPERTY))
 				continue;
 			
-			entryNode = children.item(i);
+			entryNode = children.get(i);
 			properties.put(getAttribute(entryNode, KEY), getAttribute(entryNode, VALUE));
 		}
 		
@@ -284,12 +283,9 @@ public class XunitFactory implements XunitConstants {
 	private UnitDef createChainNode(Node node){
 		ChainDef chainDef = new ChainDef();
 		
-		NodeList children = node.getChildNodes();
-		for(int i = 0; i < children.getLength(); i++){
-			if(!isValidNode(children.item(i))) 
-				continue;
-			
-			chainDef.addUnitDef(createUnitNode(children.item(i)));
+		List<Node> children = getValidChildNodes(node);
+		for(int i = 0; i < children.size(); i++){
+			chainDef.addUnitDef(createUnitNode(children.get(i)));
 		}
 
 		return chainDef;
@@ -309,12 +305,12 @@ public class XunitFactory implements XunitConstants {
 		BranchDef branchDef = new BranchDef();
 		branchDef.setLocatorDef(createChildNode(node, LOCATOR));
 
-		NodeList children = node.getChildNodes();
-		for(int i = 0; i < children.getLength(); i++){
-			if(!isValidNode(children.item(i), BRANCH_UNIT))
+		List<Node> children = getValidChildNodes(node);
+		for(int i = 0; i < children.size(); i++){
+			if(!isValidNode(children.get(i), BRANCH_UNIT))
 				continue;
 
-			Node found = children.item(i);
+			Node found = children.get(i);
 			UnitDef branchUnit = createUnitNode(found);
 			String key = getAttribute(found, KEY);
 			branchUnit.setKey(key);
@@ -363,5 +359,15 @@ public class XunitFactory implements XunitConstants {
 		}
 		
 		return null;
+	}
+	
+	private List<Node> getValidChildNodes(Node node) {
+		List<Node> nl = new ArrayList<>();
+		NodeList nodeList = node.getChildNodes();
+		for(int i = 0; i < nodeList.getLength(); i++){
+			if(isValidNode(nodeList.item(i)))
+				nl.add(nodeList.item(i));
+		}
+		return nl;
 	}
 }
