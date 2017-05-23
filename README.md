@@ -22,11 +22,11 @@ Xross unit 编辑器是一个灵活的系统构建器。
 [参考样例POM](https://github.com/hejiehui/xUnit/blob/master/com.xrosstools.xunit.sample/pom.xml)
 Depenency
 
-		<dependency>
-			<groupId>com.xrosstools</groupId>
-			<artifactId>xunit</artifactId>
-			<version>0.9.0-SNAPSHOT</version>
-		</dependency>
+	<dependency>
+		<groupId>com.xrosstools</groupId>
+		<artifactId>xunit</artifactId>
+		<version>0.9.0-SNAPSHOT</version>
+	</dependency>
 
 repository
 
