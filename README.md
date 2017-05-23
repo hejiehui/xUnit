@@ -18,7 +18,28 @@ Xross unit 编辑器是一个灵活的系统构建器。
 
 ![overview](https://github.com/hejiehui/xUnit/blob/master/doc/overview.png) 
 
+# 添加依赖
+[参考样例POM](https://github.com/hejiehui/xUnit/blob/master/com.xrosstools.xunit.sample/pom.xml)
+Depenency
 
+		<dependency>
+			<groupId>com.xrosstools</groupId>
+			<artifactId>xunit</artifactId>
+			<version>0.9.0-SNAPSHOT</version>
+		</dependency>
+
+repository
+
+	<repositories>
+		<repository>
+			<id>xtools-repo</id>
+			<url>https://raw.github.com/hejiehui/xtools-repo/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
 # 组件
 ## 行为组件
 ### processor
