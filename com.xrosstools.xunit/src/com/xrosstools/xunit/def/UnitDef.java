@@ -91,7 +91,12 @@ public class UnitDef {
 	}
 	
 	protected Unit createDefault(){
-		return new DefaultUnitImpl(this);
+	    DefaultUnitImpl defaultimpl = new DefaultUnitImpl(this);
+	    
+	    defaultimpl.setApplicationProperties(new LinkedHashMap<String, String>(repo.getApplicationProperties()));
+	    defaultimpl.setUnitProperties(new LinkedHashMap<String, String>(properties));
+	    
+		return defaultimpl;
 	}
 
 	protected Unit createInstance() throws Exception{
