@@ -55,6 +55,7 @@ public interface UnitConstants extends XunitConstants {
 	String PROP_STRUCTURE_TYPE = "Structure type";
 	String PROP_CLASS = "Class";
 	String PROP_REFERENCE = "Reference unit";
+	String PROP_MODULE = "Reference Module";
 	String PROP_VALID_LABEL = "validLabel";
 	String PROP_INVALID_LABEL = "invalidLabel";
 	String PROP_LABEL = "Label";

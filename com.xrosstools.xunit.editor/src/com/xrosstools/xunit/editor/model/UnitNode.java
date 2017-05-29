@@ -26,6 +26,7 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	private BehaviorType type = BehaviorType.processor;
 	
 	private String className = MSG_DEFAULT;
+	private String moduleName;
 	private String referenceName;
 	
 	private List<UnitNodeConnection> inputs = new ArrayList<UnitNodeConnection>();
@@ -88,6 +89,7 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 				getDescriptor(PROP_DESCRIPTION),
 				getDescriptor(PROP_CLASS),
 				getDescriptor(PROP_REFERENCE, getReferenceValues()),
+				getDescriptor(PROP_MODULE),
 		};
 		
 		return combine(descriptors, properties.getPropertyDescriptors());
@@ -99,6 +101,10 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	
 	protected abstract String getCategory(String id);
 	public abstract String[] getReferenceValues();
+	
+	public String[] getReferenceModules() {
+		return new String[]{"test"};
+	}
 	
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] p1 = getBasicPropertyDescriptors();
@@ -125,6 +131,8 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 			return type.ordinal();
 		if (PROP_REFERENCE.equals(propName))
 			return helper.getIndex(getReferenceValues(), referenceName);
+		if (PROP_MODULE.equals(propName))
+			return helper.getValue(moduleName);
 
 		return properties.getPropertyValue(propName);
 	}
@@ -140,6 +148,9 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 			setType(BehaviorType.getType((Integer)value));
 		if (PROP_REFERENCE.equals(propName))
 			setReferenceName(getReferenceValues()[(Integer)value]);
+		if (PROP_MODULE.equals(propName))
+			setModuleName((String)value);
+			
 		properties.setPropertyValue(propName, value);
 	}
 	
@@ -189,6 +200,15 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 			return false;
 		
 		return value.trim().length() > 0;
+	}
+
+	public String getModuleName() {
+		return moduleName;
+	}
+
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
+		firePropertyChange(PROP_NODE);
 	}
 
 	public void setClassName(String className) {

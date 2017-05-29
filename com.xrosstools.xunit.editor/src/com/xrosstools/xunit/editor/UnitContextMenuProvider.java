@@ -10,6 +10,7 @@ import org.eclipse.jface.action.Separator;
 
 import com.xrosstools.xunit.editor.actions.AssignClassNameAction;
 import com.xrosstools.xunit.editor.actions.AssignDefaultAction;
+import com.xrosstools.xunit.editor.actions.AssignModuleAction;
 import com.xrosstools.xunit.editor.actions.AssignReferenceNameAction;
 import com.xrosstools.xunit.editor.actions.CreatePropertyAction;
 import com.xrosstools.xunit.editor.actions.OpenClassAction;
@@ -49,6 +50,8 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     	menu.add(new AssignDefaultAction(editor, node));
 
     	menu.add(new Separator());
+    	menu.add(new AssignModuleAction(editor, node));
+    	
     	MenuManager sub = new MenuManager(ASSIGN_REFERENCE);
     	for(String name: node.getReferenceValues()){
     		if(EMPTY_VALUE.equals(name))
