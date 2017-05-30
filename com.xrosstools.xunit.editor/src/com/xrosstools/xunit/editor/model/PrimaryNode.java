@@ -22,7 +22,7 @@ public abstract class PrimaryNode extends UnitNode {
 	}
 	
 	public String[] getReferenceValues(){
-		return helper.getReferenceNames(getType(), part);
+		return helper.getReferenceNames(this, part);
 	}
 	
 	/**

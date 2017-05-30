@@ -9,7 +9,7 @@ import com.xrosstools.xunit.editor.model.UnitNode;
 public class AssignModuleAction extends BaseDialogAction {
 	private UnitNode node;
 	public AssignModuleAction(IWorkbenchPart part, UnitNode node){
-		super(part, ASSIGN_MODULE, ASSIGN_MODULE, "");
+		super(part, ASSIGN_MODULE, ASSIGN_MODULE, node.getModuleName());
 		this.node = node;
 		setText(ASSIGN_MODULE);
 	}

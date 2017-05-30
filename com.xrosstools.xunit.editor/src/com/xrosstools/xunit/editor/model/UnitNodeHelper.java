@@ -1,16 +1,47 @@
 package com.xrosstools.xunit.editor.model;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.gef.EditPart;
 
 import com.xrosstools.xunit.BehaviorType;
+import com.xrosstools.xunit.editor.io.UnitNodeDiagramFactory;
 
 public class UnitNodeHelper implements UnitConstants {
 	private UnitNodeDiagram diagram;
 	public UnitNodeHelper(UnitNodeDiagram diagram){
 		this.diagram = diagram;
+	}
+	
+	public String[] getReferenceNames(UnitNode node, EditPart curPart){
+		UnitNodeDiagramFactory diagramFactory = new UnitNodeDiagramFactory();
+		
+		if(!node.isValid(node.getModuleName()) || node.getModuleName().equals(diagram.getFileName())) {
+			String excluded = getTopLevelNodeName(curPart);
+			if(node instanceof CompositeUnitNode)
+				return getReferenceNames(node.getType(), ((CompositeUnitNode)node).getStructureType(), excluded);
+			else
+				return getReferenceNames(node.getType(), excluded);
+		}
+		
+		try {
+    		FileInputStream is = new FileInputStream(new File(node.getModuleName()));
+    		UnitNodeDiagram diagram = diagramFactory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is));
+    		diagram.setFileName(node.getModuleName());
+    		UnitNodeHelper helper = new UnitNodeHelper(diagram);
+    		if(node instanceof CompositeUnitNode)
+    			return helper.getReferenceNames(node.getType(), ((CompositeUnitNode)node).getStructureType(), null);
+    		else
+    			return helper.getReferenceNames(node.getType(), null);
+		} catch (Throwable e) {
+//			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Can not locate " + node.getModuleName(), e.getMessage());
+			return new String[]{};
+		}
 	}
 	
 	private String getTopLevelNodeName(EditPart curPart) {
@@ -23,9 +54,9 @@ public class UnitNodeHelper implements UnitConstants {
 		return getValue(excluded);
 	}
 	
-	public String[] getReferenceNames(BehaviorType type, EditPart curPart){
+	private String[] getReferenceNames(BehaviorType type, String excluded){
 		List<String> names = new ArrayList<String>();
-		String excluded = getTopLevelNodeName(curPart);
+
 		names.add(EMPTY_VALUE);
 		for(UnitNode unit: diagram.getUnits()){
 			String name = unit.getName();
@@ -37,9 +68,9 @@ public class UnitNodeHelper implements UnitConstants {
 		return names.toArray(new String[names.size()]);
 	}
 	
-	public String[] getReferenceNames(BehaviorType type, StructureType structureType, EditPart curPart){
+	private String[] getReferenceNames(BehaviorType type, StructureType structureType, String excluded){
 		List<String> names = new ArrayList<String>();
-		String excluded = getTopLevelNodeName(curPart);//getValue(excluded);
+
 		names.add(EMPTY_VALUE);
 		for(UnitNode unit: diagram.getUnits()){
 			String name = unit.getName();

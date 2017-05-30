@@ -14,6 +14,7 @@ import org.eclipse.ui.views.properties.TextPropertyDescriptor;
  * Entry point of containing units
  */
 public class UnitNodeDiagram implements UnitNodeContainer, IPropertySource {
+	private String fileName;
 	private String packageId;
 	private String name;
 	private String description;
@@ -23,6 +24,14 @@ public class UnitNodeDiagram implements UnitNodeContainer, IPropertySource {
 	private List<String> imports = new ArrayList<String>();
 	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public String getPackageId() {
 		return packageId;
 	}

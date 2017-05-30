@@ -11,6 +11,7 @@ public interface XunitConstants {
 	String VALUE = "value";
 	String NAME = "name";
 	String CLASS = "class";
+	String MODULE = "module";
 	String REFERENCE = "reference";
 	String DESCRIPTION = "description";
 	String IMPORTS = "imports";

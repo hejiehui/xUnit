@@ -118,6 +118,7 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 		node.setAttribute(NAME, unit.getName());
 		node.setAttribute(DESCRIPTION, unit.getDescription());
 		node.setAttribute(CLASS, unit.getClassName());
+		node.setAttribute(MODULE, unit.getModuleName());
 		node.setAttribute(REFERENCE, unit.getReferenceName());
 
 		if(unit instanceof CompositeUnitNode)

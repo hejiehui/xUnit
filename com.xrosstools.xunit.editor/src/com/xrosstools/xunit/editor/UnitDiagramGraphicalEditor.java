@@ -155,6 +155,7 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     	try {
     		InputStream is = file.getContents(false);
     		diagram = getFromXML(is);
+    		diagram.setFileName(file.getFullPath().toString());
     		is.close();
     	} catch (Exception e) {
     		e.printStackTrace();

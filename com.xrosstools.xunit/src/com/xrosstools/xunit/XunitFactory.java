@@ -183,6 +183,7 @@ public class XunitFactory implements XunitConstants {
 		unitDef.setName(getAttribute(node, NAME));
 		unitDef.setDescription(getAttribute(node, DESCRIPTION));
 		unitDef.setClassName(getAttribute(node, CLASS));
+		unitDef.setModuleName(getAttribute(node, MODULE));
 		unitDef.setReferenceName(getAttribute(node, REFERENCE));
 		unitDef.setType(getType(node));
 		unitDef.setProperties(getProperties(node));
@@ -250,6 +251,7 @@ public class XunitFactory implements XunitConstants {
 		
 //		unitDef.setType(UnitType.valueOf(getAttribute(node, TYPE)));
 		decoratorDef.setClassName(getAttribute(node, CLASS));
+		decoratorDef.setModuleName(getAttribute(node, MODULE));
 		decoratorDef.setReferenceName(getAttribute(node, REFERENCE));
 		decoratorDef.setUnitDef(createChildNode(node, DECORATOR_UNIT));
 		
@@ -261,6 +263,7 @@ public class XunitFactory implements XunitConstants {
 		
 		adapterDef.setType(BehaviorType.valueOf(getAttribute(node, TYPE)));
 		adapterDef.setClassName(getAttribute(node, CLASS));
+		adapterDef.setModuleName(getAttribute(node, MODULE));
 		adapterDef.setReferenceName(getAttribute(node, REFERENCE));
 		adapterDef.setUnitDef(createChildNode(node, ADAPTER_UNIT));
 		

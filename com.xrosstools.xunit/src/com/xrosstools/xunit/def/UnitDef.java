@@ -16,6 +16,7 @@ public class UnitDef {
 	private boolean singleton;
 	private Unit instance;
 	private String className;
+	private String moduleName;
 	private String referenceName;
 	private String key;
 	private LinkedHashMap<String, String> properties;
@@ -70,6 +71,14 @@ public class UnitDef {
 
 	public void setClassName(String className) {
 		this.className = className;
+	}
+
+	public String getModuleName() {
+		return moduleName;
+	}
+
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
 	}
 
 	public String getReferenceName() {

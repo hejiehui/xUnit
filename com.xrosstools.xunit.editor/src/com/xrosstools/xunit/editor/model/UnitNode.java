@@ -102,10 +102,6 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	protected abstract String getCategory(String id);
 	public abstract String[] getReferenceValues();
 	
-	public String[] getReferenceModules() {
-		return new String[]{"test"};
-	}
-	
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] p1 = getBasicPropertyDescriptors();
 		IPropertyDescriptor[] p2 = getAdditionalPropertyDescriptors();
@@ -146,8 +142,12 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 			setClassName((String)value);
 		if (PROP_BEHAVIOR_TYPE.equals(propName))
 			setType(BehaviorType.getType((Integer)value));
-		if (PROP_REFERENCE.equals(propName))
-			setReferenceName(getReferenceValues()[(Integer)value]);
+		if (PROP_REFERENCE.equals(propName)) {
+			if(((Integer)value) == -1)
+				setReferenceName(null);
+			else
+				setReferenceName(getReferenceValues()[(Integer)value]);
+		}
 		if (PROP_MODULE.equals(propName))
 			setModuleName((String)value);
 			

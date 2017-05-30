@@ -37,7 +37,7 @@ public abstract class CompositeUnitNode extends UnitNode {
 	}
 	
 	public String[] getReferenceValues(){
-		return helper.getReferenceNames(getType(), getStructureType(), part);
+		return helper.getReferenceNames(this, part);
 	}
 	
 	public IPropertyDescriptor[] getAdditionalPropertyDescriptors(){

@@ -1,6 +1,10 @@
 package com.xrosstools.xunit.editor;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
@@ -17,14 +21,18 @@ import com.xrosstools.xunit.editor.actions.OpenClassAction;
 import com.xrosstools.xunit.editor.actions.RemovePropertyAction;
 import com.xrosstools.xunit.editor.actions.RenamePropertyAction;
 import com.xrosstools.xunit.editor.actions.UnitActionConstants;
+import com.xrosstools.xunit.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.editor.model.UnitConstants;
 import com.xrosstools.xunit.editor.model.UnitNode;
 import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
+import com.xrosstools.xunit.editor.model.UnitNodeHelper;
 import com.xrosstools.xunit.editor.model.UnitNodeProperties;
 import com.xrosstools.xunit.editor.parts.BaseNodePart;
 
 public class UnitContextMenuProvider  extends ContextMenuProvider implements UnitActionConstants, UnitConstants {
 	private UnitDiagramGraphicalEditor editor;
+	private UnitNodeDiagramFactory diagramFactory = new UnitNodeDiagramFactory();
+	
     public UnitContextMenuProvider(EditPartViewer viewer, UnitDiagramGraphicalEditor editor) {
         super(viewer);
         this.editor = editor;
@@ -53,6 +61,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     	menu.add(new AssignModuleAction(editor, node));
     	
     	MenuManager sub = new MenuManager(ASSIGN_REFERENCE);
+
     	for(String name: node.getReferenceValues()){
     		if(EMPTY_VALUE.equals(name))
     			continue;
