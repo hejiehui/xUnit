@@ -1,13 +1,16 @@
 package com.xrosstools.xunit.editor.model;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.xrosstools.xunit.BehaviorType;
 import com.xrosstools.xunit.editor.io.UnitNodeDiagramFactory;
@@ -30,7 +33,7 @@ public class UnitNodeHelper implements UnitConstants {
 		}
 		
 		try {
-    		FileInputStream is = new FileInputStream(new File(node.getModuleName()));
+    		InputStream is = getFile(node.getModuleName()).openStream();
     		UnitNodeDiagram diagram = diagramFactory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is));
     		diagram.setFileName(node.getModuleName());
     		UnitNodeHelper helper = new UnitNodeHelper(diagram);
@@ -39,9 +42,26 @@ public class UnitNodeHelper implements UnitConstants {
     		else
     			return helper.getReferenceNames(node.getType(), null);
 		} catch (Throwable e) {
-//			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Can not locate " + node.getModuleName(), e.getMessage());
+			e.printStackTrace(System.err);
 			return new String[]{};
 		}
+	}
+	
+	public static boolean isFileExist(String name) {
+		try {
+			return new File(getFile(name).getFile()).isFile();
+		} catch (Throwable e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Can not locate " + name, e.getMessage());
+			return false;
+		}
+	}
+	
+	private static URL getFile(String name) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null)
+            classLoader = UnitNodeHelper.class.getClassLoader();
+
+        return classLoader.getResource(name);
 	}
 	
 	private String getTopLevelNodeName(EditPart curPart) {

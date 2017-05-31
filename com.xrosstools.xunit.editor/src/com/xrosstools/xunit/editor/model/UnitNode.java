@@ -207,7 +207,9 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	}
 
 	public void setModuleName(String moduleName) {
-		this.moduleName = moduleName;
+		if(moduleName == null || helper.isFileExist(moduleName))
+			this.moduleName = moduleName;
+		
 		firePropertyChange(PROP_NODE);
 	}
 
