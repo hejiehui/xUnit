@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -32,8 +33,15 @@ import com.xrosstools.xunit.def.UnitDefRepo;
 import com.xrosstools.xunit.def.ValidatorDef;
 
 public class XunitFactory implements XunitConstants {
+    private static final ConcurrentHashMap<String, XunitFactory> factories = new ConcurrentHashMap<>();
+    
 	public static XunitFactory load(URL url) throws Exception {
-        return load(url.openStream());
+	    String path = url.toString();
+	    
+	    if(isLoaded(url.toString()))
+	        return factories.get(path);
+	    
+        return getFactory(path, load(url.openStream()));
 	}
 	
 	/**
@@ -43,6 +51,9 @@ public class XunitFactory implements XunitConstants {
 	 * @throws Exception
 	 */
 	public static XunitFactory load(String path) throws Exception {
+        if(isLoaded(path))
+            return factories.get(path);
+        
 		InputStream in;
 		File f = new File(path);
 		if(f.exists())
@@ -54,8 +65,13 @@ public class XunitFactory implements XunitConstants {
 			}
 			in = classLoader.getResource(path).openStream();
 		}
-		
-		return load(in);
+        
+        return getFactory(path, load(in));
+	}
+	
+	private static XunitFactory getFactory(String path, XunitFactory factory) {
+        XunitFactory oldFactory = factories.putIfAbsent(path, factory);        
+        return oldFactory == null ? factory : oldFactory;
 	}
 	
 	public static XunitFactory load(InputStream in) throws Exception {
@@ -73,6 +89,10 @@ public class XunitFactory implements XunitConstants {
 		return factory;
 	}
 	
+	private static boolean isLoaded(String path) {
+	    return factories.containsKey(path);
+	}
+    
 	private static Set<String> WRAPPED_UNITS = new HashSet<String>();
 	static {
 		WRAPPED_UNITS.add(DECORATOR_UNIT);

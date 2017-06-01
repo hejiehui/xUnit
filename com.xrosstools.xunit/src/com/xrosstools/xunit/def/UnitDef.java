@@ -1,11 +1,14 @@
 package com.xrosstools.xunit.def;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.xrosstools.xunit.ApplicationPropertiesAware;
 import com.xrosstools.xunit.BehaviorType;
 import com.xrosstools.xunit.Unit;
 import com.xrosstools.xunit.UnitPropertiesAware;
+import com.xrosstools.xunit.XunitFactory;
 import com.xrosstools.xunit.impl.DefaultUnitImpl;
 
 public class UnitDef {
@@ -126,8 +129,17 @@ public class UnitDef {
 		}
 		
 		if(!isEmpty(referenceName))
-			return repo.getUnit(referenceName);
+			return createReferenceInsance();
+		
 		return createDefault();
+	}
+	
+	protected Unit createReferenceInsance() throws Exception{
+	    if(moduleName == null || moduleName.trim().length() == 0)
+	        return repo.getUnit(referenceName);
+	    else{
+	        return XunitFactory.load(moduleName).getUnit(referenceName);
+	    }
 	}
 	
 	/**
