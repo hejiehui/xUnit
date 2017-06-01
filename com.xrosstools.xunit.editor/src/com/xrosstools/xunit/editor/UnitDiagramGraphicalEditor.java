@@ -1,17 +1,20 @@
 package com.xrosstools.xunit.editor;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.util.EventObject;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.commands.CommandStackListener;
@@ -155,7 +158,7 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     	try {
     		InputStream is = file.getContents(false);
     		diagram = getFromXML(is);
-    		diagram.setFileName(file.getFullPath().toString());
+    		diagram.setFilePath(file);
     		is.close();
     	} catch (Exception e) {
     		e.printStackTrace();

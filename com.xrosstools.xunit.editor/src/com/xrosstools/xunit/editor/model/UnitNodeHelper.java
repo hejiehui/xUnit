@@ -1,13 +1,14 @@
 package com.xrosstools.xunit.editor.model;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -22,9 +23,7 @@ public class UnitNodeHelper implements UnitConstants {
 	}
 	
 	public String[] getReferenceNames(UnitNode node, EditPart curPart){
-		UnitNodeDiagramFactory diagramFactory = new UnitNodeDiagramFactory();
-		
-		if(!node.isValid(node.getModuleName()) || node.getModuleName().equals(diagram.getFileName())) {
+		if(!node.isValid(node.getModuleName()) || node.getModuleName().equals(diagram.getFilePath())) {
 			String excluded = getTopLevelNodeName(curPart);
 			if(node instanceof CompositeUnitNode)
 				return getReferenceNames(node.getType(), ((CompositeUnitNode)node).getStructureType(), excluded);
@@ -33,9 +32,7 @@ public class UnitNodeHelper implements UnitConstants {
 		}
 		
 		try {
-    		InputStream is = getFile(node.getModuleName()).openStream();
-    		UnitNodeDiagram diagram = diagramFactory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is));
-    		diagram.setFileName(node.getModuleName());
+    		UnitNodeDiagram diagram = load(node.getModuleName());
     		UnitNodeHelper helper = new UnitNodeHelper(diagram);
     		if(node instanceof CompositeUnitNode)
     			return helper.getReferenceNames(node.getType(), ((CompositeUnitNode)node).getStructureType(), null);
@@ -47,21 +44,36 @@ public class UnitNodeHelper implements UnitConstants {
 		}
 	}
 	
-	public static boolean isFileExist(String name) {
-		try {
-			return new File(getFile(name).getFile()).isFile();
-		} catch (Throwable e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), "Can not locate " + name, e.getMessage());
-			return false;
-		}
+	public boolean isFileExist(String moduleName) {
+	    if(!isValid(moduleName))
+	        return false;
+	    
+        if(!new File(moduleName).exists()) {
+            IFile moduleFile = (IFile)diagram.getFilePath().getParent().findMember(moduleName);
+            if(moduleFile == null) {
+                MessageDialog.openError(Display.getCurrent().getActiveShell(), "Can not locate \"" + moduleName + "\"", "Can not locate \"" + moduleName + "\"");
+                return false;
+            }else
+                return true;
+        }else
+            return true;
 	}
 	
-	private static URL getFile(String name) {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        if (classLoader == null)
-            classLoader = UnitNodeHelper.class.getClassLoader();
-
-        return classLoader.getResource(name);
+	private UnitNodeDiagram load(String moduleName) throws Exception {
+        InputStream in;
+        File f = new File(moduleName);
+        if(f.exists())
+            in = new FileInputStream(f);
+        else {                
+            IFile moduleFile = (IFile)diagram.getFilePath().getParent().findMember(moduleName);
+            if(moduleFile == null)
+                return null;
+            
+            in = moduleFile.getContents(false);
+        }
+        
+        UnitNodeDiagramFactory diagramFactory = new UnitNodeDiagramFactory();
+        return diagramFactory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in));
 	}
 	
 	private String getTopLevelNodeName(EditPart curPart) {

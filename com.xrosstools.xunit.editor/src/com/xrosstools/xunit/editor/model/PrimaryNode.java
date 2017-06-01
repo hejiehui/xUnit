@@ -21,10 +21,6 @@ public abstract class PrimaryNode extends UnitNode {
 		return null;
 	}
 	
-	public String[] getReferenceValues(){
-		return helper.getReferenceNames(this, part);
-	}
-	
 	/**
 	 * Do not allow type to be changed for primary type
 	 */

@@ -36,10 +36,6 @@ public abstract class CompositeUnitNode extends UnitNode {
 		return new ProcessorNode(name);
 	}
 	
-	public String[] getReferenceValues(){
-		return helper.getReferenceNames(this, part);
-	}
-	
 	public IPropertyDescriptor[] getAdditionalPropertyDescriptors(){
 		IPropertyDescriptor[] descriptors = new IPropertyDescriptor[]{
 				getDescriptor(PROP_BEHAVIOR_TYPE, BehaviorType.names),

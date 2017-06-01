@@ -19,11 +19,7 @@ public class AssignModuleCommand extends Command {
 	}
 	
 	public void execute() {
-		if(!node.isValid(moduleName)){
-			executed = false;
-			return;
-		}
-		
+	    node.getHelper().isFileExist(moduleName);
 		node.setModuleName(moduleName);
 		executed = true;
 	}

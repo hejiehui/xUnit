@@ -100,7 +100,13 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	}
 	
 	protected abstract String getCategory(String id);
-	public abstract String[] getReferenceValues();
+	
+	private String[] referenceNames;
+	public String[] getReferenceValues(){
+	    if(referenceNames == null)
+	        referenceNames = helper.getReferenceNames(this, part);
+	    return referenceNames;
+	}
 	
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		IPropertyDescriptor[] p1 = getBasicPropertyDescriptors();
@@ -202,14 +208,17 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 		return value.trim().length() > 0;
 	}
 
-	public String getModuleName() {
+	public UnitNodeHelper getHelper() {
+        return helper;
+    }
+
+    public String getModuleName() {
 		return moduleName;
 	}
 
 	public void setModuleName(String moduleName) {
-		if(moduleName == null || helper.isFileExist(moduleName))
-			this.moduleName = moduleName;
-		
+	    this.moduleName = moduleName;
+	    referenceNames = null;
 		firePropertyChange(PROP_NODE);
 	}
 
