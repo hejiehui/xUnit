@@ -57,7 +57,16 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     	menu.add(new Separator());
     	menu.add(new AssignDefaultAction(editor, node));
 
-    	menu.add(new Separator());
+    	addReferenceAction(menu, node);
+    	
+    	addPropertiesActions(menu, node.getProperties());
+    }
+
+    private void addReferenceAction(IMenuManager menu, UnitNode node) {
+        if(!node.isReferenceAllowed())
+            return;
+        
+        menu.add(new Separator());
     	menu.add(new AssignModuleAction(editor, node));
     	
     	MenuManager sub = new MenuManager(ASSIGN_REFERENCE);
@@ -68,8 +77,6 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     		sub.add(new AssignReferenceNameAction(editor, node, name));
     	}
     	menu.add(sub);
-    	
-    	addPropertiesActions(menu, node.getProperties());
     }
     
     private void addPropertiesActions(IMenuManager menu, UnitNodeProperties properties) {

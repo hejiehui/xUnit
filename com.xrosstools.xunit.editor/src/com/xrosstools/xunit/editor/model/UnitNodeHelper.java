@@ -114,10 +114,7 @@ public class UnitNodeHelper implements UnitConstants {
 				continue;
 			if(isValid(unit.getReferenceName()))
 				continue;
-			/*
-			if(unit.getStructureType() == structureType)
-				names.add(unit.getName());
-			*/
+
 			names.add(unit.getName());
 		}
 		return names.toArray(new String[names.size()]);

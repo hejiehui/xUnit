@@ -88,24 +88,32 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 				getDescriptor(PROP_NAME),
 				getDescriptor(PROP_DESCRIPTION),
 				getDescriptor(PROP_CLASS),
-				getDescriptor(PROP_REFERENCE, getReferenceValues()),
-				getDescriptor(PROP_MODULE),
 		};
+		
+		if(isReferenceAllowed())
+		    descriptors = combine(descriptors, getRefencePropertyDescriptors());
 		
 		return combine(descriptors, properties.getPropertyDescriptors());
 	}
 	
+    private IPropertyDescriptor[] getRefencePropertyDescriptors(){
+        return new IPropertyDescriptor[]{
+                getDescriptor(PROP_MODULE),
+                getDescriptor(PROP_REFERENCE, getReferenceValues()),
+        };
+    }
+    
 	public IPropertyDescriptor[] getAdditionalPropertyDescriptors(){
 		return new IPropertyDescriptor[0];
 	}
 	
 	protected abstract String getCategory(String id);
 	
-	private String[] referenceNames;
+	private String[] referenceValues;
 	public String[] getReferenceValues(){
-	    if(referenceNames == null)
-	        referenceNames = helper.getReferenceNames(this, part);
-	    return referenceNames;
+	    if(referenceValues == null)
+	        referenceValues = helper.getReferenceNames(this, part);
+	    return referenceValues;
 	}
 	
 	public IPropertyDescriptor[] getPropertyDescriptors() {
@@ -212,13 +220,15 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
         return helper;
     }
 
+	public abstract boolean isReferenceAllowed();
+
     public String getModuleName() {
 		return moduleName;
 	}
 
 	public void setModuleName(String moduleName) {
 	    this.moduleName = moduleName;
-	    referenceNames = null;
+	    referenceValues = null;
 		firePropertyChange(PROP_NODE);
 	}
 

@@ -1,8 +1,6 @@
 package com.xrosstools.xunit.def;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.xrosstools.xunit.ApplicationPropertiesAware;
 import com.xrosstools.xunit.BehaviorType;

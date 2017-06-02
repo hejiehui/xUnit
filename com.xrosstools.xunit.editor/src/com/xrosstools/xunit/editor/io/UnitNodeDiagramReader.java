@@ -127,8 +127,10 @@ public class UnitNodeDiagramReader implements UnitConstants{
 		unit.setName(getAttribute(node, NAME));
 		unit.setDescription(getAttribute(node, DESCRIPTION));
 		unit.setClassName(getAttribute(node, CLASS));
-		unit.setModuleName(getAttribute(node, MODULE));
-		unit.setReferenceName(getAttribute(node, REFERENCE));
+		if(unit.isReferenceAllowed()) {
+    		unit.setModuleName(getAttribute(node, MODULE));
+    		unit.setReferenceName(getAttribute(node, REFERENCE));
+		}
 
 		if(unit instanceof CompositeUnitNode)
 			unit.setType(BehaviorType.valueOf(getAttribute(node, TYPE)));
