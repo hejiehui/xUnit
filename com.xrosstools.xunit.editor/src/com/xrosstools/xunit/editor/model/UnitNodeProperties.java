@@ -49,6 +49,10 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
 		return properties.remove(name);
 	}	
 	
+	public void setPropertyValue(String id, Object value) {
+		properties.put(id, (String)value);
+	}
+	
 	public IPropertyDescriptor[] getPropertyDescriptors() {
 		List<IPropertyDescriptor> descciptors = new ArrayList<IPropertyDescriptor>();
 		

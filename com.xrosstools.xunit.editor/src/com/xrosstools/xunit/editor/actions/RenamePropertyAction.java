@@ -11,7 +11,7 @@ public class RenamePropertyAction extends BaseDialogAction {
 	private String oldName;
 	
 	public RenamePropertyAction(IWorkbenchPart part, String oldName, UnitNodeProperties properties){
-		super(part, RENAME_PROPERTY, RENAME_NODE_PROPERTY, oldName);
+		super(part, RENAME_PROPERTY, RENAME_PROPERTY, oldName);
 		this.oldName = oldName;
 		this.properties = properties;
 		setText(oldName);

@@ -7,10 +7,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.xrosstools.xunit.editor.UnitDiagramGraphicalEditor;
-import com.xrosstools.xunit.editor.model.UnitConfigure;
-import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
-
 public abstract class BaseDialogAction extends WorkbenchPartAction implements UnitActionConstants {
 	private String dialogTitle;
 	private String dialogMessage; 

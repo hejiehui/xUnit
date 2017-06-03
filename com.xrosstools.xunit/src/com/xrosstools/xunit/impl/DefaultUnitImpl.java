@@ -83,6 +83,7 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
 
 	    try {
             Field field = ctx.getClass().getField(evaluateFieldName);
+            field.setAccessible(true);
             return field.get(ctx).toString();
         } catch (Throwable e) {
             throw new RuntimeException("Can not evaluate field : " + evaluateFieldName, e);
@@ -95,6 +96,7 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
 
         try {
             Field field = ctx.getClass().getField(evaluateFieldName);
+            field.setAccessible(true);
             return Boolean.parseBoolean(field.get(ctx).toString());
         } catch (Throwable e) {
             throw new RuntimeException("Can not evaluate field : " + evaluateFieldName, e);

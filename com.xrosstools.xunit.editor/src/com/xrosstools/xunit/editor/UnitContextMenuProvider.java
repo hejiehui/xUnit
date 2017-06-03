@@ -1,10 +1,9 @@
 package com.xrosstools.xunit.editor;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
@@ -20,12 +19,12 @@ import com.xrosstools.xunit.editor.actions.CreatePropertyAction;
 import com.xrosstools.xunit.editor.actions.OpenClassAction;
 import com.xrosstools.xunit.editor.actions.RemovePropertyAction;
 import com.xrosstools.xunit.editor.actions.RenamePropertyAction;
+import com.xrosstools.xunit.editor.actions.SetPropertyValueAction;
 import com.xrosstools.xunit.editor.actions.UnitActionConstants;
 import com.xrosstools.xunit.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.editor.model.UnitConstants;
 import com.xrosstools.xunit.editor.model.UnitNode;
 import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
-import com.xrosstools.xunit.editor.model.UnitNodeHelper;
 import com.xrosstools.xunit.editor.model.UnitNodeProperties;
 import com.xrosstools.xunit.editor.parts.BaseNodePart;
 
@@ -59,7 +58,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
 
     	addReferenceAction(menu, node);
     	
-    	addPropertiesActions(menu, node.getProperties());
+    	addPropertiesActions(menu, node);
     }
 
     private void addReferenceAction(IMenuManager menu, UnitNode node) {
@@ -82,7 +81,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     private void addPropertiesActions(IMenuManager menu, UnitNodeProperties properties) {
     	menu.add(new Separator());
     	menu.add(new CreatePropertyAction(editor, properties));
-    	MenuManager subRemove = new MenuManager(REMOVE_NODE_PROPERTY);
+    	MenuManager subRemove = new MenuManager(REMOVE_PROPERTY);
     	for(String name: properties.getNames()){
     		if(EMPTY_VALUE.equals(name))
     			continue;
@@ -90,12 +89,62 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     	}
     	menu.add(subRemove);
 
-    	MenuManager subRename = new MenuManager(RENAME_NODE_PROPERTY);
+    	MenuManager subRename = new MenuManager(RENAME_PROPERTY);
     	for(String name: properties.getNames()){
     		if(EMPTY_VALUE.equals(name))
     			continue;
     		subRename.add(new RenamePropertyAction(editor, name, properties));
     	}
     	menu.add(subRename);
+    }
+    
+    private void addPropertiesActions(IMenuManager menu, UnitNode node) {
+    	UnitNodeProperties properties = node.getProperties();
+    	
+    	menu.add(new Separator());
+    	menu.add(new CreatePropertyAction(editor, properties));
+    	addPreDefinedPropertiesActions(menu, node);
+    	MenuManager subRemove = new MenuManager(REMOVE_PROPERTY);
+    	for(String name: properties.getNames()){
+    		if(EMPTY_VALUE.equals(name))
+    			continue;
+    		subRemove.add(new RemovePropertyAction(editor, properties, name));
+    	}
+    	menu.add(subRemove);
+
+    	MenuManager subRename = new MenuManager(RENAME_PROPERTY);
+    	for(String name: properties.getNames()){
+    		if(EMPTY_VALUE.equals(name))
+    			continue;
+    		subRename.add(new RenamePropertyAction(editor, name, properties));
+    	}
+    	menu.add(subRename);
+    }
+
+    private void addPreDefinedPropertiesActions(IMenuManager menu, UnitNode node) {
+    	List<String> propKeys = new ArrayList<>();
+    	UnitNodeProperties properties = node.getProperties();
+    	
+    	if(node.isValid(node.getImplClassName())){
+    		try {
+    			Class impl = Class.forName(node.getImplClassName());
+				for(Field f: impl.getDeclaredFields()) {
+					int mod = f.getModifiers();
+					if(Modifier.isPublic(mod) && Modifier.isStatic(mod) && f.getName().startsWith(PROPERTY_KEY_PREFIX))
+						propKeys.add(f.get(impl).toString());
+				}
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+    	}
+    	
+    	if(propKeys.size() ==  0)
+    		return;
+
+    	MenuManager subSetValue = new MenuManager(SET_PROPERTY);
+    	for(String key: propKeys){
+    		subSetValue.add(new SetPropertyValueAction(editor, properties, key));
+    	}
+    	menu.add(subSetValue);
     }
 }

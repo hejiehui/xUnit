@@ -17,7 +17,7 @@ public class RemovePropertyAction extends WorkbenchPartAction implements UnitAct
 		super(part);
 		this.key = key;
 		this.properties = properties;
-		setId(ID_PREFIX + REMOVE_NODE_PROPERTY);
+		setId(ID_PREFIX + REMOVE_PROPERTY);
 		setText(key);
 	}
 	
