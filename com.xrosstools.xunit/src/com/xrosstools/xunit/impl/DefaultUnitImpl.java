@@ -1,6 +1,7 @@
 package com.xrosstools.xunit.impl;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import com.xrosstools.xunit.Adapter;
@@ -25,7 +26,10 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
     public static final String PROP_KEY_SHOW_FIELDS = "showFields";
     public static final String PROP_KEY_SHOW_APP_PROP = "showApplicationProperties";
     
+    // The method take higher priority
+    public static final String PROP_KEY_EVALUATE_METHOD = "evaluateMethod";
     public static final String PROP_KEY_EVALUATE_FIELD = "evaluateField";
+
     public static final String PROP_KEY_VALIDATE_DEFAULT = "validateDefault";
     
 	private String messageToShow;
@@ -33,11 +37,14 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
 	private String[] applicationPropertiesToShow;
     
     private String evaluateFieldName;
-    private boolean validateDefault;
+    private String evaluateMethodName;
+    
+    // Default is true
+    private boolean validateDefault = true;
     
     private Map<String, String> appProperties;
     
-	private String key;
+	private String defaultKey;
 
 	public DefaultUnitImpl(UnitDef unitDef){
 	}
@@ -70,39 +77,54 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
     }
             
 	public void setDefaultKey(String key){
-		this.key = key;
+		this.defaultKey = key;
 	}
 	
 	public String getDefaultKey(){
-		return key;
+		return defaultKey;
 	}
 
 	public String locate(Context ctx){
-	    if(evaluateFieldName == null)
-	        return key;
+		if(evaluateFieldName == null && evaluateMethodName == null)
+	        return defaultKey;
 
-	    try {
-            Field field = ctx.getClass().getField(evaluateFieldName);
-            field.setAccessible(true);
-            return field.get(ctx).toString();
-        } catch (Throwable e) {
-            throw new RuntimeException("Can not evaluate field : " + evaluateFieldName, e);
-        }
+        return getValue(ctx).toString();
 	}
 
 	public boolean validate(Context ctx){
-        if(evaluateFieldName == null)
+        if(evaluateFieldName == null && evaluateMethodName == null)
             return validateDefault;
 
-        try {
-            Field field = ctx.getClass().getField(evaluateFieldName);
-            field.setAccessible(true);
-            return Boolean.parseBoolean(field.get(ctx).toString());
-        } catch (Throwable e) {
-            throw new RuntimeException("Can not evaluate field : " + evaluateFieldName, e);
-        }
+        Object value = getValue(ctx);
+        if(value != null && value instanceof Boolean)
+        	return (Boolean)value;
+        return Boolean.parseBoolean(value.toString());
 	}
 
+	private Object getValue(Context ctx) {
+		if(evaluateMethodName != null) {
+		    try {
+				Method method = ctx.getClass().getDeclaredMethod(evaluateMethodName, new Class[0]);
+				method.setAccessible(true);
+				return method.invoke(ctx, new Object[0]);
+	        } catch (Throwable e) {
+	            throw new RuntimeException("Can not invoke method: " + evaluateMethodName, e);
+	        }
+		}
+		
+		if(evaluateFieldName != null) {
+		    try {
+		        Field field = ctx.getClass().getDeclaredField(evaluateFieldName);
+		        field.setAccessible(true);
+		        return field.get(ctx);
+	        } catch (Throwable e) {
+	            throw new RuntimeException("Can not evaluate field: " + evaluateFieldName, e);
+	        }
+		}
+		
+		return null;
+	}
+	
 	public Context convert(Context inputCtx) {
 	    displayMessage(inputCtx);
 		return inputCtx;
@@ -140,9 +162,9 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
         Class<?> clazz = ctx.getClass();
         for(String fieldName: fieldsToShow) {
             try {
-                System.out.println(String.format("%s: %s", fieldName, clazz.getField(fieldName).get(ctx).toString()));
+                System.out.println(String.format("%s: %s", fieldName, clazz.getDeclaredField(fieldName).get(ctx).toString()));
             } catch (Throwable e) {
-                throw new RuntimeException("Can not display field valuen for field: " + fieldName, e);
+                throw new RuntimeException("Can not display field value for field: " + fieldName, e);
             }
         }
     }
