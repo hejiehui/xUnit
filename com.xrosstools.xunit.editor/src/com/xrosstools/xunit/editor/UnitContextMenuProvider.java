@@ -103,7 +103,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     	
     	menu.add(new Separator());
     	menu.add(new CreatePropertyAction(editor, properties));
-    	addPreDefinedPropertiesActions(menu, node);
+    	addDefinedPropertiesActions(menu, node);
     	MenuManager subRemove = new MenuManager(REMOVE_PROPERTY);
     	for(String name: properties.getNames()){
     		if(EMPTY_VALUE.equals(name))
@@ -121,7 +121,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     	menu.add(subRename);
     }
 
-    private void addPreDefinedPropertiesActions(IMenuManager menu, UnitNode node) {
+    private void addDefinedPropertiesActions(IMenuManager menu, UnitNode node) {
     	List<String> propKeys = new ArrayList<>();
     	UnitNodeProperties properties = node.getProperties();
     	
@@ -137,6 +137,10 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
 				e.printStackTrace();
 			}
     	}
+    	
+    	for(String key: properties.getNames())
+    	    if(!propKeys.contains(key))
+    	        propKeys.add(key);
     	
     	if(propKeys.size() ==  0)
     		return;

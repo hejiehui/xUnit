@@ -11,6 +11,9 @@ import org.eclipse.gef.ui.actions.ZoomOutRetargetAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.ui.actions.ActionFactory;
 
+import com.xrosstools.xunit.editor.actions.SaveImageAction;
+import com.xrosstools.xunit.editor.actions.SaveImageRetargetAction;
+
 public class UnitActionBarContributor extends ActionBarContributor {
 	protected void buildActions() {
 		addRetargetAction(new UndoRetargetAction());
@@ -18,6 +21,7 @@ public class UnitActionBarContributor extends ActionBarContributor {
 		addRetargetAction(new DeleteRetargetAction());
 		addRetargetAction(new ZoomInRetargetAction());
 		addRetargetAction(new ZoomOutRetargetAction());
+		addRetargetAction(new SaveImageRetargetAction());
 	}
 	
 //	private LabelRetargetAction getAction(String id, String text){
@@ -33,6 +37,7 @@ public class UnitActionBarContributor extends ActionBarContributor {
 		toolBarManager.add(getAction(GEFActionConstants.ZOOM_IN));
 		toolBarManager.add(getAction(GEFActionConstants.ZOOM_OUT));
 		toolBarManager.add(new ZoomComboContributionItem(getPage()));
+		toolBarManager.add(getAction(SaveImageAction.ID));
 		
 //		toolBarManager.add(new Separator());
 	}

@@ -1,21 +1,22 @@
 package com.xrosstools.xunit.editor;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.util.EventObject;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.draw2d.Viewport;
+import org.eclipse.draw2d.parts.ScrollableThumbnail;
 import org.eclipse.gef.DefaultEditDomain;
+import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.RootEditPart;
 import org.eclipse.gef.commands.CommandStackListener;
 import org.eclipse.gef.dnd.TemplateTransferDragSourceListener;
@@ -26,9 +27,13 @@ import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.gef.ui.parts.GraphicalEditorWithPalette;
+import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.gef.ui.parts.TreeViewer;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IEditorInput;
@@ -39,6 +44,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.xrosstools.common.XmlHelper;
+import com.xrosstools.xunit.editor.actions.SaveImageAction;
 import com.xrosstools.xunit.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
 import com.xrosstools.xunit.editor.parts.UnitNodePartFactory;
@@ -76,6 +82,12 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     	getSite().getKeyBindingService().registerAction(action);
     	action = new ZoomOutAction(root.getZoomManager());
     	getActionRegistry().registerAction(action);
+    	getSite().getKeyBindingService().registerAction(action);
+    	
+    	action = new SaveImageAction(this);
+    	action.setEnabled(true);
+    	getActionRegistry().registerAction(action);
+    	((SaveImageAction)action).setViewer((ScrollingGraphicalViewer)getGraphicalViewer());
     	getSite().getKeyBindingService().registerAction(action);
     }
     
@@ -191,25 +203,37 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     }
     
     private class OutlinePage extends ContentOutlinePage {
-        private Control outline;
+        private SashForm sash;
+        
         public OutlinePage() {
             super(new TreeViewer());
         }
         public void createControl(Composite parent) {
-            outline = getViewer().createControl(parent);
-            getSelectionSynchronizer().addViewer(getViewer());
+            sash = new SashForm(parent, SWT.VERTICAL);
+            getViewer().createControl(sash);
             getViewer().setEditDomain(getEditDomain());
             getViewer().setEditPartFactory(new UnitNodeTreePartFactory());
             getViewer().setContents(diagram);
+            getSelectionSynchronizer().addViewer(getViewer());
+            
+            Canvas canvas = new Canvas(sash, SWT.BORDER);
+            LightweightSystem lws = new LightweightSystem(canvas);
+            
+            ScalableFreeformRootEditPart rootEditPart = (ScalableFreeformRootEditPart) getGraphicalViewer()
+                    .getRootEditPart();
+            ScrollableThumbnail thumbnail = new ScrollableThumbnail(  
+                    (Viewport) rootEditPart.getFigure());  
+            thumbnail.setSource(rootEditPart.getLayer(LayerConstants.PRINTABLE_LAYERS));
+            lws.setContents(thumbnail);
         }
-
+        
         public Control getControl() {
-            return outline;
+            return sash;
         }
 
         public void dispose() {
             getSelectionSynchronizer().removeViewer(getViewer());
             super.dispose();
         }
-    }
+    }    
 }

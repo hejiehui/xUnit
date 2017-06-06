@@ -6,7 +6,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.xrosstools.xunit.editor.model.UnitNode;
 import com.xrosstools.xunit.editor.parts.BaseNodePart;
 
-public class OpenClassAction  extends WorkbenchPartAction implements UnitActionConstants {
+public class OpenClassAction extends WorkbenchPartAction implements UnitActionConstants {
 	private BaseNodePart nodePart;
 	public OpenClassAction(IWorkbenchPart part, BaseNodePart nodePart) {
 		super(part);
