@@ -217,6 +217,7 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
             getSelectionSynchronizer().addViewer(getViewer());
             
             Canvas canvas = new Canvas(sash, SWT.BORDER);
+            sash.setWeights(new int[]{3, 1});
             LightweightSystem lws = new LightweightSystem(canvas);
             
             ScalableFreeformRootEditPart rootEditPart = (ScalableFreeformRootEditPart) getGraphicalViewer()
