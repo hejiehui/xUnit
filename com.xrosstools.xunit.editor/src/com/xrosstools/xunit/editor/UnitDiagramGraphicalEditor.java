@@ -208,8 +208,10 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
         public OutlinePage() {
             super(new TreeViewer());
         }
+        
         public void createControl(Composite parent) {
             sash = new SashForm(parent, SWT.VERTICAL);
+            
             getViewer().createControl(sash);
             getViewer().setEditDomain(getEditDomain());
             getViewer().setEditPartFactory(new UnitNodeTreePartFactory());
