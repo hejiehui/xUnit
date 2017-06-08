@@ -26,7 +26,7 @@ Depenency
 	<dependency>
 		<groupId>com.xrosstools</groupId>
 		<artifactId>xunit</artifactId>
-		<version>0.9.0-SNAPSHOT</version>
+		<version>0.9.1</version>
 	</dependency>
 
 repository
