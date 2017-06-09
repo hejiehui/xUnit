@@ -1,12 +1,15 @@
 package com.xrosstools.xunit.editor.actions;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.SWTGraphics;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.editparts.LayerManager;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
-import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
@@ -15,8 +18,11 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
+
 public class SaveImageAction extends WorkbenchPartAction implements UnitActionConstants {
     private ScrollingGraphicalViewer viewer;
+    private UnitNodeDiagram diagram;
     public static final String ID = ID_PREFIX + SAVE_IMPAGE;
     public SaveImageAction(IWorkbenchPart part) {
         super(part);
@@ -27,8 +33,9 @@ public class SaveImageAction extends WorkbenchPartAction implements UnitActionCo
         saveOutlinePicture();
     }
 
-    public void setViewer(ScrollingGraphicalViewer viewer) {
+    public void setData(ScrollingGraphicalViewer viewer, UnitNodeDiagram diagram) {
         this.viewer = viewer;
+        this.diagram = diagram;
     }
 
     /**
@@ -60,8 +67,16 @@ public class SaveImageAction extends WorkbenchPartAction implements UnitActionCo
         ImageLoader il = new ImageLoader();
         il.data = new ImageData[] { img.getImageData() };
 
-            //保存地址和保存图片的类型
-        il.save("c:/test.jpg", SWT.IMAGE_JPEG);
+        String name = diagram.getFilePath().getName() + ".jpg";
+        IFile imgFile = diagram.getFilePath().getParent().getFile(new Path(name));
+        String path = imgFile.getLocation().toOSString();
+        
+        il.save(path, SWT.IMAGE_JPEG);
+        try {
+            imgFile.refreshLocal(IResource.DEPTH_ZERO,null);
+        } catch (CoreException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
