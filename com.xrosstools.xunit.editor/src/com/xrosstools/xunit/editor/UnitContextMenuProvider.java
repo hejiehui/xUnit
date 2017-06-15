@@ -67,6 +67,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
         
         menu.add(new Separator());
     	menu.add(new AssignModuleAction(editor, node));
+    	//SelectModuleAction
     	
     	MenuManager sub = new MenuManager(ASSIGN_REFERENCE);
 

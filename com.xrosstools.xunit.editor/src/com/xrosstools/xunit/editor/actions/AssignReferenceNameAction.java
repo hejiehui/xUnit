@@ -14,6 +14,8 @@ public class AssignReferenceNameAction extends WorkbenchPartAction implements Un
 		setText(referenceName);
 		this.node = node;
 		this.referenceName = referenceName;
+		if(node.getReferenceName().equals(referenceName))
+			setChecked(true);
 	}
 
 	protected boolean calculateEnabled() {

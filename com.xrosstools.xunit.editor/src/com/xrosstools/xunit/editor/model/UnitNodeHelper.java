@@ -9,6 +9,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -42,6 +44,20 @@ public class UnitNodeHelper implements UnitConstants {
 			e.printStackTrace(System.err);
 			return new String[]{};
 		}
+	}
+	
+	public List<String> getWorkSpaceModuleNames(){
+		List<String> names = new ArrayList<String>();
+		try {			
+			String curName = diagram.getFilePath().getName();
+			for(IResource res: diagram.getFilePath().getParent().members(false)) {
+				if(res.getFileExtension().equals("xunit") && !res.getName().equals(curName))
+					names.add(res.getName());
+			}
+		} catch (CoreException e) {
+			e.printStackTrace(System.err);
+		}
+		return names;
 	}
 	
 	public boolean isFileExist(String moduleName) {
