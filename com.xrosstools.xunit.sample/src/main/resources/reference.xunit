@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xunit description="" name="" packageId="">
+ <properties/>
+ <units>
+  <chain class="default" description="" name="chain1" type="processor">
+   <processor class="" description="" module="" name="unit 1" reference="chain2"/>
+   <processor class="" description="" module="unit_test.xunit" name="unit 2" reference="Chain test"/>
+   <processor class="default" description="" module="" name="unit 3" reference="">
+    <property key="showMessage" value="4"/>
+   </processor>
+  </chain>
+  <chain class="default" description="" name="chain2" type="processor">
+   <processor class="default" description="" module="" name="unit 1" reference="">
+    <property key="showMessage" value="1"/>
+   </processor>
+   <processor class="default" description="" module="" name="unit 2" reference="">
+    <property key="showMessage" value="2"/>
+   </processor>
+   <processor class="default" description="" module="" name="unit 3" reference="">
+    <property key="showMessage" value="3"/>
+   </processor>
+  </chain>
+ </units>
+</xunit>

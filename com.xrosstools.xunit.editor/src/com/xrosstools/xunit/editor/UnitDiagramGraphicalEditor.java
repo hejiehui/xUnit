@@ -87,7 +87,7 @@ public class UnitDiagramGraphicalEditor extends GraphicalEditorWithPalette {
     	action = new SaveImageAction(this);
     	action.setEnabled(true);
     	getActionRegistry().registerAction(action);
-    	((SaveImageAction)action).setViewer((ScrollingGraphicalViewer)getGraphicalViewer());
+    	((SaveImageAction)action).setData((ScrollingGraphicalViewer)getGraphicalViewer(), diagram);
     	getSite().getKeyBindingService().registerAction(action);
     }
     
