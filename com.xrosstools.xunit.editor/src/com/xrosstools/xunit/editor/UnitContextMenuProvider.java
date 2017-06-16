@@ -19,18 +19,18 @@ import com.xrosstools.xunit.editor.actions.CreatePropertyAction;
 import com.xrosstools.xunit.editor.actions.OpenClassAction;
 import com.xrosstools.xunit.editor.actions.RemovePropertyAction;
 import com.xrosstools.xunit.editor.actions.RenamePropertyAction;
+import com.xrosstools.xunit.editor.actions.SelectModuleAction;
 import com.xrosstools.xunit.editor.actions.SetPropertyValueAction;
 import com.xrosstools.xunit.editor.actions.UnitActionConstants;
-import com.xrosstools.xunit.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.editor.model.UnitConstants;
 import com.xrosstools.xunit.editor.model.UnitNode;
 import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
+import com.xrosstools.xunit.editor.model.UnitNodeHelper;
 import com.xrosstools.xunit.editor.model.UnitNodeProperties;
 import com.xrosstools.xunit.editor.parts.BaseNodePart;
 
 public class UnitContextMenuProvider  extends ContextMenuProvider implements UnitActionConstants, UnitConstants {
 	private UnitDiagramGraphicalEditor editor;
-	private UnitNodeDiagramFactory diagramFactory = new UnitNodeDiagramFactory();
 	
     public UnitContextMenuProvider(EditPartViewer viewer, UnitDiagramGraphicalEditor editor) {
         super(viewer);
@@ -38,45 +38,53 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     }
     
     public void buildContextMenu(IMenuManager menu) {
-		UnitNodeDiagram diagram = (UnitNodeDiagram)editor.getRootEditPart().getContents().getModel();
-		
+        UnitNodeDiagram diagram = (UnitNodeDiagram)editor.getRootEditPart().getContents().getModel();
+        
 		EditPartViewer viewer = this.getViewer();
 		List selected = viewer.getSelectedEditParts();
 		if(selected.size() == 1 && selected.get(0) instanceof BaseNodePart)
-			getNodeActions(menu, (BaseNodePart)selected.get(0));
+			getNodeActions(menu, (BaseNodePart)selected.get(0), diagram);
 		else
 			addPropertiesActions(menu, diagram.getProperties());
 		
     }
     
-    private void getNodeActions(IMenuManager menu, BaseNodePart nodePart){
+    private void getNodeActions(IMenuManager menu, BaseNodePart nodePart, UnitNodeDiagram diagram){
     	UnitNode node = (UnitNode)nodePart.getModel();
     	menu.add(new AssignClassNameAction(editor, nodePart));
     	menu.add(new OpenClassAction(editor, nodePart));
     	menu.add(new Separator());
     	menu.add(new AssignDefaultAction(editor, node));
 
-    	addReferenceAction(menu, node);
+    	addReferenceAction(menu, node, diagram);
     	
     	addPropertiesActions(menu, node);
     }
 
-    private void addReferenceAction(IMenuManager menu, UnitNode node) {
+    private void addReferenceAction(IMenuManager menu, UnitNode node, UnitNodeDiagram diagram) {
         if(!node.isReferenceAllowed())
             return;
         
         menu.add(new Separator());
-    	menu.add(new AssignModuleAction(editor, node));
-    	//SelectModuleAction
+        
+        MenuManager moduleSub = new MenuManager(ASSIGN_MODULE);
+        moduleSub.add(new AssignModuleAction(editor, node));
+        UnitNodeHelper helper = new UnitNodeHelper(diagram);
+        List<String> moduleNames = helper.getWorkSpaceModuleNames();
+        if(moduleNames.size() > 0) {
+            moduleSub.add(new Separator());
+            for(String name: moduleNames)
+                moduleSub.add(new SelectModuleAction(editor, node, name));
+        }
+        menu.add(moduleSub);
     	
-    	MenuManager sub = new MenuManager(ASSIGN_REFERENCE);
-
+    	MenuManager referSub = new MenuManager(ASSIGN_REFERENCE);
     	for(String name: node.getReferenceValues()){
     		if(EMPTY_VALUE.equals(name))
     			continue;
-    		sub.add(new AssignReferenceNameAction(editor, node, name));
+    		referSub.add(new AssignReferenceNameAction(editor, node, name));
     	}
-    	menu.add(sub);
+    	menu.add(referSub);
     }
     
     private void addPropertiesActions(IMenuManager menu, UnitNodeProperties properties) {
