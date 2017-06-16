@@ -1,12 +1,12 @@
 package com.xrosstools.xunit.editor;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -28,6 +28,7 @@ import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
 import com.xrosstools.xunit.editor.model.UnitNodeHelper;
 import com.xrosstools.xunit.editor.model.UnitNodeProperties;
 import com.xrosstools.xunit.editor.parts.BaseNodePart;
+import com.xrosstools.xunit.editor.parts.UnitNodeDiagramPart;
 
 public class UnitContextMenuProvider  extends ContextMenuProvider implements UnitActionConstants, UnitConstants {
 	private UnitDiagramGraphicalEditor editor;
@@ -136,12 +137,14 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     	
     	if(node.isValid(node.getImplClassName())){
     		try {
-    			Class impl = Class.forName(node.getImplClassName());
-				for(Field f: impl.getDeclaredFields()) {
-					int mod = f.getModifiers();
-					if(Modifier.isPublic(mod) && Modifier.isStatic(mod) && f.getName().startsWith(PROPERTY_KEY_PREFIX))
-						propKeys.add(f.get(impl).toString());
-				}
+                UnitNodeDiagramPart undp = (UnitNodeDiagramPart)editor.getRootEditPart().getContents();
+                IType type = undp.getSourceType(node.getClassName());
+                if(type != null) {
+                    for(IField f: type.getFields()) {
+                        String name = f.getElementName();
+                        propKeys.add(name);
+                    }
+                }
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
