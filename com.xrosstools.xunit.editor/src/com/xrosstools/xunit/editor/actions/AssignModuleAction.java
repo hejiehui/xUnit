@@ -11,7 +11,7 @@ public class AssignModuleAction extends BaseDialogAction {
 	public AssignModuleAction(IWorkbenchPart part, UnitNode node){
 		super(part, ASSIGN_MODULE, ASSIGN_MODULE, node.getModuleName());
 		this.node = node;
-		setText(ASSIGN_MODULE);
+		setText(ASSIGN_TO_MODULE);
 	}
 
 	protected Command createCommand(String value) {

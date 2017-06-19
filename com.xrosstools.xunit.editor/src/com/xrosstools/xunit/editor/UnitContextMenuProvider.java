@@ -138,11 +138,12 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     	if(node.isValid(node.getImplClassName())){
     		try {
                 UnitNodeDiagramPart undp = (UnitNodeDiagramPart)editor.getRootEditPart().getContents();
-                IType type = undp.getSourceType(node.getClassName());
+                IType type = undp.getSourceType(node.getImplClassName());
                 if(type != null) {
                     for(IField f: type.getFields()) {
-                        String name = f.getElementName();
-                        propKeys.add(name);
+                        if(f.getElementName().startsWith(PROPERTY_KEY_PREFIX)) {
+                            propKeys.add(f.getConstant().toString());
+                        }
                     }
                 }
 			} catch (Throwable e) {
