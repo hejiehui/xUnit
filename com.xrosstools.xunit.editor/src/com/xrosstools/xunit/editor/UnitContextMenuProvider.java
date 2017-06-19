@@ -7,6 +7,7 @@ import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.internal.core.SourceType;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
@@ -141,8 +142,13 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
                 IType type = undp.getSourceType(node.getImplClassName());
                 if(type != null) {
                     for(IField f: type.getFields()) {
-                        if(f.getElementName().startsWith(PROPERTY_KEY_PREFIX)) {
-                            propKeys.add(f.getConstant().toString());
+                        if(f.getElementName().startsWith(PROPERTY_KEY_PREFIX) && f.getConstant() != null) {
+                            String name = f.getConstant().toString();
+                            if(type instanceof SourceType) {
+                                name = name.substring(1);
+                                name = name.substring(0, name.length()-1);
+                            }
+                            propKeys.add(name);
                         }
                     }
                 }

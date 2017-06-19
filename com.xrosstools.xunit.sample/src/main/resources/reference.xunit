@@ -21,5 +21,7 @@
     <property key="showMessage" value="3"/>
    </processor>
   </chain>
+  <processor class="com.xrosstools.xunit.sample.unit.PropertyAwareProcessor" description="" module="" name="processor" reference=""/>
+  <processor class="default" description="" module="" name="processor" reference=""/>
  </units>
 </xunit>
