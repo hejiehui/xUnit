@@ -142,9 +142,11 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
                 IType type = undp.getSourceType(node.getImplClassName());
                 if(type != null) {
                     for(IField f: type.getFields()) {
-                        if(f.getElementName().startsWith(PROPERTY_KEY_PREFIX) && f.getConstant() != null) {
+                        if(f.getElementName().startsWith(PROPERTY_KEY_PREFIX) &&
+                                f.getTypeSignature().equals("Ljava.lang.String;") &&
+                                f.getConstant() != null) {
                             String name = f.getConstant().toString();
-                            if(type instanceof SourceType) {
+                            if(type instanceof SourceType && name.startsWith("\"") && name.endsWith("\"")) {
                                 name = name.substring(1);
                                 name = name.substring(0, name.length()-1);
                             }

@@ -19,8 +19,6 @@ public class RemovePropertyAction extends WorkbenchPartAction implements UnitAct
 		this.properties = properties;
 		setId(ID_PREFIX + REMOVE_PROPERTY);
 		setText(key);
-		if(properties.contains(key))
-			setChecked(true);
 	}
 	
 	protected boolean calculateEnabled() {

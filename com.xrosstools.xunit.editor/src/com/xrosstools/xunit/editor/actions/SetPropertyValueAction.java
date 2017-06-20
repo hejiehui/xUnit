@@ -15,6 +15,8 @@ public class SetPropertyValueAction extends BaseDialogAction {
 		this.properties = properties;
 		this.key = key;
 		setText(key);
+		if(properties.contains(key))
+		    setChecked(true);
 	}
 
 	protected Command createCommand(String value) {
