@@ -22,6 +22,10 @@ import com.xrosstools.xunit.def.UnitDef;
  *
  */
 public class DefaultUnitImpl implements Processor, Converter, Validator, Locator, Decorator, Adapter, ApplicationPropertiesAware, UnitPropertiesAware {
+    /**
+     * public static final String constant with name start with PROP_KEY will be displayed 
+     * in "Set property" context menu
+     */
     public static final String PROP_KEY_SHOW_MESSAGE = "showMessage";
     public static final String PROP_KEY_SHOW_FIELDS = "showFields";
     public static final String PROP_KEY_SHOW_APP_PROP = "showApplicationProperties";
@@ -57,11 +61,15 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
         messageToShow = properties.get(PROP_KEY_SHOW_MESSAGE);
         fieldsToShow = parse(properties.get(PROP_KEY_SHOW_FIELDS));
         applicationPropertiesToShow = parse(properties.get(PROP_KEY_SHOW_APP_PROP));
+
         evaluateFieldName = properties.get(PROP_KEY_EVALUATE_FIELD);
-        
         if(evaluateFieldName!= null)
             evaluateFieldName = evaluateFieldName.trim();
         
+        evaluateMethodName = properties.get(PROP_KEY_EVALUATE_METHOD);
+        if(evaluateMethodName!= null)
+            evaluateMethodName = evaluateMethodName.trim();
+
         validateDefault = properties.containsKey(PROP_KEY_VALIDATE_DEFAULT) ? Boolean.parseBoolean(properties.get(PROP_KEY_VALIDATE_DEFAULT)) : true;
     }
 
@@ -100,30 +108,6 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
         	return (Boolean)value;
         return Boolean.parseBoolean(value.toString());
 	}
-
-	private Object getValue(Context ctx) {
-		if(evaluateMethodName != null) {
-		    try {
-				Method method = ctx.getClass().getDeclaredMethod(evaluateMethodName, new Class[0]);
-				method.setAccessible(true);
-				return method.invoke(ctx, new Object[0]);
-	        } catch (Throwable e) {
-	            throw new RuntimeException("Can not invoke method: " + evaluateMethodName, e);
-	        }
-		}
-		
-		if(evaluateFieldName != null) {
-		    try {
-		        Field field = ctx.getClass().getDeclaredField(evaluateFieldName);
-		        field.setAccessible(true);
-		        return field.get(ctx);
-	        } catch (Throwable e) {
-	            throw new RuntimeException("Can not evaluate field: " + evaluateFieldName, e);
-	        }
-		}
-		
-		return null;
-	}
 	
 	public Context convert(Context inputCtx) {
 	    displayMessage(inputCtx);
@@ -144,6 +128,63 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
 	public void after(Context ctx) {
 	}
 	
+	private Object getValueFromMethod(Context ctx, String methodName) {
+        try {
+            Method method = ctx.getClass().getDeclaredMethod(evaluateMethodName, new Class[0]);
+            method.setAccessible(true);
+            return method.invoke(ctx, new Object[0]);
+        } catch (Throwable e) {
+            throw new RuntimeException("Can not invoke method: " + evaluateMethodName, e);
+        }
+    }
+	
+	private Object getValueFromField(Context ctx, String fieldName) {
+	    try {
+            Field field = ctx.getClass().getDeclaredField(fieldName);
+            
+            // Try getter of the field first
+            StringBuilder sb = new StringBuilder();
+            sb.append(fieldName);
+            if (Character.isLowerCase(sb.charAt(0))) {
+                if (sb.length() == 1 || !Character.isUpperCase(sb.charAt(1))) {
+                    sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+                }
+            }
+            if (field.getType().equals(Boolean.class) || field.getType().equals(boolean.class)) {
+                sb.insert(0, "is");
+            } else {
+                sb.insert(0, "get");
+            }
+            
+            Method method = null;
+            try{
+                method = ctx.getClass().getDeclaredMethod(sb.toString(), new Class[0]);
+            } catch (NoSuchMethodException e) {
+            }
+            
+            if(method != null) {
+                  method.setAccessible(true);
+                  return method.invoke(ctx, new Object[0]);
+            } else {
+                field.setAccessible(true);
+                return field.get(ctx);
+            }
+        } catch (Throwable e) {
+            throw new RuntimeException("Can not evaluate field: " + fieldName, e);
+        }
+	}
+
+	
+	private Object getValue(Context ctx) {
+        if(evaluateMethodName != null)
+            return getValueFromMethod(ctx, evaluateMethodName);
+        
+        if(evaluateFieldName != null)
+            return getValueFromField(ctx, evaluateFieldName);
+        
+        return null;
+    }
+	   
 	private void displayMessage(Context ctx) {
 	    showMessage();
 	    showFields(ctx);
@@ -159,10 +200,10 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
         if(fieldsToShow == null)
             return;
         
-        Class<?> clazz = ctx.getClass();
         for(String fieldName: fieldsToShow) {
             try {
-                System.out.println(String.format("%s: %s", fieldName, clazz.getDeclaredField(fieldName).get(ctx).toString()));
+                String value = String.valueOf(getValueFromField(ctx, fieldName));
+                System.out.println(String.format("%s: %s", fieldName, value));
             } catch (Throwable e) {
                 throw new RuntimeException("Can not display field value for field: " + fieldName, e);
             }

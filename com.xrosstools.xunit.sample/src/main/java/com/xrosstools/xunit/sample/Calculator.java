@@ -13,16 +13,16 @@ public class Calculator implements Converter, UnitPropertiesAware {
 	public Context convert(Context contxt) {
 		LotteryDrawContext ctx = (LotteryDrawContext)contxt;
 		
-		double value = ctx.quantity;
-		switch(ctx.operator){
+		double value = ctx.getQuantity();
+		switch(ctx.getOperator()){
 			case "+": value+=quantity; break;
 			case "-": value-=quantity; break;
 			case "*": value*=quantity; break;
 			case "/": value/=quantity; break;
 		}
 		
-		System.out.println(String.format("%g %s %g = %g", ctx.quantity, ctx.operator, quantity, value));
-		ctx.quantity = value;
+		System.out.println(String.format("%g %s %g = %g", ctx.getQuantity(), ctx.getOperator(), quantity, value));
+		ctx.setQuantity(value);
 		
 		return ctx;
 	}
