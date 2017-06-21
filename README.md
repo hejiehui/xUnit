@@ -43,6 +43,7 @@ repository
 	</repositories>
 
 # Demo project
+Demo包含了简单的示例，方便大家迅速的上手。并展示了缺省实现的众多功能。
 [Demo](https://github.com/hejiehui/xUnit/tree/master/com.xrosstools.xunit.sample)
 
 # 设计思路
@@ -50,7 +51,7 @@ repository
 
 input --> process --> output。
 
-依据这种抽象，xunt把输入数据/输出数据抽象为Context接口。
+依据这种抽象，xunit把输入数据/输出数据抽象为Context接口。
 
 	package com.xrosstools.xunit;
 
@@ -60,7 +61,7 @@ input --> process --> output。
 
 把输入到输出之间的转化行为定义为Converter接口。由于Converter接口定义了行为，因此又称为行为组件。Converter的工作是把输入Context转化为输出Context。
 
-如果输入与输出是相同的具体类型（Context的子类），则Converter接口可以简化为Processor接口。即仅仅接收输入Context，但没有返回值。Processor一般对输入的Context的内部属性做处理。
+如果输入与输出是相同的具体类型（Context的具体实现类），则Converter接口可以简化为Processor接口。即仅仅接收输入Context，但没有返回值。Processor一般对输入的Context的内部属性做处理。
 
 将不同的Converter和Processor依次串联起来，让Context从第一个处理单元一直流动到最后一个处理单元，可以完成一系列动作，这种对单元的组装就是结构组件Chain。
 
@@ -75,7 +76,7 @@ input --> process --> output。
 如果希望对某个组件做修饰，可以使用Decorator组件。Decorator的行为自动与被修饰的组件保持一致。
 
 # 组件
-xunit的组件可以分为行为组件和结构组件。行为组件定义真的Context能做的处理；结构组件则对行为组件进行组合，将多个行为组件结合为更大，结构更复杂的行为组件。与行为组件不同的是，结构组件的行为模式需要手工指定，缺省是Processor。
+xunit的组件可以分为行为组件和结构组件。行为组件定义针对Context能做的处理；结构组件则对行为组件进行组合，将多个行为组件结合为更大，结构更复杂的行为组件。与行为组件不同的是，结构组件的行为模式需要手工指定，缺省是Processor。
 
 ## 行为组件
 
@@ -114,8 +115,9 @@ xunit的组件可以分为行为组件和结构组件。行为组件定义真的
     }
 
 ## 结构组件
+
 ### chain
-对内部的unit顺序调度处理
+对内部的unit顺序调度处理。Context将被顺序处理。
 ![chain](https://github.com/hejiehui/xUnit/blob/master/doc/chain.PNG)
 
 ### if-else
@@ -161,6 +163,15 @@ xunit的组件可以分为行为组件和结构组件。行为组件定义真的
     }
 
 ![adapter](https://github.com/hejiehui/xUnit/blob/master/doc/adaptor.PNG)
+
+## 结构不一至处理
+结构组件一般要求其内部包含的行为组件与结构组件自身定义的行为模式一致。不一至的情况下，可以通过Adapter来保持一致。为高效的复用现有组件，避免频繁的配置大量简单重复的Adapter，结构组件内置了简单的适配机制。以Chain为例：
+
+如果Chain的行为模式是Converter，而Chain中包含Processor，则Processor的输入Context会当作Convert的结果传递到下一个单元。
+
+如果Chain的行为模式是Processor，而Chain中包含Converter，则Converter的convert方法会被调用，但是转化的输出Context则会被丢弃。最开始输入的Context会传递到下一个单元。
+
+[逻辑实现]()
 
 # 编辑方法
 直接选择需要的组件，点击编辑器特定的区域
