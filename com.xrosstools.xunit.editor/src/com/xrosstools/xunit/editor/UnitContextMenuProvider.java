@@ -143,7 +143,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
                 if(type != null) {
                     for(IField f: type.getFields()) {
                         if(f.getElementName().startsWith(PROPERTY_KEY_PREFIX) &&
-                                f.getTypeSignature().equals("Ljava.lang.String;") &&
+                                (f.getTypeSignature().equals("Ljava.lang.String;") || f.getTypeSignature().equals("QString;")) &&
                                 f.getConstant() != null) {
                             String name = f.getConstant().toString();
                             if(type instanceof SourceType && name.startsWith("\"") && name.endsWith("\"")) {
