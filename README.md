@@ -26,7 +26,7 @@ Depenency
 	<dependency>
 		<groupId>com.xrosstools</groupId>
 		<artifactId>xunit</artifactId>
-		<version>0.9.1</version>
+		<version>0.9.2</version>
 	</dependency>
 
 repository
@@ -45,8 +45,40 @@ repository
 # Demo project
 [Demo](https://github.com/hejiehui/xUnit/tree/master/com.xrosstools.xunit.sample)
 
+# 设计思路
+任何一个系统，模块，处理单元的工作模式都可以简化为IPO模型，即把一定的输入通过模块定义的动作，转化为一定的输出：
+
+input --> process --> output。
+
+依据这种抽象，xunt把输入数据/输出数据抽象为Context接口。
+
+	package com.xrosstools.xunit;
+
+	public interface Context {
+	
+	}
+
+把输入到输出之间的转化行为定义为Converter接口。由于Converter接口定义了行为，因此又称为行为组件。Converter的工作是把输入Context转化为输出Context。
+
+如果输入与输出是相同的具体类型（Context的子类），则Converter接口可以简化为Processor接口。即仅仅接收输入Context，但没有返回值。Processor一般对输入的Context的内部属性做处理。
+
+将不同的Converter和Processor依次串联起来，让Context从第一个处理单元一直流动到最后一个处理单元，可以完成一系列动作，这种对单元的组装就是结构组件Chain。
+
+如果需要在两个行为组件之间选择一个，则需要对Context进行判断，这种封装了判断的行为组件就是Converter的另外一个变种Validator。Validator对Context进行判断操作，返回的是一个Boolean类型的输出。有了Validator，即可以组合成BiBranch这种结构组件。
+
+同理，有时我们需要基于Context在多个行为组件之间进行选择，这种封装了选择行为的组件就是Converter的另一个变种Locator。Locator对Context进行标识符的识别判断，返回的是一个String类型的输出。有了Locator，即可组合成Branch这种结构组件。
+
+基于Validator和单个行为组件，我们还可以构建While Loop和Do While loop结构组件，完成前置或后置条件判断的循环操作。
+
+如果希望复用某个已有的行为组件，但接口与我们需要的不一至则可以通过Adapter来做适配
+
+如果希望对某个组件做修饰，可以使用Decorator组件。Decorator的行为自动与被修饰的组件保持一致。
+
 # 组件
+xunit的组件可以分为行为组件和结构组件。行为组件定义真的Context能做的处理；结构组件则对行为组件进行组合，将多个行为组件结合为更大，结构更复杂的行为组件。与行为组件不同的是，结构组件的行为模式需要手工指定，缺省是Processor。
+
 ## 行为组件
+
 ### processor
 对Context进行处理，但没有返回值
 
@@ -174,7 +206,7 @@ repository
 ![assign](https://github.com/hejiehui/xUnit/blob/master/doc/uc_response_assign.png)
 
 ## 不同文件文件案例
-这个是用户自创的方式，未来系统缺省会提供缺省实现
+这个是用户自创的方式，目前的编辑器依据缺省支持
 主图和子图在不同文件，通过通用的dispatcher来实现结合
 
 ### 案例1
