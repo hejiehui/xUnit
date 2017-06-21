@@ -18,7 +18,7 @@ Xross Unit尤其适合重构老系统。特别是跨语言的重构，通过Xros
 
 ![overview](https://github.com/hejiehui/xUnit/blob/master/doc/overview.png) 
 
-[设计思想和组件介绍](https://github.com/hejiehui/xUnit/wiki/Design-Introduction)
+[设计思想和组件介绍](https://github.com/hejiehui/xUnit/wiki/Design)
 
 [使用方法](https://github.com/hejiehui/xUnit/wiki/Editor-Usage)
 
