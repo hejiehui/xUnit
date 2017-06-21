@@ -7,6 +7,7 @@ import com.xrosstools.xunit.Converter;
 import com.xrosstools.xunit.UnitPropertiesAware;
 
 public class Calculator implements Converter, UnitPropertiesAware {
+    public static final String PROP_KEY_QUANTITY = "quantity";
 	private double quantity;
 	
 	@Override
@@ -29,6 +30,6 @@ public class Calculator implements Converter, UnitPropertiesAware {
 
 	@Override
 	public void setUnitProperties(Map<String, String> arg0) {
-		quantity = Double.parseDouble(arg0.get("quantity"));
+		quantity = Double.parseDouble(arg0.get(PROP_KEY_QUANTITY));
 	}
 }

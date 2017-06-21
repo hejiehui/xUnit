@@ -4,16 +4,16 @@
  <properties/>
  <units>
   <chain class="default" description="" name="Lottery Draw" type="processor">
-   <processor class="com.xrosstools.xunit.sample.FieldDisplayer" description="" module="" name="Display Player" reference="">
-    <property key="Fields" value="name,quantity"/>
+   <processor class="default" description="" module="" name="Display Player" reference="">
+    <property key="showFields" value="name,quantity"/>
    </processor>
    <branch class="default" description="" name="a branch" type="processor">
-    <locator class="com.xrosstools.xunit.sample.FieldLocator" default_key="" description="" module="" name="locator" reference="">
-     <property key="field" value="operator"/>
+    <locator class="default" default_key="" description="" module="" name="locator" reference="">
+     <property key="evaluateField" value="operator"/>
     </locator>
     <branch_unit key="+">
      <converter class="com.xrosstools.xunit.sample.Calculator" description="test" module="" name="+ 1000" reference="">
-      <property key="quantity" value="1000"/>
+      <property key="quantity" value="100"/>
      </converter>
     </branch_unit>
     <branch_unit key="-">
@@ -32,8 +32,8 @@
      </converter>
     </branch_unit>
    </branch>
-   <processor class="com.xrosstools.xunit.sample.FieldDisplayer" description="" module="" name="Display Result" reference="">
-    <property key="Fields" value="name,quantity"/>
+   <processor class="default" description="" module="" name="Display Result" reference="">
+    <property key="showFields" value="name,quantity"/>
    </processor>
   </chain>
  </units>
