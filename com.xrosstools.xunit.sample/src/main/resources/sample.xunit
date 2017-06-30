@@ -13,7 +13,7 @@
     </locator>
     <branch_unit key="+">
      <converter class="com.xrosstools.xunit.sample.Calculator" description="test" module="" name="+ 1000" reference="">
-      <property key="quantity" value="100"/>
+      <property key="quantity" value="1000"/>
      </converter>
     </branch_unit>
     <branch_unit key="-">
