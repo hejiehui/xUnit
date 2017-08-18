@@ -22,6 +22,6 @@
    </processor>
   </chain>
   <processor class="com.xrosstools.xunit.sample.unit.PropertyAwareProcessor" description="" module="" name="processor" reference=""/>
-  <processor class="default" description="" module="" name="processor" reference=""/>
+  <processor class="com.xrosstools.xunit.sample.unit.MapContextProcessor" description="" module="" name="Map Context Processor" reference=""/>
  </units>
 </xunit>
