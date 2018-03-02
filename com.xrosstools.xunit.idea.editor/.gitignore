@@ -1,3 +1,6 @@
 /out
 
 /.idea/workspace.xml
+
+
+!/libs/dom4j-1.6.1.jar
