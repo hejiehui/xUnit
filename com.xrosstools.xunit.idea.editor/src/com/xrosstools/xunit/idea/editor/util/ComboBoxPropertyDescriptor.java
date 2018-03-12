@@ -1,7 +1,26 @@
 package com.xrosstools.xunit.idea.editor.util;
 
-public class ComboBoxPropertyDescriptor extends PropertyDescriptor {
-    public ComboBoxPropertyDescriptor(String name, String label, Object value) {
+import com.intellij.openapi.ui.ComboBox;
 
+import javax.swing.*;
+
+public class ComboBoxPropertyDescriptor extends PropertyDescriptor {
+    private String[] values;
+    public ComboBoxPropertyDescriptor(String propertyId, String label, String[] values) {
+        setPropertyName(propertyId);
+        this.values = values;
+    }
+
+    public JComponent getEditor(Object value) {
+        ComboBox ctrl = new ComboBox();
+        for(String v: values)
+            ctrl.addItem(v);
+
+        ctrl.setSelectedItem(value);
+        return ctrl;
+    }
+
+    public String[] getValues() {
+        return values;
     }
 }

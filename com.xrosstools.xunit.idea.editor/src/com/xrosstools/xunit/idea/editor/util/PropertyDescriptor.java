@@ -1,6 +1,6 @@
 package com.xrosstools.xunit.idea.editor.util;
 
-public class PropertyDescriptor implements IPropertyDescriptor {
+public abstract class PropertyDescriptor implements IPropertyDescriptor {
     private String category;
     private String propertyName;
 

@@ -1,10 +1,11 @@
 package com.xrosstools.xunit.idea.editor.util;
 
 import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import java.util.*;
 
-public class PropertyTableModel implements TableModel {
+public class PropertyTableModel extends AbstractTableModel {
     private static final String DEFAULT = "default";
     private IPropertySource source;
     private class TableRow {
@@ -40,6 +41,7 @@ public class PropertyTableModel implements TableModel {
 
             TableRow row = new TableRow();
             row.propertyName = d.getPropertyName();
+            row.propertyDescriptor = d;
             rows.add(row);
         }
 
@@ -54,6 +56,17 @@ public class PropertyTableModel implements TableModel {
                 internalRows.addAll(rowByCategory.get(catName));
             }
         }
+    }
+
+    public IPropertyDescriptor getDescriptor(int row) {
+        return internalRows.get(row).propertyDescriptor;
+    }
+
+    public String getDisplayText(int rowIndex, int columnIndex, Object value) {
+        if(columnIndex == 1 && getDescriptor(rowIndex) instanceof ComboBoxPropertyDescriptor)
+            return ((ComboBoxPropertyDescriptor)getDescriptor(rowIndex)).getValues()[(int)value];
+        else
+            return value == null ? "": value.toString();
     }
 
     @Override
@@ -78,7 +91,7 @@ public class PropertyTableModel implements TableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return internalRows.get(rowIndex).isCategory == false;
+        return internalRows.get(rowIndex).isCategory == false && columnIndex == 1;
     }
 
     @Override
@@ -97,15 +110,5 @@ public class PropertyTableModel implements TableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         source.setPropertyValue(internalRows.get(rowIndex).propertyName, aValue);
-    }
-
-    @Override
-    public void addTableModelListener(TableModelListener l) {
-
-    }
-
-    @Override
-    public void removeTableModelListener(TableModelListener l) {
-
     }
 }

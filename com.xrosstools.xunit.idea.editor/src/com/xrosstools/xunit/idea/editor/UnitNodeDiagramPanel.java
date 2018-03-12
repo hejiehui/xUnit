@@ -1,13 +1,9 @@
 package com.xrosstools.xunit.idea.editor;
 
-import com.intellij.ide.util.TreeClassChooser;
-import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiClass;
-import com.intellij.ui.AncestorListenerAdapter;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
@@ -23,12 +19,11 @@ import com.xrosstools.xunit.idea.editor.policies.DiagramLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.policies.UnitNodeLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.treeparts.TreeEditPart;
 import com.xrosstools.xunit.idea.editor.treeparts.UnitNodeTreePartFactory;
-import com.xrosstools.xunit.idea.editor.util.IPropertySource;
-import com.xrosstools.xunit.idea.editor.util.PropertyTableModel;
-import com.xrosstools.xunit.idea.editor.util.XmlHelper;
+import com.xrosstools.xunit.idea.editor.util.*;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -313,25 +308,21 @@ public class UnitNodeDiagramPanel extends JPanel implements UnitConstants {
     }
 
     private void selectedFigure(Figure selected) {
-        tableProperties.setModel(new PropertyTableModel((IPropertySource)selected.getPart().getModel()));
+        PropertyTableModel model = new PropertyTableModel((IPropertySource)selected.getPart().getModel());
+        tableProperties.setModel(model);
+        tableProperties.setDefaultRenderer(Object.class, new SimpleTableRenderer(model));
+        tableProperties.getColumnModel().getColumn(1).setCellEditor(new SimpleTableCellEditor(model));
+        model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                ;
+            }
+        });
     }
 
     private void showContexMenu(int x, int y) {
-        JPopupMenu ctxMenu = new JPopupMenu();
-        JMenuItem item = new JMenuItem("Chose class");
-        ctxMenu.add(item);
-        ctxMenu.addSeparator();
-        item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                choseClass("aaa");
-            }
-        });
-        ctxMenu.add(new JMenuItem("abc"));
-        ctxMenu.show(unitPanel, x, y);
-
-
-
+        UnitContextMenuProvider builder = new UnitContextMenuProvider();
+        builder.buildContextMenu(project, diagram, lastSelected.getPart()).show(unitPanel, x, y);
     }
 
     public void reset() {
@@ -385,17 +376,6 @@ public class UnitNodeDiagramPanel extends JPanel implements UnitConstants {
     private void updateVisual() {
         unitPanel.getPreferredSize();
         repaint();
-    }
-
-    private void choseClass(String name) {
-        TreeClassChooser chooser = TreeClassChooserFactory.getInstance(project).createProjectScopeChooser("");
-        chooser.showDialog();
-        PsiClass selected = chooser.getSelected();
-        if(selected == null)
-            return;
-
-        String qName = selected.getQualifiedName();
-        System.out.println(qName);
     }
 
     private class UnitPanel extends JPanel {
