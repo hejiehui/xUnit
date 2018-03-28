@@ -3,11 +3,13 @@ package com.xrosstools.xunit.idea.editor.util;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
+import java.beans.PropertyChangeListener;
 import java.util.*;
 
 public class PropertyTableModel extends AbstractTableModel {
     private static final String DEFAULT = "default";
     private IPropertySource source;
+    private PropertyChangeListener listener;
     private class TableRow {
         boolean isCategory;
         String categoryName;
@@ -17,11 +19,9 @@ public class PropertyTableModel extends AbstractTableModel {
 
     private List<TableRow> internalRows = new ArrayList<>();
 
-    public PropertyTableModel() {
-    }
-
-    public PropertyTableModel(IPropertySource source) {
+    public PropertyTableModel(IPropertySource source, PropertyChangeListener listener) {
         this.source = source;
+        this.listener = listener;
 
         Map<String, List<TableRow>> rowByCategory = new HashMap<>();
 
@@ -63,10 +63,14 @@ public class PropertyTableModel extends AbstractTableModel {
     }
 
     public String getDisplayText(int rowIndex, int columnIndex, Object value) {
-        if(columnIndex == 1 && getDescriptor(rowIndex) instanceof ComboBoxPropertyDescriptor)
-            return ((ComboBoxPropertyDescriptor)getDescriptor(rowIndex)).getValues()[(int)value];
-        else
+        if(columnIndex == 0)
+            return (String)value;
+
+        IPropertyDescriptor descriptor = getDescriptor(rowIndex);
+        if(descriptor == null || descriptor instanceof TextPropertyDescriptor)
             return value == null ? "": value.toString();
+        else
+            return descriptor.getValue((int)value);
     }
 
     @Override
@@ -110,5 +114,6 @@ public class PropertyTableModel extends AbstractTableModel {
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         source.setPropertyValue(internalRows.get(rowIndex).propertyName, aValue);
+        listener.propertyChange(null);
     }
 }

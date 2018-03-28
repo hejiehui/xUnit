@@ -8,16 +8,10 @@ import com.xrosstools.xunit.idea.editor.parts.EditPart;
 public class UnitNodeLayoutPolicy {
 
 	public Command getAddCommand(EditPart target, EditPart child) {
-//    	ChangeBoundsRequest req = (ChangeBoundsRequest)request;
-//    	if(req.getEditParts().size() > 1)
-//    		return null;
-//
-//    	if(req.getEditParts().size() != 1)
-//    		return null;
-//
-//        EditPart child = (EditPart)req.getEditParts().get(0);
-        
-    	return new UnitNodeAddNodeCommand(
+        if(target == null)
+            return null;
+
+        return new UnitNodeAddNodeCommand(
 				target.getParent().getModel(),
         		(UnitNode)target.getModel(),
         		child.getParent().getModel(),
@@ -25,6 +19,8 @@ public class UnitNodeLayoutPolicy {
     }
 
 	public Command getCreateCommand(EditPart target, UnitNode newNode) {
+		if(target == null)
+		    return null;
         return new UnitNodeCreateNodeCommand(
 				target.getParent().getModel(),
                 (UnitNode) target.getModel(),

@@ -23,4 +23,8 @@ public abstract class PropertyDescriptor implements IPropertyDescriptor {
     public String getCategory() {
         return category;
     }
+
+    public String getValue(int index) {
+        return null;
+    }
 }

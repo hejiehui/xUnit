@@ -1,7 +1,13 @@
 package com.xrosstools.xunit.idea.editor.model;
 
+import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.xrosstools.xunit.idea.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.idea.editor.parts.EditPart;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +18,7 @@ public class UnitNodeHelper implements UnitConstants {
     }
 
     public String[] getReferenceNames(UnitNode node, EditPart curPart){
-        if(!node.isValid(node.getModuleName()) || node.getModuleName().equals(diagram.getFilePath())) {
+        if(!node.isValid(node.getModuleName()) || node.getModuleName().equals(diagram.getFilePath().getName())) {
             String excluded = getTopLevelNodeName(curPart);
             if(node instanceof CompositeUnitNode)
                 return getReferenceNames(node.getType(), ((CompositeUnitNode)node).getStructureType(), excluded);
@@ -35,15 +41,15 @@ public class UnitNodeHelper implements UnitConstants {
 
     public List<String> getWorkSpaceModuleNames(){
         List<String> names = new ArrayList<String>();
-//        try {
-//            String curName = diagram.getFilePath().getName();
-//            for(IResource res: diagram.getFilePath().getParent().members(false)) {
-//                if(res.getFileExtension().equals("xunit") && !res.getName().equals(curName))
-//                    names.add(res.getName());
-//            }
-//        } catch (CoreException e) {
-//            e.printStackTrace(System.err);
-//        }
+        try {
+            String curName = diagram.getFilePath().getName();
+            for(VirtualFile res: diagram.getFilePath().getParent().getChildren()) {
+                if(res.getExtension().equals("xunit") && !res.getName().equals(curName))
+                    names.add(res.getName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
         return names;
     }
 
@@ -51,43 +57,39 @@ public class UnitNodeHelper implements UnitConstants {
         if(!isValid(moduleName))
             return false;
 
-//        if(!new File(moduleName).exists()) {
-//            IFile moduleFile = (IFile)diagram.getFilePath().getParent().findMember(moduleName);
-//            if(moduleFile == null) {
-//                MessageDialog.openError(Display.getCurrent().getActiveShell(), "Can not locate \"" + moduleName + "\"", "Can not locate \"" + moduleName + "\"");
-//                return false;
-//            }else
-//                return true;
-//        }else
-//            return true;
-        return true;
+        if(!new File(moduleName).exists()) {
+            VirtualFile moduleFile = diagram.getFilePath().getParent().findChild(moduleName);
+            if(moduleFile == null) {
+                Messages.showInfoMessage("Can not locate \"" + moduleName + "\"", "Can not locate \"" + moduleName + "\"");
+                return false;
+            }else
+                return true;
+        }else
+            return true;
     }
 
     private UnitNodeDiagram load(String moduleName) throws Exception {
-//        InputStream in;
-//        File f = new File(moduleName);
-//        if(f.exists())
-//            in = new FileInputStream(f);
-//        else {
-//            IFile moduleFile = (IFile)diagram.getFilePath().getParent().findMember(moduleName);
-//            if(moduleFile == null)
-//                return null;
-//
-//            in = moduleFile.getContents(false);
-//        }
-//
-//        UnitNodeDiagramFactory diagramFactory = new UnitNodeDiagramFactory();
-//        return diagramFactory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in));
-        return null;
+        VirtualFile moduleFile;
+        File f = new File(moduleName);
+        if(f.exists())
+            moduleFile = LocalFileSystem.getInstance().findFileByIoFile(f);
+        else
+            moduleFile = diagram.getFilePath().getParent().findChild(moduleName);
+
+        if(moduleFile == null)
+            return null;
+
+        UnitNodeDiagramFactory diagramFactory = new UnitNodeDiagramFactory();
+        return diagramFactory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(moduleFile.getInputStream()));
     }
 
     private String getTopLevelNodeName(EditPart curPart) {
         String excluded = null;
-//        while(curPart.getModel() != diagram) {
-//            if(curPart.getModel() instanceof UnitNode)
-//                excluded = ((UnitNode)curPart.getModel()).getName();
-//            curPart = curPart.getParent();
-//        }
+        while(curPart.getModel() != diagram) {
+            if(curPart.getModel() instanceof UnitNode)
+                excluded = ((UnitNode)curPart.getModel()).getName();
+            curPart = curPart.getParent();
+        }
         return getValue(excluded);
     }
 
@@ -95,12 +97,14 @@ public class UnitNodeHelper implements UnitConstants {
         List<String> names = new ArrayList<String>();
 
         names.add(EMPTY_VALUE);
-        for(UnitNode unit: diagram.getUnits()){
-            String name = unit.getName();
-            if(unit.getType() != type || !isValid(name))
-                continue;
-            if(!name.equals(excluded))
-                names.add(unit.getName());
+        if(diagram != null) {
+            for (UnitNode unit : diagram.getUnits()) {
+                String name = unit.getName();
+                if (unit.getType() != type || !isValid(name))
+                    continue;
+                if (!name.equals(excluded))
+                    names.add(unit.getName());
+            }
         }
         return names.toArray(new String[names.size()]);
     }

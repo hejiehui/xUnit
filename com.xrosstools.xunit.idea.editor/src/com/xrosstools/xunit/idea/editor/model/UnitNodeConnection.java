@@ -84,7 +84,7 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
             return new IPropertyDescriptor[0];
         IPropertyDescriptor[] descriptors;
         descriptors = new IPropertyDescriptor[] {
-                new TextPropertyDescriptor(PROP_LABEL, PROP_LABEL),
+                new TextPropertyDescriptor(PROP_LABEL),
         };
         return descriptors;
     }

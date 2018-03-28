@@ -1,6 +1,6 @@
 package com.xrosstools.xunit.idea.editor.model;
 
-import com.xrosstools.xunit.idea.editor.util.IFile;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.xrosstools.xunit.idea.editor.util.IPropertyDescriptor;
 import com.xrosstools.xunit.idea.editor.util.TextPropertyDescriptor;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer {
-    private IFile filePath;
+    private VirtualFile filePath;
     private String packageId;
     private String name;
     private String description;
@@ -17,11 +17,11 @@ public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer
     private List<UnitNode> units = new ArrayList<>();
     private List<String> imports = new ArrayList<>();
 
-    public IFile getFilePath() {
+    public VirtualFile getFilePath() {
         return filePath;
     }
 
-    public void setFilePath(IFile filePath) {
+    public void setFilePath(VirtualFile filePath) {
         this.filePath = filePath;
     }
 
@@ -137,9 +137,9 @@ public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer
     @Override
     public IPropertyDescriptor[] getPropertyDescriptors() {
         TextPropertyDescriptor[] p1 = new TextPropertyDescriptor[]{
-                new TextPropertyDescriptor(PROP_NAME, PROP_NAME),
-                new TextPropertyDescriptor(PROP_DESCRIPTION, PROP_DESCRIPTION),
-                new TextPropertyDescriptor(PACKAGE_ID, PACKAGE_ID)
+                new TextPropertyDescriptor(PROP_NAME),
+                new TextPropertyDescriptor(PROP_DESCRIPTION),
+                new TextPropertyDescriptor(PACKAGE_ID)
         };
 //		p1[0].setCategory(CATEGORY_COMMON);
 //		p1[1].setCategory(CATEGORY_COMMON);

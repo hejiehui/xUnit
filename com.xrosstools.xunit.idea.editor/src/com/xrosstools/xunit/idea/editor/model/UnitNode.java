@@ -59,7 +59,7 @@ public abstract class UnitNode extends PropertySource {
     }
 
     protected final IPropertyDescriptor getDescriptor(String propName){
-        IPropertyDescriptor descriptor = new TextPropertyDescriptor(propName, propName);
+        IPropertyDescriptor descriptor = new TextPropertyDescriptor(propName);
         descriptor.setCategory(getCategory(propName));
         return descriptor;
     }
@@ -70,7 +70,13 @@ public abstract class UnitNode extends PropertySource {
         return descriptor;
     }
 
-    public IPropertyDescriptor[] getBasicPropertyDescriptors(){
+    protected final IPropertyDescriptor getReferenceDescriptor(String propName) {
+        ReferencePropertyDescriptor descriptor = new ReferencePropertyDescriptor(propName, this);
+        descriptor.setCategory(getCategory(propName));
+        return descriptor;
+    }
+
+        public IPropertyDescriptor[] getBasicPropertyDescriptors(){
         IPropertyDescriptor[] descriptors = new IPropertyDescriptor[]{
                 getDescriptor(PROP_NAME),
                 getDescriptor(PROP_DESCRIPTION),
@@ -86,7 +92,7 @@ public abstract class UnitNode extends PropertySource {
     private IPropertyDescriptor[] getRefencePropertyDescriptors(){
         return new IPropertyDescriptor[]{
                 getDescriptor(PROP_MODULE),
-                getDescriptor(PROP_REFERENCE, getReferenceValues()),
+                getReferenceDescriptor(PROP_REFERENCE),
         };
     }
 

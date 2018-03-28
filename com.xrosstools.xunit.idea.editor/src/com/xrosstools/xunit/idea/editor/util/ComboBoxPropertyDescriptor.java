@@ -20,7 +20,7 @@ public class ComboBoxPropertyDescriptor extends PropertyDescriptor {
         return ctrl;
     }
 
-    public String[] getValues() {
-        return values;
+    public String getValue(int index) {
+        return values[index];
     }
 }

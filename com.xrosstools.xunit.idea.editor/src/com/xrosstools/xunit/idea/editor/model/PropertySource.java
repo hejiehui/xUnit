@@ -8,7 +8,7 @@ import java.beans.PropertyChangeSupport;
 public abstract class PropertySource implements UnitConstants, IPropertySource {
     private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 
-    public void addPropertyChangeListener(UnitNodeConnection lilistener) {
+    public void addPropertyChangeListener(PropertyChangeListener lilistener) {
         listeners.addPropertyChangeListener(lilistener);
     }
 

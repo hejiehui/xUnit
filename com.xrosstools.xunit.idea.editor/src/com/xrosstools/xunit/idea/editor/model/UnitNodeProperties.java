@@ -59,7 +59,7 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
         List<IPropertyDescriptor> descciptors = new ArrayList<IPropertyDescriptor>();
 
         for(String name: properties.keySet()){
-            IPropertyDescriptor descriptor = new TextPropertyDescriptor(new PropertyId(name), name);
+            IPropertyDescriptor descriptor = new TextPropertyDescriptor(new PropertyId(name));
             descriptor.setCategory("Properties");
             descciptors.add(descriptor);
         }

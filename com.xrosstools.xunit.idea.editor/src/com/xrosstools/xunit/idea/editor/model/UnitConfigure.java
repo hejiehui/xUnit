@@ -95,7 +95,7 @@ public class UnitConfigure implements UnitConstants, IPropertySource {
             String catName = category.getKey();
             for(Map.Entry<String, String> entry: category.getValue().entrySet()){
                 ConfigId id = new ConfigId(catName, entry.getKey());
-                IPropertyDescriptor descriptor = new TextPropertyDescriptor(id, entry.getKey());
+                IPropertyDescriptor descriptor = new TextPropertyDescriptor(id);
                 descriptor.setCategory(simple? "Properties" : "Properties " + catName);
                 descciptors.add(descriptor);
             }

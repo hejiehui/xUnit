@@ -10,4 +10,6 @@ public interface IPropertyDescriptor {
     String getCategory();
 
     JComponent getEditor(Object value);
+
+    String getValue(int index);
 }

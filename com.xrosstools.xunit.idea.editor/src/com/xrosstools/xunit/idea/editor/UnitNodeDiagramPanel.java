@@ -29,9 +29,11 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 //TODO make it factoryinstead of subclass of JPAnel
-public class UnitNodeDiagramPanel extends JPanel implements UnitConstants {
+public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListener, UnitConstants {
     private Project project;
     private VirtualFile virtualFile;
 
@@ -58,6 +60,7 @@ public class UnitNodeDiagramPanel extends JPanel implements UnitConstants {
         this.project = project;
         this.virtualFile = virtualFile;
         diagram = factory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(virtualFile.getInputStream()));
+        diagram.setFilePath(virtualFile);
         createVisual();
         registerListener();
         build();
@@ -150,8 +153,8 @@ public class UnitNodeDiagramPanel extends JPanel implements UnitConstants {
     }
 
     private JComponent createProperty() {
-        tableProperties = new JBTable(new PropertyTableModel());
-
+        PropertyTableModel model = new PropertyTableModel(diagram, this);
+        tableProperties = new JBTable(model);
         JScrollPane scrollPane = new JBScrollPane(tableProperties);
         scrollPane.setLayout(new ScrollPaneLayout());
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -308,16 +311,10 @@ public class UnitNodeDiagramPanel extends JPanel implements UnitConstants {
     }
 
     private void selectedFigure(Figure selected) {
-        PropertyTableModel model = new PropertyTableModel((IPropertySource)selected.getPart().getModel());
+        PropertyTableModel model = new PropertyTableModel((IPropertySource)selected.getPart().getModel(), this);
         tableProperties.setModel(model);
         tableProperties.setDefaultRenderer(Object.class, new SimpleTableRenderer(model));
         tableProperties.getColumnModel().getColumn(1).setCellEditor(new SimpleTableCellEditor(model));
-        model.addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-                ;
-            }
-        });
     }
 
     private void showContexMenu(int x, int y) {
@@ -376,6 +373,11 @@ public class UnitNodeDiagramPanel extends JPanel implements UnitConstants {
     private void updateVisual() {
         unitPanel.getPreferredSize();
         repaint();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        save();
     }
 
     private class UnitPanel extends JPanel {
