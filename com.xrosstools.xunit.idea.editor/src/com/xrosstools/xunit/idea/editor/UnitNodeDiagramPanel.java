@@ -22,8 +22,6 @@ import com.xrosstools.xunit.idea.editor.treeparts.UnitNodeTreePartFactory;
 import com.xrosstools.xunit.idea.editor.util.*;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.xml.parsers.DocumentBuilderFactory;

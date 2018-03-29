@@ -32,7 +32,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     private void getNodeActions(Project project, JPopupMenu menu, BaseNodePart nodePart, UnitNodeDiagram diagram){
     	UnitNode node = (UnitNode)nodePart.getModel();
     	menu.add(createItem(new AssignClassNameAction(project, nodePart)));
-    	menu.add(createItem(new OpenClassAction(nodePart)));
+    	menu.add(createItem(new OpenClassAction(project, nodePart)));
     	menu.addSeparator();
     	menu.add(createItem(new AssignDefaultAction(node)));
 
