@@ -7,7 +7,7 @@ import javax.swing.*;
 public class ComboBoxPropertyDescriptor extends PropertyDescriptor {
     private String[] values;
     public ComboBoxPropertyDescriptor(String propertyId, String label, String[] values) {
-        setPropertyName(propertyId);
+        setId(propertyId);
         this.values = values;
     }
 

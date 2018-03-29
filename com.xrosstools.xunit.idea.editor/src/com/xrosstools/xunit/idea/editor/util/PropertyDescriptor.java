@@ -2,16 +2,16 @@ package com.xrosstools.xunit.idea.editor.util;
 
 public abstract class PropertyDescriptor implements IPropertyDescriptor {
     private String category;
-    private String propertyName;
+    private Object id;
 
     @Override
-    public void setPropertyName(Object propertyName) {
-        this.propertyName = (String) propertyName;
+    public void setId(Object id) {
+        this.id = id;
     }
 
     @Override
-    public String getPropertyName() {
-        return propertyName;
+    public Object getId() {
+        return id;
     }
 
     @Override

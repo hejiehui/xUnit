@@ -8,7 +8,7 @@ public class TextPropertyDescriptor extends PropertyDescriptor{
     private JTextField editor = new JTextField();
 
     public TextPropertyDescriptor(Object propertyId) {
-        setPropertyName(propertyId);
+        setId(propertyId);
         editor.addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {

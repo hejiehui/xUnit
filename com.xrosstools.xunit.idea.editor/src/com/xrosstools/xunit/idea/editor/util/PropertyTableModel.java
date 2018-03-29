@@ -1,22 +1,21 @@
 package com.xrosstools.xunit.idea.editor.util;
 
-import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
 public class PropertyTableModel extends AbstractTableModel {
-    private static final String DEFAULT = "default";
+    private static final String DEFAULT = "Misc";
     private IPropertySource source;
     private PropertyChangeListener listener;
     private class TableRow {
         boolean isCategory;
         String categoryName;
-        String propertyName;
+        Object propertyName;
         IPropertyDescriptor propertyDescriptor;
     }
 
+    private boolean showCatName;
     private List<TableRow> internalRows = new ArrayList<>();
 
     public PropertyTableModel(IPropertySource source, PropertyChangeListener listener) {
@@ -34,13 +33,13 @@ public class PropertyTableModel extends AbstractTableModel {
                 rows = new ArrayList<>();
                 TableRow header = new TableRow();
                 header.isCategory = true;
-                header.categoryName = d.getCategory();
+                header.categoryName = catName;
                 rows.add(header);
                 rowByCategory.put(catName, rows);
             }
 
             TableRow row = new TableRow();
-            row.propertyName = d.getPropertyName();
+            row.propertyName = d.getId();
             row.propertyDescriptor = d;
             rows.add(row);
         }
@@ -56,6 +55,8 @@ public class PropertyTableModel extends AbstractTableModel {
                 internalRows.addAll(rowByCategory.get(catName));
             }
         }
+
+        showCatName = rowByCategory.size() > 1;
     }
 
     public IPropertyDescriptor getDescriptor(int row) {
@@ -103,7 +104,7 @@ public class PropertyTableModel extends AbstractTableModel {
         TableRow row = internalRows.get(rowIndex);
 
         if(columnIndex == 0) {
-            return row.isCategory ? row.categoryName : "        " + row.propertyName;
+            return row.isCategory ? (showCatName ? row.categoryName : "") : ("        " + row.propertyName);
         } else {
             return isCellEditable(rowIndex, columnIndex) ?
                     source.getPropertyValue(internalRows.get(rowIndex).propertyName) :

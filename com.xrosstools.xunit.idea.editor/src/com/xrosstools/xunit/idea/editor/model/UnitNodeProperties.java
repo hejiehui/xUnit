@@ -2,14 +2,13 @@ package com.xrosstools.xunit.idea.editor.model;
 
 import com.xrosstools.xunit.idea.editor.util.IPropertyDescriptor;
 import com.xrosstools.xunit.idea.editor.util.IPropertySource;
-import com.xrosstools.xunit.idea.editor.util.PropertyDescriptor;
 import com.xrosstools.xunit.idea.editor.util.TextPropertyDescriptor;
 
 import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 public class UnitNodeProperties implements UnitConstants, IPropertySource {
-    private Map<String, String> properties = new LinkedHashMap<String, String>();
+    private Map<String, String> properties = new LinkedHashMap<>();
 
     public boolean contains(String propName) {
         return properties.containsKey(propName);
@@ -28,10 +27,7 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
     }
 
     public boolean isValidId(String key){
-        if(key == null || key.trim().length() == 0)
-            return false;
-
-        return true;
+        return key != null && key.trim().length() > 0;
     }
 
     @Override
@@ -59,7 +55,7 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
         List<IPropertyDescriptor> descciptors = new ArrayList<IPropertyDescriptor>();
 
         for(String name: properties.keySet()){
-            IPropertyDescriptor descriptor = new TextPropertyDescriptor(new PropertyId(name));
+            IPropertyDescriptor descriptor = new TextPropertyDescriptor(name);
             descriptor.setCategory("Properties");
             descciptors.add(descriptor);
         }
@@ -67,10 +63,7 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
     }
 
     public Object getPropertyValue(Object id) {
-        if(id instanceof PropertyId)
-            return properties.get(((PropertyId)id).name);
-
-        return null;
+        return properties.get((String)id);
     }
 
     public boolean isPropertySet(Object id) {
@@ -81,12 +74,6 @@ public class UnitNodeProperties implements UnitConstants, IPropertySource {
     }
 
     public void setPropertyValue(Object id, Object value) {
-        if(id instanceof PropertyId)
-            properties.put(((PropertyId)id).name, (String)value);
-    }
-
-    private class PropertyId {
-        String name;
-        PropertyId(String name) {this.name = name;}
+        properties.put((String)id, (String)value);
     }
 }
