@@ -5,9 +5,11 @@ import com.xrosstools.xunit.idea.editor.Activator;
 import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.parts.EditContext;
+import com.xrosstools.xunit.idea.editor.parts.EditPart;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -18,10 +20,15 @@ public class TreeEditPart implements UnitConstants, PropertyChangeListener {
     private TreeEditPart parent;
     private EditContext editContext;
     private Object model;
+    private DefaultMutableTreeNode treeNode;
     private List<TreeEditPart> childEditParts = new ArrayList<>();
 
     public Object getModel() {
         return model;
+    }
+
+    public DefaultMutableTreeNode getTreeNode() {
+        return treeNode;
     }
 
     public void setModel(Object model) {
@@ -33,7 +40,7 @@ public class TreeEditPart implements UnitConstants, PropertyChangeListener {
     }
 
     public final DefaultMutableTreeNode build() {
-        DefaultMutableTreeNode treeNode = new DefaultMutableTreeNode(getText());
+        treeNode = new DefaultMutableTreeNode(getText());
         List children = getModelChildren();
         for (int i = 0; i < children.size(); i++) {
             TreeEditPart childEditPart = factory.createEditPart(this, children.get(i));
@@ -67,6 +74,10 @@ public class TreeEditPart implements UnitConstants, PropertyChangeListener {
 
     public EditContext getContext() {
         return editContext;
+    }
+
+    public final TreeEditPart findEditPart(Object model) {
+        return editContext.findTreeEditPart(model);
     }
 
     public void setContext(EditContext editContext) {

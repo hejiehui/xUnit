@@ -42,7 +42,7 @@ public class UnitNodeTreePartFactory {
 		part.setModel(model);
 		part.setParent(parent);
 		part.setContext(editContext);
-//		editContext.add(part, model);
+		editContext.add(part, model);
 
 
 		return part;

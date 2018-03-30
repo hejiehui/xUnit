@@ -24,6 +24,8 @@ import com.xrosstools.xunit.idea.editor.util.*;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.awt.event.*;
@@ -46,6 +48,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
     private UnitPanel unitPanel;
     private EditPart root;
+    private TreeEditPart treeRoot;
 
     private Figure lastSelected;
     private Figure lastHover;
@@ -140,6 +143,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         node1.add(new DefaultMutableTreeNode("aaa-1"));
         node1.add(new DefaultMutableTreeNode("aaa-2"));
         treeNavigator = new Tree(node1);
+        treeNavigator.setExpandsSelectedPaths(true);
 
         JScrollPane treePane = new JBScrollPane(treeNavigator);
         treePane.setLayout(new ScrollPaneLayout());
@@ -151,8 +155,10 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private JComponent createProperty() {
+        tableProperties = new JBTable();
         PropertyTableModel model = new PropertyTableModel(diagram, this);
-        tableProperties = new JBTable(model);
+        setModel(model);
+
         JScrollPane scrollPane = new JBScrollPane(tableProperties);
         scrollPane.setLayout(new ScrollPaneLayout());
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -185,7 +191,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         updateVisual();
 
         UnitNodeTreePartFactory treePartFactory = new UnitNodeTreePartFactory(context);
-        TreeEditPart treeRoot = treePartFactory.createEditPart(null, diagram);
+        treeRoot = treePartFactory.createEditPart(null, diagram);
         treeNavigator.setModel(new DefaultTreeModel(treeRoot.build(), false));
     }
 
@@ -308,11 +314,20 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
     }
 
-    private void selectedFigure(Figure selected) {
-        PropertyTableModel model = new PropertyTableModel((IPropertySource)selected.getPart().getModel(), this);
+    private void setModel(PropertyTableModel model){
         tableProperties.setModel(model);
         tableProperties.setDefaultRenderer(Object.class, new SimpleTableRenderer(model));
         tableProperties.getColumnModel().getColumn(1).setCellEditor(new SimpleTableCellEditor(model));
+
+    }
+
+    private void selectedFigure(Figure selected) {
+        PropertyTableModel model = new PropertyTableModel((IPropertySource)selected.getPart().getModel(), this);
+        setModel(model);
+
+
+        TreeNode[] path = treeRoot.findEditPart(selected.getPart().getModel()).getTreeNode().getPath();
+        treeNavigator.setSelectionPath(new TreePath(path));
     }
 
     private void showContexMenu(int x, int y) {

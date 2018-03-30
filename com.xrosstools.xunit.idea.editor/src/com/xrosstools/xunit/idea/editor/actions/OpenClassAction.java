@@ -32,6 +32,9 @@ public class OpenClassAction extends WorkbenchPartAction implements UnitActionCo
 
 	public void openClass(){
 		GlobalSearchScope scope = GlobalSearchScope.allScope (project);
+
+		//VirtualFileManager.getInstance().findFileByUrl("jar://path/to/file.jar!/path/to/file.class");
+
         PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(className, scope);
         if (null == psiClass) {
             Messages.showErrorDialog("Can not open " + className, "Error");
