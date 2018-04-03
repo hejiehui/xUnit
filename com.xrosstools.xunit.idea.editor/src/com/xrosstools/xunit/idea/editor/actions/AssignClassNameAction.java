@@ -34,13 +34,6 @@ public class AssignClassNameAction extends WorkbenchPartAction implements UnitAc
 
 		new AssignClassCommand((UnitNode)nodePart.getModel(), qName).execute();
 
-//		IType newType = openDialog();
-//		if(newType == null)
-//			return;
-//
-//		setSourceType(newType);
-//		if(newType.getFullyQualifiedName().equalsIgnoreCase(getNode().getImplClassName()))
-//			return;
-//		getViewer().getEditDomain().getCommandStack().execute(new AssignClassCommand((UnitNode)getModel(), newType.getFullyQualifiedName()));
+//		.getCommandStack().execute(new AssignClassCommand((UnitNode)getModel(), newType.getFullyQualifiedName()));
 	}
 }

@@ -10,13 +10,11 @@ import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
 
 public class OpenClassAction extends WorkbenchPartAction implements UnitActionConstants {
-	private BaseNodePart nodePart;
 	private Project project;
     private UnitNode node;
 	private String className;
 	public OpenClassAction(Project project, BaseNodePart nodePart) {
 		setText(OPEN_CLASS);
-		this.nodePart = nodePart;
 		this.project = project;
         node = (UnitNode)nodePart.getModel();
         className = node.getClassName();
@@ -27,10 +25,10 @@ public class OpenClassAction extends WorkbenchPartAction implements UnitActionCo
 	}
 
 	public void run() {
-		openClass();
+		openClass(project, className);
 	}
 
-	public void openClass(){
+	public static void openClass(Project project, String className){
 		GlobalSearchScope scope = GlobalSearchScope.allScope (project);
 
 		//VirtualFileManager.getInstance().findFileByUrl("jar://path/to/file.jar!/path/to/file.class");

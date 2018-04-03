@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,9 +100,9 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     			continue;
     		subRemove.add(createItem(new RemovePropertyAction(properties, name)));
     	}
-    	menu.add(subRemove);
+		menu.add(subRemove);
 
-        JPopupMenu subRename = new JPopupMenu(RENAME_PROPERTY);
+		JPopupMenu subRename = new JPopupMenu(RENAME_PROPERTY);
     	for(String name: properties.getNames()){
     		if(EMPTY_VALUE.equals(name))
     			continue;

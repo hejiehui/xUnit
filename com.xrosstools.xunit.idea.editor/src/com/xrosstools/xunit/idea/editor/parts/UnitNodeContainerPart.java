@@ -21,7 +21,7 @@ public class UnitNodeContainerPart extends EditPart implements UnitConstants, Pr
     }
 
     protected void createEditPolicies() {
-//        installEditPolicy(EditPolicy.LAYOUT_ROLE, new DiagramLayoutPolicy());
+//        installEditPolicy(EditPolicy.LAYOUT_ROLE, new UnitNodeContainerLayoutPolicy());
     }
 
     public void propertyChange(PropertyChangeEvent evt) {

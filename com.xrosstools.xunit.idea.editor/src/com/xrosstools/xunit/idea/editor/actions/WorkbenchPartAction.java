@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor.actions;
 
+import com.intellij.openapi.command.CommandProcessor;
 import com.xrosstools.xunit.idea.editor.commands.Command;
 
 import java.awt.event.ActionEvent;
@@ -38,6 +39,7 @@ public abstract class WorkbenchPartAction implements ActionListener {
     public abstract void run();
 
     public void execute(Command command) {
+//        CommandProcessor.getInstance().executeCommand()
         command.execute();
     }
 }

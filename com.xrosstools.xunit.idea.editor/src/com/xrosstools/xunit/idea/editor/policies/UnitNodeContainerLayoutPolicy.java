@@ -9,7 +9,7 @@ import java.util.Set;
 import com.xrosstools.xunit.idea.editor.model.*;
 import com.xrosstools.xunit.idea.editor.parts.EditPart;
 
-public class DiagramLayoutPolicy {
+public class UnitNodeContainerLayoutPolicy {
 	public Command getCreateCommand(Figure target, UnitNode newNode) {
 		UnitNodeContainer container = (UnitNodeContainer)target.getPart().getModel();
 

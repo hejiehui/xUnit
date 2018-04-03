@@ -7,15 +7,17 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
+import com.xrosstools.xunit.idea.editor.actions.OpenClassAction;
 import com.xrosstools.xunit.idea.editor.commands.DeleteNodeCommand;
 import com.xrosstools.xunit.idea.editor.figures.Figure;
+import com.xrosstools.xunit.idea.editor.figures.UnitNodeContainerFigure;
 import com.xrosstools.xunit.idea.editor.figures.UnitNodeDiagramFigure;
 import com.xrosstools.xunit.idea.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.idea.editor.model.*;
 import com.xrosstools.xunit.idea.editor.parts.EditContext;
 import com.xrosstools.xunit.idea.editor.parts.EditPart;
 import com.xrosstools.xunit.idea.editor.parts.UnitNodePartFactory;
-import com.xrosstools.xunit.idea.editor.policies.DiagramLayoutPolicy;
+import com.xrosstools.xunit.idea.editor.policies.UnitNodeContainerLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.policies.UnitNodeLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.treeparts.TreeEditPart;
 import com.xrosstools.xunit.idea.editor.treeparts.UnitNodeTreePartFactory;
@@ -54,7 +56,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     private Figure lastHover;
     private UnitNode newUnitNode;
 
-    private DiagramLayoutPolicy diagramLayoutPolicy = new DiagramLayoutPolicy();
+    private UnitNodeContainerLayoutPolicy unitNodeContainerLayoutPolicy = new UnitNodeContainerLayoutPolicy();
     private UnitNodeLayoutPolicy nodeLayoutPolicy = new UnitNodeLayoutPolicy();
 
     public UnitNodeDiagramPanel(Project project, VirtualFile virtualFile) throws Exception {
@@ -199,31 +201,39 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         build();
     }
 
+    private void updateHover(MouseEvent e) {
+        Figure f = root.getFigure().findFigureAt(e.getX(), e.getY());
+        f = f == null ? root.getFigure() : f;
+
+        if(lastHover == f)
+            return;
+
+        clearHover();
+
+        if(f != null) {
+            f.setInsertionPoint(e.getPoint());
+            unitPanel.repaint(f.getBound());
+        }
+
+        lastHover = f;
+    }
+
+    private void clearHover() {
+        if(lastHover != null) {
+            lastHover.setInsertionPoint(null);
+            unitPanel.repaint(lastHover.getBound());
+            lastHover = null;
+        }
+    }
+
     private void registerListener() {
         unitPanel.addMouseMotionListener(new MouseMotionListener() {
-            private void updateHover(MouseEvent e) {
-                Figure f = root.getFigure().findFigureAt(e.getX(), e.getY());
-                f = f == null ? root.getFigure() : f;
-
-                if(lastHover == f)
-                    return;
-
-                if(lastHover != null) {
-                    lastHover.setInsertionPoint(null);
-                    unitPanel.repaint(lastHover.getBound());
-                }
-
-                if(f != null) {
-                    f.setInsertionPoint(e.getPoint());
-                    unitPanel.repaint(f.getBound());
-                }
-
-                lastHover = f;
-
-            }
             @Override
             public void mouseDragged(MouseEvent e) {
-                updateHover(e);
+                if(lastSelected != null && !(lastSelected instanceof UnitNodeDiagramFigure))
+                    updateHover(e);
+                else
+                    clearHover();
             }
 
             @Override
@@ -236,21 +246,24 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
                 if(newUnitNode != null)
                     updateHover(e);
+                else
+                    clearHover();
             }
         });
 
         unitPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Create new node
-                if (newUnitNode != null && lastHover != null) {
-                    if (lastHover instanceof UnitNodeDiagramFigure)
-                        update(diagramLayoutPolicy.getCreateCommand(lastHover, newUnitNode));
-                    else
-                        update(nodeLayoutPolicy.getCreateCommand(lastHover.getPart(), newUnitNode));
-                    return;
+                if (e.getClickCount() == 2) {
+                    Figure f = root.getFigure().selectFigureAt(e.getX(), e.getY());
+                    Object obj = f.getPart().getModel();
+                    if(obj == null || !(obj instanceof UnitNode))
+                        return;
+
+                    OpenClassAction.openClass(project, ((UnitNode)obj).getImplClassName());
                 }
             }
+
             @Override
             public void mousePressed(MouseEvent e) {
                 Figure f = root.getFigure().selectFigureAt(e.getX(), e.getY());
@@ -270,9 +283,6 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
                 lastSelected = f;
                 unitPanel.repaint();
-
-                if (e.isPopupTrigger())
-                    showContexMenu(e.getX(), e.getY());
             }
 
             @Override
@@ -282,10 +292,23 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                     unitPanel.repaint(lastHover.getBound());
                 }
 
+                // Create new node
+                if (newUnitNode != null) {
+                    updateHover(e);
+                    if (lastHover != null) {
+                        if (lastHover instanceof UnitNodeDiagramFigure || lastHover instanceof UnitNodeContainerFigure)
+                            update(unitNodeContainerLayoutPolicy.getCreateCommand(lastHover, newUnitNode));
+                        else
+                            update(nodeLayoutPolicy.getCreateCommand(lastHover.getPart(), newUnitNode));
+                    }
+                    return;
+                }
+
                 // Drag and drop
                 if (lastSelected != null && lastHover != null && lastSelected != lastHover) {
-                    if (lastHover instanceof UnitNodeDiagramFigure)
-                        update(diagramLayoutPolicy.createAddCommand(lastHover, lastSelected.getPart()));
+                    updateHover(e);
+                    if (lastHover instanceof UnitNodeDiagramFigure || lastHover instanceof UnitNodeContainerFigure)
+                        update(unitNodeContainerLayoutPolicy.createAddCommand(lastHover, lastSelected.getPart()));
                     else
                         update(nodeLayoutPolicy.getAddCommand(lastHover.getPart(), lastSelected.getPart()));
                     return;
