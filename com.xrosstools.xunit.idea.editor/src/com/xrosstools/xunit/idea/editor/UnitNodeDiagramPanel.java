@@ -354,7 +354,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private void showContexMenu(int x, int y) {
-        UnitContextMenuProvider builder = new UnitContextMenuProvider();
+        UnitContextMenuProvider builder = new UnitContextMenuProvider(this);
         builder.buildContextMenu(project, diagram, lastSelected.getPart()).show(unitPanel, x, y);
     }
 

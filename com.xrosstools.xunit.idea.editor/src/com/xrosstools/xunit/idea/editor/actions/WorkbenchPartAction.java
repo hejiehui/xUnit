@@ -5,11 +5,17 @@ import com.xrosstools.xunit.idea.editor.commands.Command;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 
 public abstract class WorkbenchPartAction implements ActionListener {
     private String text;
 
     private boolean checked;
+    private PropertyChangeListener listener;
+
+    public void setListener(PropertyChangeListener listener) {
+        this.listener = listener;
+    }
 
     public boolean isChecked() {
         return checked;
@@ -41,5 +47,6 @@ public abstract class WorkbenchPartAction implements ActionListener {
     public void execute(Command command) {
 //        CommandProcessor.getInstance().executeCommand()
         command.execute();
+        listener.propertyChange(null);
     }
 }

@@ -1,6 +1,6 @@
 package com.xrosstools.xunit.idea.editor;
 
-import java.awt.*;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +13,11 @@ import com.xrosstools.xunit.idea.editor.parts.EditPart;
 import javax.swing.*;
 
 public class UnitContextMenuProvider  implements UnitActionConstants, UnitConstants {
+    private PropertyChangeListener listener;
+    public UnitContextMenuProvider(PropertyChangeListener listener) {
+        this.listener = listener;
+    }
+
     public JPopupMenu buildContextMenu(Project project, UnitNodeDiagram diagram, EditPart selected) {
 		JPopupMenu menu = new JPopupMenu();
 
@@ -25,6 +30,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     }
 
     private JMenuItem createItem(WorkbenchPartAction action) {
+    	action.setListener(listener);
 		JMenuItem item = new JMenuItem(action.getText());
 		item.addActionListener(action);
 		return item;
@@ -48,7 +54,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
         
         menu.addSeparator();
 
-        JPopupMenu moduleSub = new JPopupMenu(ASSIGN_MODULE);
+        JMenu moduleSub = new JMenu(ASSIGN_MODULE);
         moduleSub.add(createItem(new AssignModuleAction(project, node)));
         UnitNodeHelper helper = new UnitNodeHelper(diagram);
         List<String> moduleNames = helper.getWorkSpaceModuleNames();
@@ -59,7 +65,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
         }
         menu.add(moduleSub);
 
-        JPopupMenu referSub = new JPopupMenu(ASSIGN_REFERENCE);
+        JMenu referSub = new JMenu(ASSIGN_REFERENCE);
     	for(String name: node.getReferenceValues()){
     		if(EMPTY_VALUE.equals(name))
     			continue;
@@ -71,7 +77,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     private void addPropertiesActions(Project project, JPopupMenu menu, UnitNodeProperties properties) {
     	menu.addSeparator();
     	menu.add(createItem(new CreatePropertyAction(project, properties)));
-        JPopupMenu subRemove = new JPopupMenu(REMOVE_PROPERTY);
+        JMenu subRemove = new JMenu(REMOVE_PROPERTY);
     	for(String name: properties.getNames()){
     		if(EMPTY_VALUE.equals(name))
     			continue;
@@ -79,7 +85,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     	}
     	menu.add(subRemove);
 
-        JPopupMenu subRename = new JPopupMenu(RENAME_PROPERTY);
+        JMenu subRename = new JMenu(RENAME_PROPERTY);
     	for(String name: properties.getNames()){
     		if(EMPTY_VALUE.equals(name))
     			continue;
@@ -94,7 +100,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     	menu.addSeparator();
     	menu.add(createItem(new CreatePropertyAction(project, properties)));
     	addDefinedPropertiesActions(project, menu, node);
-        JPopupMenu subRemove = new JPopupMenu(REMOVE_PROPERTY);
+        JMenu subRemove = new JMenu(REMOVE_PROPERTY);
     	for(String name: properties.getNames()){
     		if(EMPTY_VALUE.equals(name))
     			continue;
@@ -102,7 +108,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     	}
 		menu.add(subRemove);
 
-		JPopupMenu subRename = new JPopupMenu(RENAME_PROPERTY);
+        JMenu subRename = new JMenu(RENAME_PROPERTY);
     	for(String name: properties.getNames()){
     		if(EMPTY_VALUE.equals(name))
     			continue;
