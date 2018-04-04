@@ -201,8 +201,12 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         build();
     }
 
+    private Figure selectFigureAt(int x, int y) {
+        return root.getFigure().selectFigureAt(x, y);
+    }
+
     private void updateHover(MouseEvent e) {
-        Figure f = root.getFigure().findFigureAt(e.getX(), e.getY());
+        Figure f = selectFigureAt(e.getX(), e.getY());//findFigureAt
         f = f == null ? root.getFigure() : f;
 
         if(lastHover == f)
@@ -238,11 +242,12 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
             @Override
             public void mouseMoved(MouseEvent e) {
-                Figure f = root.getFigure().findFigureAt(e.getX(), e.getY());
+                Figure f = selectFigureAt(e.getX(), e.getY());//findFigureAt
                 if(f == null || f == root.getFigure())
                     unitPanel.setToolTipText(null);
                 else
                     unitPanel.setToolTipText(f.getToolTipText());
+
 
                 if(newUnitNode != null)
                     updateHover(e);
@@ -255,7 +260,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    Figure f = root.getFigure().selectFigureAt(e.getX(), e.getY());
+                    Figure f = selectFigureAt(e.getX(), e.getY());
                     Object obj = f.getPart().getModel();
                     if(obj == null || !(obj instanceof UnitNode))
                         return;
@@ -266,7 +271,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
             @Override
             public void mousePressed(MouseEvent e) {
-                Figure f = root.getFigure().selectFigureAt(e.getX(), e.getY());
+                Figure f = selectFigureAt(e.getX(), e.getY());
 
                 if(lastSelected == f)
                     return;
