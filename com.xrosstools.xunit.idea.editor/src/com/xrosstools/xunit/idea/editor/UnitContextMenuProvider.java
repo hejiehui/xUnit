@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
+import com.intellij.psi.*;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.OpenSourceUtil;
 import com.xrosstools.xunit.idea.editor.actions.*;
 import com.xrosstools.xunit.idea.editor.model.*;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
@@ -120,29 +124,32 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     private void addDefinedPropertiesActions(Project project, JPopupMenu menu, UnitNode node) {
     	List<String> propKeys = new ArrayList<>();
     	UnitNodeProperties properties = node.getProperties();
-//
-//    	if(node.isValid(node.getImplClassName())){
-//    		try {
-//                UnitNodeDiagramPart undp = (UnitNodeDiagramPart)editor.getRootEditPart().getContents();
-//                IType type = undp.getSourceType(node.getImplClassName());
-//                if(type != null) {
-//                    for(IField f: type.getFields()) {
-//                        if(f.getElementName().startsWith(PROPERTY_KEY_PREFIX) &&
-//                                (f.getTypeSignature().equals("Ljava.lang.String;") || f.getTypeSignature().equals("QString;")) &&
-//                                f.getConstant() != null) {
-//                            String name = f.getConstant().toString();
-//                            if(type instanceof SourceType && name.startsWith("\"") && name.endsWith("\"")) {
-//                                name = name.substring(1);
-//                                name = name.substring(0, name.length()-1);
-//                            }
-//                            propKeys.add(name);
-//                        }
-//                    }
-//                }
-//			} catch (Throwable e) {
-//				e.printStackTrace();
-//			}
-//    	}
+
+    	if(node.isValid(node.getImplClassName())){
+    		try {
+                GlobalSearchScope scope = GlobalSearchScope.allScope (project);
+
+                //VirtualFileManager.getInstance().findFileByUrl("jar://path/to/file.jar!/path/to/file.class");
+
+                PsiClass type = JavaPsiFacade.getInstance(project).findClass(node.getImplClassName(), scope);
+
+                if (null != type) {
+                    for (PsiField f : type.getFields()) {
+                        if (f.getNameIdentifier().getText().startsWith(PROPERTY_KEY_PREFIX) && f.getType().getPresentableText().equals("String")) {
+                            String text = f.getText();
+                            int start =text.indexOf('"');
+                            if(start <=0)
+                                continue;
+
+                            int end = text.indexOf('"', start + 1);
+                            propKeys.add(text.substring(start +1, end - 1));
+                        }
+                    }
+                }
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+    	}
     	
     	for(String key: properties.getNames())
     	    if(!propKeys.contains(key))
@@ -151,7 +158,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     	if(propKeys.size() ==  0)
     		return;
 
-        JPopupMenu subSetValue = new JPopupMenu(SET_PROPERTY);
+        JMenu subSetValue = new JMenu(SET_PROPERTY);
     	for(String key: propKeys){
     		subSetValue.add(createItem(new SetPropertyValueAction(project, properties, key)));
     	}
