@@ -8,15 +8,13 @@ import com.xrosstools.xunit.idea.editor.parts.UnitRouter;
 
 import java.awt.*;
 import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
 
 public class Connection extends Figure {
+    public static final int DELTA = 2;
     private UnitNodeConnection connection;
     private Text label = new Text();
     private PointList pl;
-    private GeneralPath shape = new GeneralPath();
+    private GeneralPath shape;
 
     public void setConnection(UnitNodeConnection connection) {
         this.connection = connection;
@@ -24,8 +22,10 @@ public class Connection extends Figure {
 
     @Override
     public void layout() {
-        AbstractRouter router = connection.getByPassed() == null ? new UnitRouter(getPart()) : new LoopUnitRouter(getPart());
-        pl = router.route(connection);
+    }
+
+    private void updatePath() {
+        shape = new GeneralPath();
 
         int[] px = pl.getXPoints();
         int[] py = pl.getYPoints();
@@ -36,7 +36,7 @@ public class Connection extends Figure {
             shape.lineTo(px[i], py[i]);
         }
 
-        for(int i = count -1; i > 0; i--) {
+        for(int i = count -2; i > 0; i--) {
             shape.lineTo(px[i], py[i]);
         }
 
@@ -49,6 +49,7 @@ public class Connection extends Figure {
 
         AbstractRouter router = connection.getByPassed() == null ? new UnitRouter(getPart()) : new LoopUnitRouter(getPart());
         pl = router.route(connection);
+        updatePath();
 
         String text = connection.getLabel();
         if(text != null) {
@@ -64,6 +65,36 @@ public class Connection extends Figure {
 
     @Override
     public boolean containsPoint(int x, int y) {
-        return Path2D.contains(shape.getPathIterator(null), new Point2D.Float(x, y));
+//        Path2D.contains(shape.getPathIterator(null), new Point2D.Float(x, y))
+//        shape.contains(new Point2D.Float(x, y))
+
+        int count = pl.getPoints();
+        for(int i = 1; i < count; i++) {
+            Point start = pl.get(i-1);
+            Point end = pl.get(i);
+
+            if(contains(start,end, x, y)) {
+//                System.out.println("found: " + connection.getLabel());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean contains(Point start, Point end, int x, int y) {
+        // Vertical case
+        if(start.x == end.x) {
+            return between(start.y, end.y, y) && near(start.x, x);
+        }else{
+            return between(start.x, end.x, x) && near(start.y, y);
+        }
+    }
+
+    private boolean between(int p1, int p2, int p) {
+        return p1 <= p &&  p <= p2 || p2 <= p &&  p <= p1;
+    }
+
+    private boolean near(int p1, int p) {
+        return Math.abs(p1 - p) <= DELTA;
     }
 }

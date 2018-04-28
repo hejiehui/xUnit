@@ -229,9 +229,6 @@ public class Figure implements ImageObserver, UnitConstants {
                 return conn;
         }
 
-        if(!containsPoint(x, y))
-            return null;
-
         Figure found;
         for(Figure child: components) {
             found = child.findFigureAt(x, y);
@@ -240,6 +237,9 @@ public class Figure implements ImageObserver, UnitConstants {
 
             return found;
         }
+
+        if(!containsPoint(x, y))
+            return null;
 
         return this;
     }

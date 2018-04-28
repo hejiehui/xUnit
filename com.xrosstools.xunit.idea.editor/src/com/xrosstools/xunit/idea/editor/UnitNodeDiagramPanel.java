@@ -353,9 +353,12 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         PropertyTableModel model = new PropertyTableModel((IPropertySource)selected.getPart().getModel(), this);
         setModel(model);
 
+        DefaultMutableTreeNode treeNode = treeRoot.findEditPart(selected.getPart().getModel()).getTreeNode();
 
-        TreeNode[] path = treeRoot.findEditPart(selected.getPart().getModel()).getTreeNode().getPath();
-        treeNavigator.setSelectionPath(new TreePath(path));
+        if(treeNode == null)
+            return;
+
+        treeNavigator.setSelectionPath(new TreePath(treeNode.getPath()));
     }
 
     private void showContexMenu(int x, int y) {
