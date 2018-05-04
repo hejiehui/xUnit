@@ -22,7 +22,7 @@ Xross Unit尤其适合重构老系统。特别是跨语言的重构，通过Xros
 ![overview_idea](https://github.com/hejiehui/xUnit/blob/master/doc/overview_idea.png) 
 
 ###### 安装方法
-![下载插件](https://github.com/hejiehui/xUnit/blob/master/com.xrosstools.xunit.idea.editor/com.xrosstools.xunit.idea.editor.zip)
+![下载插件](https://github.com/hejiehui/xUnit/raw/master/com.xrosstools.xunit.idea.editor/com.xrosstools.xunit.idea.editor.zip)
 
 安装：
 
