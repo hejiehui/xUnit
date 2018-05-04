@@ -31,6 +31,9 @@
 
   <actions>
     <!-- Add your actions here -->
+    <action id="XrossTools.CreateXrossUnit" class="com.xrosstools.xunit.idea.editor.NewXrossUnitAction" text="Xross Unit Model" description="Create new Xross Unit Model file" icon="/icons/chain.png">
+      <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
+    </action>
   </actions>
 
 </idea-plugin>
