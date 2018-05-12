@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidator;
 import com.intellij.openapi.ui.Messages;
@@ -13,7 +14,10 @@ import com.intellij.pom.Navigatable;
 import com.intellij.util.OpenSourceUtil;
 import com.xrosstools.xunit.idea.editor.util.XmlHelper;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class NewXrossUnitAction extends AnAction {
     @Override
@@ -48,7 +52,18 @@ public class NewXrossUnitAction extends AnAction {
             public void run() {
                 try {
                     VirtualFile newFile = dir.createChildData(project, name + ".xunit");
-                    newFile.setBinaryContent("<?xml version=\"1.0\" encoding=\"UTF-8\"?><xunit description=\"\" name=\"\" packageId=\"\"><configure><category name=\"default\"/></configure><units/></xunit>".getBytes());
+
+                    BufferedInputStream in = new BufferedInputStream(getClass().getResourceAsStream("/template/emptyTemplate.xunit"));
+                    int buf_size = 1024;
+                    byte[] buffer = new byte[buf_size];
+                    int len;
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    while (-1 != (len = in.read(buffer, 0, buf_size))) {
+                        bos.write(buffer, 0, len);
+                    }
+
+                    newFile.setBinaryContent(bos.toByteArray());
+                    FileEditorManager.getInstance(project).openFile(newFile, true);
                 } catch (Throwable e) {
                     throw new IllegalStateException("Can not save document " + name, e);
                 }

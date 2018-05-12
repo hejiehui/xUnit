@@ -26,7 +26,6 @@ import com.xrosstools.xunit.idea.editor.util.*;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
@@ -288,6 +287,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
                 lastSelected = f;
                 unitPanel.repaint();
+                unitPanel.grabFocus();
             }
 
             @Override
@@ -324,7 +324,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
             }
         });
 
-        addKeyListener(new KeyAdapter() {
+        unitPanel.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if(lastSelected == null)
@@ -415,7 +415,10 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private void updateVisual() {
-        unitPanel.getPreferredSize();
+        Dimension size = unitPanel.getPreferredSize();
+//        //Make sure lines to be seen
+//        size.height += 500;
+//        unitPanel.setPreferredSize(size);
         repaint();
     }
 
