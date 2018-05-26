@@ -9,6 +9,7 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
 import com.xrosstools.xunit.idea.editor.actions.OpenClassAction;
 import com.xrosstools.xunit.idea.editor.commands.DeleteNodeCommand;
+import com.xrosstools.xunit.idea.editor.figures.Connection;
 import com.xrosstools.xunit.idea.editor.figures.Figure;
 import com.xrosstools.xunit.idea.editor.figures.UnitNodeContainerFigure;
 import com.xrosstools.xunit.idea.editor.figures.UnitNodeDiagramFigure;
@@ -352,6 +353,9 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     private void selectedFigure(Figure selected) {
         PropertyTableModel model = new PropertyTableModel((IPropertySource)selected.getPart().getModel(), this);
         setModel(model);
+
+        if(selected instanceof Connection)
+            return;
 
         DefaultMutableTreeNode treeNode = treeRoot.findEditPart(selected.getPart().getModel()).getTreeNode();
 
