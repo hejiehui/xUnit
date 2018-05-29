@@ -206,18 +206,19 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private void updateHover(MouseEvent e) {
-        Figure f = selectFigureAt(e.getX(), e.getY());//findFigureAt
+        Figure f = root.getFigure().findFigureAt(e.getX(), e.getY());
         f = f == null ? root.getFigure() : f;
 
-        if(lastHover == f)
+        if(!(f instanceof UnitNodeDiagramFigure || f instanceof UnitNodeContainerFigure)) {
+            clearHover();
             return;
-
-        clearHover();
-
-        if(f != null) {
-            f.setInsertionPoint(e.getPoint());
-            unitPanel.repaint(f.getBound());
         }
+
+        if(lastHover != null && lastHover != f)
+            lastHover.setInsertionPoint(null);
+
+        f.setInsertionPoint(e.getPoint());
+        unitPanel.repaint();//f.getBound());
 
         lastHover = f;
     }
@@ -242,7 +243,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
             @Override
             public void mouseMoved(MouseEvent e) {
-                Figure f = selectFigureAt(e.getX(), e.getY());//findFigureAt
+                Figure f = selectFigureAt(e.getX(), e.getY());
                 if(f == null || f == root.getFigure())
                     unitPanel.setToolTipText(null);
                 else
