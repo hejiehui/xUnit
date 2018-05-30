@@ -48,6 +48,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     private UnitNodeDiagramFactory factory = new UnitNodeDiagramFactory();
     private UnitNodeDiagram diagram;
 
+    private JScrollPane innerDiagramPane;
     private UnitPanel unitPanel;
     private EditPart root;
     private TreeEditPart treeRoot;
@@ -129,13 +130,13 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         mainPanel.add(toolbar, BorderLayout.WEST);
 
         unitPanel = new UnitPanel();
-        JScrollPane diagramPane = new JBScrollPane(unitPanel);
-        diagramPane.setLayout(new ScrollPaneLayout());
-        diagramPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        diagramPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        diagramPane.getVerticalScrollBar().setUnitIncrement(50);
+        innerDiagramPane = new JBScrollPane(unitPanel);
+        innerDiagramPane.setLayout(new ScrollPaneLayout());
+        innerDiagramPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        innerDiagramPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        innerDiagramPane.getVerticalScrollBar().setUnitIncrement(50);
 
-        mainPanel.add(diagramPane, BorderLayout.CENTER);
+        mainPanel.add(innerDiagramPane, BorderLayout.CENTER);
 
         return mainPanel;
     }
@@ -209,24 +210,20 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         Figure f = root.getFigure().findFigureAt(e.getX(), e.getY());
         f = f == null ? root.getFigure() : f;
 
-        if(!(f instanceof UnitNodeDiagramFigure || f instanceof UnitNodeContainerFigure)) {
-            clearHover();
-            return;
-        }
-
         if(lastHover != null && lastHover != f)
             lastHover.setInsertionPoint(null);
 
-        f.setInsertionPoint(e.getPoint());
-        unitPanel.repaint();//f.getBound());
+        if(f instanceof UnitNodeDiagramFigure || f instanceof UnitNodeContainerFigure)
+            f.setInsertionPoint(e.getPoint());
 
+        unitPanel.repaint();
         lastHover = f;
     }
 
     private void clearHover() {
         if(lastHover != null) {
             lastHover.setInsertionPoint(null);
-            unitPanel.repaint(lastHover.getBound());
+            unitPanel.repaint();
             lastHover = null;
         }
     }
@@ -420,10 +417,9 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private void updateVisual() {
-        Dimension size = unitPanel.getPreferredSize();
-//        //Make sure lines to be seen
-//        size.height += 500;
-//        unitPanel.setPreferredSize(size);
+        // TODO when item changed, the scroll bar should be updated
+        unitPanel.getPreferredSize();
+        innerDiagramPane.getVerticalScrollBar().updateUI();
         repaint();
     }
 
@@ -445,6 +441,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
             Dimension size = root.getFigure().getPreferredSize();
             root.getFigure().layout();
+            size.height+=100;
             return size;
         }
     }
