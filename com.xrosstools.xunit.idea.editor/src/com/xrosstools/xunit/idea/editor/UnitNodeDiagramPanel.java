@@ -25,6 +25,8 @@ import com.xrosstools.xunit.idea.editor.treeparts.UnitNodeTreePartFactory;
 import com.xrosstools.xunit.idea.editor.util.*;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -196,6 +198,11 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         UnitNodeTreePartFactory treePartFactory = new UnitNodeTreePartFactory(context);
         treeRoot = treePartFactory.createEditPart(null, diagram);
         treeNavigator.setModel(new DefaultTreeModel(treeRoot.build(), false));
+        treeNavigator.addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+            }
+        });
     }
 
     private void rebuild() {
