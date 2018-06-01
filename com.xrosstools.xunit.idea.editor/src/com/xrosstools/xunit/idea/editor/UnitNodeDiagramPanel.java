@@ -269,6 +269,9 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
             @Override
             public void mousePressed(MouseEvent e) {
+                if(newUnitNode != null)
+                    return;
+
                 Figure f = selectFigureAt(e.getX(), e.getY());
 
                 if(lastSelected == f)
@@ -291,10 +294,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if(lastHover != null) {
+                if(lastHover != null)
                     lastHover.setInsertionPoint(null);
-                    unitPanel.repaint(lastHover.getBound());
-                }
 
                 // Create new node
                 if (newUnitNode != null) {
@@ -417,9 +418,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private void updateVisual() {
-        // TODO when item changed, the scroll bar should be updated
-        unitPanel.getPreferredSize();
-        innerDiagramPane.getVerticalScrollBar().updateUI();
+        int height = unitPanel.getPreferredSize().height;
+        innerDiagramPane.getVerticalScrollBar().setMaximum(height);
         repaint();
     }
 
