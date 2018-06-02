@@ -36,10 +36,12 @@ public class Activator {
     private static Map<Class, String> reg = new HashMap<>();
 
     public static String getIconPath(Class clazz){
-        return reg.get(clazz);
+        String iconId = reg.get(clazz);
+        return HOME + iconId + ICO;
     }
 
     static {
+        reg.put(UnitNodeDiagram.class, CHAIN);
         reg.put(StartPointNode.class, END_POINT);
         reg.put(EndPointNode.class, END_POINT);
         reg.put(ValidatorNode.class, VALIDATOR);

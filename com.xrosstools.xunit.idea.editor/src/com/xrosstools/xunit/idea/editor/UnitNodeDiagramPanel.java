@@ -29,6 +29,7 @@ import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -145,10 +146,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private JComponent createTree() {
-        DefaultMutableTreeNode node1 = new DefaultMutableTreeNode("aaa");
-        node1.add(new DefaultMutableTreeNode("aaa-1"));
-        node1.add(new DefaultMutableTreeNode("aaa-2"));
-        treeNavigator = new Tree(node1);
+        treeNavigator = new Tree();
         treeNavigator.setExpandsSelectedPaths(true);
 
         JScrollPane treePane = new JBScrollPane(treeNavigator);
@@ -203,6 +201,17 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
             @Override
             public void valueChanged(TreeSelectionEvent e) {
                 selectedNode();
+            }
+        });
+        treeNavigator.setCellRenderer(new DefaultTreeCellRenderer(){
+            public Component getTreeCellRendererComponent(JTree tree, Object value,
+                                                          boolean sel, boolean expanded, boolean leaf, int row,
+                                                          boolean hasFocus){
+                super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+                TreeEditPart treePart = (TreeEditPart)((DefaultMutableTreeNode)value).getUserObject();
+                setText(treePart.getText());
+                setIcon(treePart.getImage());
+                return this;
             }
         });
     }

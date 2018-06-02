@@ -51,15 +51,11 @@ public class TreeEditPart implements UnitConstants, PropertyChangeListener {
         return treeNode;
     }
 
-    public String toString() {
-        return getText();
-    }
-
-    protected String getText() {
+    public String getText() {
         return "";
     }
 
-    protected Icon getImage() {
+    public Icon getImage() {
         return IconLoader.findIcon(Activator.getIconPath(getModel().getClass()));
     }
 

@@ -13,15 +13,15 @@ public class BaseNodeTreePart extends TreeEditPart {
 		return new ArrayList<>();
 	}
 
-    protected String getText() {
+	public String getText() {
     	UnitNode node = (UnitNode)getModel();
     	if(node.getInput() == null || node.getInput().getLabel() == null)
     		return node.getName();
     
     	return node.getInput().getLabel() + SEPARATER + node.getName();
     }
-    
-    protected Icon getImage() {
+
+	public Icon getImage() {
         return IconLoader.findIcon(Activator.getIconPath(getModel().getClass()));
     }
 }

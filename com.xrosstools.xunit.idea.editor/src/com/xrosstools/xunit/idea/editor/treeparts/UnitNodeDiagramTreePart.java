@@ -13,7 +13,7 @@ public class UnitNodeDiagramTreePart extends TreeEditPart {
     	return list;
     }
 
-    protected String getText() {
+    public String getText() {
     	UnitNodeDiagram diagram = (UnitNodeDiagram)getModel();
         return diagram.getPackageId() + SEPARATER + diagram.getName();
     }
