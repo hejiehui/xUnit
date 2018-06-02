@@ -40,7 +40,7 @@ public class TreeEditPart implements UnitConstants, PropertyChangeListener {
     }
 
     public final DefaultMutableTreeNode build() {
-        treeNode = new DefaultMutableTreeNode(getText());
+        treeNode = new DefaultMutableTreeNode(this);
         List children = getModelChildren();
         for (int i = 0; i < children.size(); i++) {
             TreeEditPart childEditPart = factory.createEditPart(this, children.get(i));

@@ -23,6 +23,7 @@ import com.xrosstools.xunit.idea.editor.policies.UnitNodeLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.treeparts.TreeEditPart;
 import com.xrosstools.xunit.idea.editor.treeparts.UnitNodeTreePartFactory;
 import com.xrosstools.xunit.idea.editor.util.*;
+import gherkin.lexer.Fi;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -201,6 +202,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         treeNavigator.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
+                selectedNode();
             }
         });
     }
@@ -280,23 +282,13 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                     return;
 
                 Figure f = selectFigureAt(e.getX(), e.getY());
+                selectedFigure(f);
 
-                if(lastSelected == f)
-                    return;
-
-                if(lastSelected != null) {
-                    lastSelected.setSelected(false);
-                    deselectedFigure(lastSelected);
+                if(!(f instanceof Connection)) {
+                    DefaultMutableTreeNode treeNode = treeRoot.findEditPart(f.getPart().getModel()).getTreeNode();
+                    if (treeNode != null)
+                        treeNavigator.setSelectionPath(new TreePath(treeNode.getPath()));
                 }
-
-                if(f != null) {
-                    f.setSelected(true);
-                    selectedFigure(f);
-                }
-
-                lastSelected = f;
-                unitPanel.repaint();
-                unitPanel.grabFocus();
             }
 
             @Override
@@ -345,30 +337,49 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         });
     }
 
-    private void deselectedFigure(Figure deselected) {
-
-    }
-
     private void setModel(PropertyTableModel model){
         tableProperties.setModel(model);
         tableProperties.setDefaultRenderer(Object.class, new SimpleTableRenderer(model));
         tableProperties.getColumnModel().getColumn(1).setCellEditor(new SimpleTableCellEditor(model));
-
     }
 
     private void selectedFigure(Figure selected) {
-        PropertyTableModel model = new PropertyTableModel((IPropertySource)selected.getPart().getModel(), this);
+        if(lastSelected == selected)
+            return;
+
+        if(lastSelected != null)
+            lastSelected.setSelected(false);
+
+        if(selected != null) {
+            lastSelected = selected;
+            lastSelected.setSelected(true);
+        }
+
+        PropertyTableModel model = new PropertyTableModel((IPropertySource)lastSelected.getPart().getModel(), this);
         setModel(model);
+        refresh();
+    }
 
-        if(selected instanceof Connection)
+    private void selectedNode() {
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)treeNavigator.getLastSelectedPathComponent();
+        if(node == null)
             return;
 
-        DefaultMutableTreeNode treeNode = treeRoot.findEditPart(selected.getPart().getModel()).getTreeNode();
+        TreeEditPart treePart = (TreeEditPart)node.getUserObject();
+        Figure selected = treePart.getContext().findFigure(treePart.getModel());
 
-        if(treeNode == null)
+        if(selected == null || selected == lastSelected)
             return;
 
-        treeNavigator.setSelectionPath(new TreePath(treeNode.getPath()));
+        selectedFigure(selected);
+
+        adjust(innerDiagramPane.getVerticalScrollBar(), lastSelected.getY(), lastSelected.getHeight());
+        adjust(innerDiagramPane.getHorizontalScrollBar(), lastSelected.getX(), lastSelected.getWidth());
+    }
+
+    private void adjust(JScrollBar scrollBar, int start, int length ) {
+        if (scrollBar.getValue() > start || scrollBar.getValue() + scrollBar.getVisibleAmount() < start + length)
+            scrollBar.setValue(start - 100);
     }
 
     private void showContexMenu(int x, int y) {
@@ -383,7 +394,12 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         }
 
         newUnitNode = null;
+        refresh();
+    }
+
+    private void refresh() {
         unitPanel.repaint();
+        unitPanel.grabFocus();
     }
 
     private JButton createResetButton() {
