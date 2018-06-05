@@ -23,9 +23,9 @@ public class UnitRouter extends AbstractRouter implements UnitConstants {
         Point end = targetFigure.getLeft();
 
         if(conn.isFirstHalf()) {
-            start = start.y == end.y ? start : start.y < end.y ? sourceFigure.getTop() : sourceFigure.getBottom();
+            start = start.y == end.y ? start : start.y > end.y ? sourceFigure.getTop() : sourceFigure.getBottom();
         }else{
-            end = start.y == end.y ? end : start.y > end.y ? targetFigure.getTop() : targetFigure.getBottom();
+            end = start.y == end.y ? end : start.y < end.y ? targetFigure.getTop() : targetFigure.getBottom();
         }
 
         pl.addPoint(start);

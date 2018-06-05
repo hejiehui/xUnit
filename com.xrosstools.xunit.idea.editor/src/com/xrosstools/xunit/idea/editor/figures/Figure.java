@@ -224,11 +224,6 @@ public class Figure implements ImageObserver, UnitConstants {
     }
 
     public Figure findFigureAt(int x, int y) {
-        for (Connection conn: connections) {
-            if(conn.containsPoint(x, y))
-                return conn;
-        }
-
         Figure found;
         for(Figure child: components) {
             found = child.findFigureAt(x, y);
@@ -236,6 +231,11 @@ public class Figure implements ImageObserver, UnitConstants {
                 continue;
 
             return found;
+        }
+
+        for (Connection conn: connections) {
+            if(conn.containsPoint(x, y))
+                return conn;
         }
 
         if(!containsPoint(x, y))
