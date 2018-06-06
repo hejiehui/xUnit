@@ -4,6 +4,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
@@ -23,7 +24,6 @@ import com.xrosstools.xunit.idea.editor.policies.UnitNodeLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.treeparts.TreeEditPart;
 import com.xrosstools.xunit.idea.editor.treeparts.UnitNodeTreePartFactory;
 import com.xrosstools.xunit.idea.editor.util.*;
-import gherkin.lexer.Fi;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -44,8 +44,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     private VirtualFile virtualFile;
 
     private boolean showed;
-    private JSplitPane mainPane;
-    private JSplitPane diagramPane;
+    private JBSplitter mainPane;
+    private JBSplitter diagramPane;
     private Tree treeNavigator;
     private JBTable tableProperties;
 
@@ -76,36 +76,20 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
     private void createVisual() {
         setLayout(new BorderLayout());
-        mainPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        mainPane.setDividerSize(3);
+        mainPane = new JBSplitter(true, 0.8f);
+        mainPane.setDividerWidth(3);
         add(mainPane, BorderLayout.CENTER);
 
-        mainPane.setLeftComponent(createMain());
-        mainPane.setRightComponent(createProperty());
-
-        //TODO to optimize portion setting, we shall intercept sync event
-        mainPane.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                initPortion();
-            }
-        });
-    }
-
-    public void initPortion() {
-        if (!showed) {
-            mainPane.setDividerLocation(0.8);
-            diagramPane.setDividerLocation(0.8);
-            showed = true;
-        }
+        mainPane.setFirstComponent(createMain());
+        mainPane.setSecondComponent(createProperty());
     }
 
     private JComponent createMain() {
-        diagramPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        diagramPane.setDividerSize(3);
+        diagramPane = new JBSplitter(false, 0.8f);
+        diagramPane.setDividerWidth(3);
 
-        diagramPane.setLeftComponent(createButtons());
-        diagramPane.setRightComponent(createTree());
+        diagramPane.setFirstComponent(createButtons());
+        diagramPane.setSecondComponent(createTree());
 
         return diagramPane;
     }
