@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor.parts;
 
+import com.xrosstools.xunit.idea.editor.UnitNodeDiagramPanel;
 import com.xrosstools.xunit.idea.editor.figures.*;
 import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
@@ -114,14 +115,8 @@ public abstract class EditPart implements UnitConstants, PropertyChangeListener 
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(PROP_NODE))
-            refresh();
-        else if (evt.getPropertyName().equals(PROP_INPUTS))
-            refreshTargetConnections();
-        else if (evt.getPropertyName().equals(PROP_OUTPUTS))
-            refreshSourceConnections();
-
         updateName();
+        refreshVisuals();
         refresh();
     }
 
@@ -141,20 +136,7 @@ public abstract class EditPart implements UnitConstants, PropertyChangeListener 
         return new ArrayList<>();
     }
 
-    public void refreshSourceConnections() {
-    }
-
-    public void refreshTargetConnections() {
-    }
-
     public void refresh() {
-//        context.getContentPane().invalidate();
-//        figure = null;
-//        build();
-//        figure.repaint();
-
-//        refreshVisuals();
-//        refreshChildren();
-
+        ((UnitNodeDiagramPanel)context.getContentPane()).refresh();
     }
 }

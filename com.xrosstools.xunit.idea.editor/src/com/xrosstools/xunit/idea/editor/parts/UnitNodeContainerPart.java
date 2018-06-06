@@ -24,10 +24,6 @@ public class UnitNodeContainerPart extends EditPart implements UnitConstants, Pr
 //        installEditPolicy(EditPolicy.LAYOUT_ROLE, new UnitNodeContainerLayoutPolicy());
     }
 
-    public void propertyChange(PropertyChangeEvent evt) {
-        refresh();
-    }
-
     protected void addChildVisual(EditPart childEditPart, int index) {
         UnitNodeContainerFigure figure = (UnitNodeContainerFigure)getFigure();
         UnitNodeContainer unitsPanel = (UnitNodeContainer)getModel();

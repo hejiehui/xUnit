@@ -140,22 +140,22 @@ public abstract class UnitNode extends PropertySource {
     public void setPropertyValue(Object propName, Object value){
         if (PROP_NAME.equals(propName))
             setName((String)value);
-        if (PROP_DESCRIPTION.equals(propName))
+        else if (PROP_DESCRIPTION.equals(propName))
             setDescription((String)value);
-        if (PROP_CLASS.equals(propName))
+        else if (PROP_CLASS.equals(propName))
             setClassName((String)value);
-        if (PROP_BEHAVIOR_TYPE.equals(propName))
+        else if (PROP_BEHAVIOR_TYPE.equals(propName))
             setType(BehaviorType.getType((Integer)value));
-        if (PROP_REFERENCE.equals(propName)) {
+        else if (PROP_REFERENCE.equals(propName)) {
             if(((Integer)value) == -1)
                 setReferenceName(null);
             else
                 setReferenceName(getReferenceValues()[(Integer)value]);
         }
-        if (PROP_MODULE.equals(propName))
+        else if (PROP_MODULE.equals(propName))
             setModuleName((String)value);
-
-        properties.setPropertyValue(propName, value);
+        else
+            properties.setPropertyValue(propName, value);
     }
 
     public Object getEditableValue(){

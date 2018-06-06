@@ -171,7 +171,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private void build() {
-        EditContext context = new EditContext(unitPanel);
+        EditContext context = new EditContext(this);
 
         UnitNodePartFactory f = new UnitNodePartFactory(context);
         root = f.createEditPart(null, diagram);
@@ -200,12 +200,14 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         });
     }
 
-    private void rebuild() {
+    public void rebuild() {
         build();
     }
 
     private Figure selectFigureAt(int x, int y) {
-        return root.getFigure().selectFigureAt(x, y);
+        Figure rootFigure = root.getFigure();
+        Figure selected = rootFigure.selectFigureAt(x, y);
+        return selected == null ? rootFigure : selected;
     }
 
     private void updateHover(MouseEvent e) {
@@ -277,7 +279,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                 Figure f = selectFigureAt(e.getX(), e.getY());
                 selectedFigure(f);
 
-                if(!(f instanceof Connection)) {
+                if(f != null && !(f instanceof Connection)) {
                     DefaultMutableTreeNode treeNode = treeRoot.findEditPart(f.getPart().getModel()).getTreeNode();
                     if (treeNode != null)
                         treeNavigator.setSelectionPath(new TreePath(treeNode.getPath()));
@@ -380,7 +382,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         builder.buildContextMenu(project, diagram, lastSelected.getPart()).show(unitPanel, x, y);
     }
 
-    public void reset() {
+    private void reset() {
         if(lastSelected != null) {
             lastSelected.setSelected(false);
             lastSelected = null;
@@ -390,8 +392,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         refresh();
     }
 
-    private void refresh() {
-        unitPanel.repaint();
+    public void refresh() {
+        updateVisual();
         unitPanel.grabFocus();
     }
 

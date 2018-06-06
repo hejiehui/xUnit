@@ -13,7 +13,7 @@ public class TextPropertyDescriptor extends PropertyDescriptor{
             @Override
             public void keyTyped(KeyEvent e) {
                 if(e.getKeyCode() == e.VK_ENTER || e.getKeyChar() == '\n')
-                    editor.getParent().transferFocus();
+                    editor.transferFocusUpCycle();
             }
         });
     }

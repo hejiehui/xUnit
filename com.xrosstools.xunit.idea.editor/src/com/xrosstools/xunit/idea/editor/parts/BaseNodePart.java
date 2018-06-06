@@ -1,10 +1,8 @@
 package com.xrosstools.xunit.idea.editor.parts;
 
-import com.xrosstools.xunit.idea.editor.figures.TopLevelUnitFigure;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeConnection;
 
-import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 public abstract class BaseNodePart extends EditPart{
@@ -37,24 +35,6 @@ public abstract class BaseNodePart extends EditPart{
     protected void addChild(List children, Object node){
         if(node != null)
             children.add(node);
-    }
-
-    protected void updateName(){
-        if(getFigure().getParent() instanceof TopLevelUnitFigure){
-            UnitNode unit = getNode();
-            TopLevelUnitFigure figure = (TopLevelUnitFigure)getFigure().getParent();
-            figure.setName(unit.getName(), unit.getDescription());
-        }
-    }
-    public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals(PROP_NODE))
-            refresh();
-        else if (evt.getPropertyName().equals(PROP_INPUTS))
-            refreshTargetConnections();
-        else if (evt.getPropertyName().equals(PROP_OUTPUTS))
-            refreshSourceConnections();
-
-        updateName();
     }
 
     public List<UnitNodeConnection> getModelSourceConnections() {

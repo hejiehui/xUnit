@@ -371,6 +371,9 @@ public class Figure implements ImageObserver, UnitConstants {
         int insertionY = insertionPoint.y;
         boolean vertical = !layout.isHorizontal();
 
+        if(getComponentCount() == 0)
+            return;
+
         if(insertionIndex == 0) {
             Figure child = getComponents().get(0);
             if(vertical)
