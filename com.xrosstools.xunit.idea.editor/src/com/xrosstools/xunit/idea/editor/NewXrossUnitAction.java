@@ -24,6 +24,11 @@ public class NewXrossUnitAction extends AnAction {
     public void actionPerformed(AnActionEvent anActionEvent) {
         final Project project = anActionEvent.getProject();
         VirtualFile selected = anActionEvent.getData(CommonDataKeys.VIRTUAL_FILE);
+        if(selected == null) {
+            Messages.showErrorDialog("Please select location first", "Error");
+            return;
+        }
+
         if(!selected.isDirectory()) {
             selected = selected.getParent();
         }
@@ -38,7 +43,17 @@ public class NewXrossUnitAction extends AnAction {
 
             @Override
             public boolean canClose(String s) {
-                return true;
+                if(s!= null || s.trim().length() == 0)
+                    return false;
+
+                String name = s + "." + XunitFileType.EXTENSION;
+                for(VirtualFile c: dir.getChildren()) {
+                    if (c.getName().equalsIgnoreCase(name)) {
+                        Messages.showErrorDialog("Name \"" + name + "\" is already used, please chose another one.", "Error");
+                        return false;
+                    }
+                }
+                return s!= null ;
             }
         });
         dialog.show();
@@ -47,11 +62,12 @@ public class NewXrossUnitAction extends AnAction {
             return;
 
         final String name = dialog.getInputString();
+
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
                 try {
-                    VirtualFile newFile = dir.createChildData(project, name + ".xunit");
+                    VirtualFile newFile = dir.createChildData(project, name + "." + XunitFileType.EXTENSION);
 
                     BufferedInputStream in = new BufferedInputStream(getClass().getResourceAsStream("/template/emptyTemplate.xunit"));
                     int buf_size = 1024;

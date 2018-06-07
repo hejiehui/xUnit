@@ -1,13 +1,16 @@
 package com.xrosstools.xunit.idea.editor.util;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class TextPropertyDescriptor extends PropertyDescriptor{
-    private JTextField editor = new JTextField();
+    private JTextField editor;
 
     public TextPropertyDescriptor(Object propertyId) {
+        editor = new JTextField();
         setId(propertyId);
         editor.addKeyListener(new KeyAdapter() {
             @Override
@@ -20,6 +23,7 @@ public class TextPropertyDescriptor extends PropertyDescriptor{
 
     public JComponent getEditor(Object value) {
         editor.setText((String)value);
+        editor.setBorder(null);
         return editor;
     }
 }

@@ -350,8 +350,6 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
             lastSelected.setSelected(true);
         }
 
-        PropertyTableModel model = new PropertyTableModel((IPropertySource)lastSelected.getPart().getModel(), this);
-        setModel(model);
         refresh();
     }
 
@@ -436,6 +434,11 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private void updateVisual() {
+        if(lastSelected!=null) {
+            PropertyTableModel model = new PropertyTableModel((IPropertySource) lastSelected.getPart().getModel(), this);
+            setModel(model);
+        }
+
         int height = unitPanel.getPreferredSize().height;
         innerDiagramPane.getVerticalScrollBar().setMaximum(height);
         repaint();
