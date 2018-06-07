@@ -6,6 +6,7 @@ import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.xrosstools.xunit.idea.editor.commands.AssignClassCommand;
+import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
 
@@ -19,21 +20,15 @@ public class AssignClassNameAction extends WorkbenchPartAction implements UnitAc
 		this.nodePart = nodePart;
 	}
 
-	public void run() {
-		assignClass();
-	}
+    public Command createCommand() {
+        TreeClassChooser chooser = TreeClassChooserFactory.getInstance(project).createProjectScopeChooser("");
+        chooser.showDialog();
+        PsiClass selected = chooser.getSelected();
+        if(selected == null)
+            return null;
 
-	public void assignClass(){
-		TreeClassChooser chooser = TreeClassChooserFactory.getInstance(project).createProjectScopeChooser("");
-		chooser.showDialog();
-		PsiClass selected = chooser.getSelected();
-		if(selected == null)
-			return;
+        String qName = selected.getQualifiedName();
 
-		String qName = selected.getQualifiedName();
-
-		new AssignClassCommand((UnitNode)nodePart.getModel(), qName).execute();
-
-//		.getCommandStack().execute(new AssignClassCommand((UnitNode)getModel(), newType.getFullyQualifiedName()));
+        return new AssignClassCommand((UnitNode)nodePart.getModel(), qName);
 	}
 }

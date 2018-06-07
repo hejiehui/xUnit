@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor.actions;
 
+import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.commands.RemovePropertyCommand;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeProperties;
 
@@ -14,12 +15,9 @@ public class RemovePropertyAction extends WorkbenchPartAction implements UnitAct
 		this.properties = properties;
 		setText(key);
 	}
-	
-	protected boolean calculateEnabled() {
-		return true;
-	}
-	
-	public void run() {
-		execute(new RemovePropertyCommand(properties, key));
+
+	@Override
+	public Command createCommand() {
+		return new RemovePropertyCommand(properties, key);
 	}
 }

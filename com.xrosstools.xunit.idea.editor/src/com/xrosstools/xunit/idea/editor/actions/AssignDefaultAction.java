@@ -2,6 +2,7 @@ package com.xrosstools.xunit.idea.editor.actions;
 
 
 import com.xrosstools.xunit.idea.editor.commands.AssignDefaultCommand;
+import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 
 public class AssignDefaultAction extends WorkbenchPartAction implements UnitActionConstants {
@@ -11,7 +12,7 @@ public class AssignDefaultAction extends WorkbenchPartAction implements UnitActi
 		this.node = node;
 	}
 
-	public void run() {
-		execute(new AssignDefaultCommand(node));
+	public Command createCommand() {
+		return new AssignDefaultCommand(node);
 	}
 }

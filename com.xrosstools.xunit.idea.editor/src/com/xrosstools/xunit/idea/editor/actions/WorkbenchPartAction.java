@@ -1,6 +1,5 @@
 package com.xrosstools.xunit.idea.editor.actions;
 
-import com.intellij.openapi.command.CommandProcessor;
 import com.xrosstools.xunit.idea.editor.commands.Command;
 
 import java.awt.event.ActionEvent;
@@ -17,10 +16,6 @@ public abstract class WorkbenchPartAction implements ActionListener {
         this.listener = listener;
     }
 
-    public boolean isChecked() {
-        return checked;
-    }
-
     public void setChecked(boolean checked) {
         this.checked = checked;
     }
@@ -33,20 +28,15 @@ public abstract class WorkbenchPartAction implements ActionListener {
         this.text = text;
     }
 
-    protected boolean calculateEnabled() {
-        return true;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        run();
-    }
+        Command c = createCommand();
+        if(c == null)
+            return;
 
-    public abstract void run();
-
-    public void execute(Command command) {
-//        CommandProcessor.getInstance().executeCommand()
-        command.execute();
+        c.execute();
         listener.propertyChange(null);
     }
+
+    public abstract Command createCommand();
 }

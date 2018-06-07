@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.OpenSourceUtil;
+import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
 
@@ -20,12 +21,9 @@ public class OpenClassAction extends WorkbenchPartAction implements UnitActionCo
         className = node.getClassName();
 	}
 
-	protected boolean calculateEnabled() {
-		return node.isValid(className);
-	}
-
-	public void run() {
+	public Command createCommand() {
 		openClass(project, className);
+		return null;
 	}
 
 	public static void openClass(Project project, String className){

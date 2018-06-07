@@ -26,13 +26,9 @@ public abstract class BaseDialogAction extends WorkbenchPartAction implements Un
 		setText(dialogTitle);
 	}
 	
-	protected boolean calculateEnabled() {
-		return true;
-	}
-	
 	abstract protected Command createCommand(String value);
-	
-	public void run() {
+
+	public Command createCommand() {
 		Messages.InputDialog dialog = new Messages.InputDialog(project, dialogTitle, dialogMessage, IconLoader.findIcon(Activator.getIconPath("chain")), initialValue, new InputValidator() {
 			@Override
 			public boolean checkInput(String s) {
@@ -46,7 +42,6 @@ public abstract class BaseDialogAction extends WorkbenchPartAction implements Un
 		});
 		dialog.show();
 
-		if (dialog.getExitCode() == 0)
-			execute(createCommand(dialog.getInputString()));
+		return dialog.getExitCode() == 0 ? createCommand(dialog.getInputString()) : null ;
 	}
 }

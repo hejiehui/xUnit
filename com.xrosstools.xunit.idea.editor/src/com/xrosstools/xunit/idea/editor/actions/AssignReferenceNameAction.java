@@ -2,6 +2,7 @@ package com.xrosstools.xunit.idea.editor.actions;
 
 
 import com.xrosstools.xunit.idea.editor.commands.AssignReferenceCommand;
+import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 
 public class AssignReferenceNameAction extends WorkbenchPartAction implements UnitActionConstants {
@@ -15,11 +16,8 @@ public class AssignReferenceNameAction extends WorkbenchPartAction implements Un
 			setChecked(true);
 	}
 
-	protected boolean calculateEnabled() {
-		return true;
-	}
-
-	public void run() {
-		execute(new AssignReferenceCommand(node, referenceName));
+	@Override
+	public Command createCommand() {
+		return new AssignReferenceCommand(node, referenceName);
 	}
 }

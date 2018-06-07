@@ -2,6 +2,7 @@ package com.xrosstools.xunit.idea.editor.actions;
 
 
 import com.xrosstools.xunit.idea.editor.commands.AssignModuleCommand;
+import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 
 public class SelectModuleAction extends WorkbenchPartAction implements UnitActionConstants {
@@ -18,11 +19,8 @@ public class SelectModuleAction extends WorkbenchPartAction implements UnitActio
 			setChecked(true);
 	}
 	
-	protected boolean calculateEnabled() {
-		return true;
-	}
-	
-	public void run() {
-		execute(new AssignModuleCommand(node, moduleName));
+	@Override
+	public Command createCommand() {
+		return new AssignModuleCommand(node, moduleName);
 	}
 }

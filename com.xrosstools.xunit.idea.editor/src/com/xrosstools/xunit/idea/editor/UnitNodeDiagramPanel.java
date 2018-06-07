@@ -176,7 +176,6 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         UnitNodePartFactory f = new UnitNodePartFactory(context);
         root = f.createEditPart(null, diagram);
         root.build();
-        updateVisual();
 
         UnitNodeTreePartFactory treePartFactory = new UnitNodeTreePartFactory(context);
         treeRoot = treePartFactory.createEditPart(null, diagram);
@@ -198,6 +197,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                 return this;
             }
         });
+
+        updateVisual();
     }
 
     public void rebuild() {
@@ -446,6 +447,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        rebuild();
         save();
     }
 
