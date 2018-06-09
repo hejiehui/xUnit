@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xunit.editor</id>
   <name>Xross Unit Designer</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -10,8 +10,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      1.0 test version.<br>
-      <em>almost full functional</em>
+      1.0 release<br>
+      <em>Full functional</em>
     ]]>
   </change-notes>
 
