@@ -18,7 +18,7 @@ public class OpenClassAction extends WorkbenchPartAction implements UnitActionCo
 		setText(OPEN_CLASS);
 		this.project = project;
         node = (UnitNode)nodePart.getModel();
-        className = node.getClassName();
+        className = node.getImplClassName();
 	}
 
 	public Command createCommand() {

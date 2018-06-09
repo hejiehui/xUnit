@@ -43,9 +43,10 @@ public class NewXrossUnitAction extends AnAction {
 
             @Override
             public boolean canClose(String s) {
-                if(s!= null || s.trim().length() == 0)
+                if(s== null || s.trim().length() == 0)
                     return false;
 
+                s = s.trim();
                 String name = s + "." + XunitFileType.EXTENSION;
                 for(VirtualFile c: dir.getChildren()) {
                     if (c.getName().equalsIgnoreCase(name)) {
@@ -53,7 +54,7 @@ public class NewXrossUnitAction extends AnAction {
                         return false;
                     }
                 }
-                return s!= null ;
+                return true;
             }
         });
         dialog.show();
