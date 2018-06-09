@@ -8,6 +8,7 @@ import com.xrosstools.xunit.idea.editor.parts.EditPart;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class UnitNodeHelper implements UnitConstants {
         try {
             String curName = diagram.getFilePath().getName();
             for(VirtualFile res: diagram.getFilePath().getParent().getChildren()) {
-                if(res.getExtension().equals("xunit") && !res.getName().equals(curName))
+                if(!res.isDirectory() && res.getExtension().equals("xunit") && !res.getName().equals(curName))
                     names.add(res.getName());
             }
         } catch (Exception e) {
@@ -54,18 +55,27 @@ public class UnitNodeHelper implements UnitConstants {
     }
 
     public boolean isFileExist(String moduleName) {
-        if(!isValid(moduleName))
+        if (!isValid(moduleName))
             return false;
 
-        if(!new File(moduleName).exists()) {
-            VirtualFile moduleFile = diagram.getFilePath().getParent().findChild(moduleName);
-            if(moduleFile == null) {
-                Messages.showInfoMessage("Can not locate \"" + moduleName + "\"", "Can not locate \"" + moduleName + "\"");
-                return false;
-            }else
-                return true;
-        }else
+        if (new File(moduleName).exists())
             return true;
+
+        VirtualFile moduleFile = diagram.getFilePath().getParent().findChild(moduleName);
+        if (moduleFile != null)
+            return true;
+
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null) {
+            classLoader = this.getClass().getClassLoader();
+        }
+
+        URL u = classLoader.getResource(moduleName);
+        if (u != null)
+            return true;
+
+        Messages.showInfoMessage("Can not locate \"" + moduleName + "\"", "Can not locate \"" + moduleName + "\"");
+        return false;
     }
 
     private UnitNodeDiagram load(String moduleName) throws Exception {

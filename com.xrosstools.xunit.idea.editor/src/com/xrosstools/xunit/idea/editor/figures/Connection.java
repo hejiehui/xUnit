@@ -67,6 +67,8 @@ public class Connection extends Figure {
     public boolean containsPoint(int x, int y) {
 //        Path2D.contains(shape.getPathIterator(null), new Point2D.Float(x, y))
 //        shape.contains(new Point2D.Float(x, y))
+        if(pl == null)
+            return false;
 
         int count = pl.getPoints();
         for(int i = 1; i < count; i++) {
