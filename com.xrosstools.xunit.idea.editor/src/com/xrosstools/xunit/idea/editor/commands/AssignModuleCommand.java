@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor.commands;
 
+import com.intellij.openapi.project.Project;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 
 public class AssignModuleCommand extends Command {
@@ -9,7 +10,7 @@ public class AssignModuleCommand extends Command {
 	private boolean executed;
 	
 	public AssignModuleCommand(
-			UnitNode node, 
+			UnitNode node,
 			String moduleName){
 		this.node = node;
 		oldModuleName = node.getModuleName();

@@ -68,6 +68,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         this.project = project;
         this.virtualFile = virtualFile;
         diagram = factory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(virtualFile.getInputStream()));
+        diagram.setProject(project);
         diagram.setFilePath(virtualFile);
         createVisual();
         registerListener();

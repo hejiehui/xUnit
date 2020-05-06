@@ -1,6 +1,5 @@
 package com.xrosstools.xunit.idea.editor.actions;
 
-
 import com.xrosstools.xunit.idea.editor.commands.AssignModuleCommand;
 import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;

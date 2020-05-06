@@ -16,4 +16,8 @@ public class IntegerContext implements Context {
 	public void setValue(Integer value) {
 		this.value = value;
 	}
+	
+	public void add() {
+		value++;
+	}
 }

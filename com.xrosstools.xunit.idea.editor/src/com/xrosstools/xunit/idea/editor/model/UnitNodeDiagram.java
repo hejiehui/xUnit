@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor.model;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.xrosstools.xunit.idea.editor.util.IPropertyDescriptor;
 import com.xrosstools.xunit.idea.editor.util.TextPropertyDescriptor;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer {
+    private Project project;
     private VirtualFile filePath;
     private String packageId;
     private String name;
@@ -16,6 +18,14 @@ public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer
 
     private List<UnitNode> units = new ArrayList<>();
     private List<String> imports = new ArrayList<>();
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
     public VirtualFile getFilePath() {
         return filePath;

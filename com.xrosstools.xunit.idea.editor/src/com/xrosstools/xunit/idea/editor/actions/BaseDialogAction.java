@@ -25,7 +25,11 @@ public abstract class BaseDialogAction extends WorkbenchPartAction implements Un
 		
 		setText(dialogTitle);
 	}
-	
+
+	public Project getProject() {
+		return project;
+	}
+
 	abstract protected Command createCommand(String value);
 
 	public Command createCommand() {

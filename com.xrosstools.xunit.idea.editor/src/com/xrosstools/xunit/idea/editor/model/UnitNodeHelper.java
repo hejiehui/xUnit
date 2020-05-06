@@ -1,8 +1,13 @@
 package com.xrosstools.xunit.idea.editor.model;
 
+import com.intellij.openapi.module.ModuleUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.xrosstools.xunit.idea.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.idea.editor.parts.EditPart;
 
@@ -10,7 +15,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UnitNodeHelper implements UnitConstants {
     private UnitNodeDiagram diagram;
@@ -55,37 +62,31 @@ public class UnitNodeHelper implements UnitConstants {
     }
 
     public boolean isFileExist(String moduleName) {
-        if (!isValid(moduleName))
-            return false;
-
-        if (new File(moduleName).exists())
-            return true;
-
-        VirtualFile moduleFile = diagram.getFilePath().getParent().findChild(moduleName);
-        if (moduleFile != null)
-            return true;
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        if (classLoader == null) {
-            classLoader = this.getClass().getClassLoader();
-        }
-
-        URL u = classLoader.getResource(moduleName);
-        if (u != null)
+        if(findByName(moduleName) != null)
             return true;
 
         Messages.showInfoMessage("Can not locate \"" + moduleName + "\"", "Can not locate \"" + moduleName + "\"");
         return false;
     }
 
-    private UnitNodeDiagram load(String moduleName) throws Exception {
-        VirtualFile moduleFile;
-        File f = new File(moduleName);
-        if(f.exists())
-            moduleFile = LocalFileSystem.getInstance().findFileByIoFile(f);
-        else
-            moduleFile = diagram.getFilePath().getParent().findChild(moduleName);
+    private VirtualFile findByName(String moduleName) {
+        if (!isValid(moduleName))
+            return null;
 
+        File f = new File(moduleName);
+        if (new File(moduleName).exists())
+            return LocalFileSystem.getInstance().findFileByIoFile(f);
+
+        VirtualFile moduleFile = diagram.getFilePath().getParent().findChild(moduleName);
+        if (moduleFile != null)
+            return moduleFile;
+
+        VirtualFile moduleContentRoot = ProjectRootManager.getInstance(diagram.getProject()).getFileIndex().getSourceRootForFile(diagram.getFilePath());
+        return VfsUtilCore.findRelativeFile(moduleName, moduleContentRoot);
+    }
+
+    private UnitNodeDiagram load(String moduleName) throws Exception {
+        VirtualFile moduleFile = findByName(moduleName);
         if(moduleFile == null)
             return null;
 

@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.OpenSourceUtil;
 import com.xrosstools.xunit.idea.editor.actions.*;
 import com.xrosstools.xunit.idea.editor.model.*;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;

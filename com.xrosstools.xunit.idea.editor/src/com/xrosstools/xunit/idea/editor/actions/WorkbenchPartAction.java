@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 
 public abstract class WorkbenchPartAction implements ActionListener {
+    //TODO add Icon
     private String text;
 
     private boolean checked;
