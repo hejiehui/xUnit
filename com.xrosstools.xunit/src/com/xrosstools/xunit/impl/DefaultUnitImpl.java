@@ -2,15 +2,21 @@ package com.xrosstools.xunit.impl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.xrosstools.xunit.Adapter;
 import com.xrosstools.xunit.ApplicationPropertiesAware;
+import com.xrosstools.xunit.CompletionMode;
 import com.xrosstools.xunit.Context;
 import com.xrosstools.xunit.Converter;
 import com.xrosstools.xunit.Decorator;
+import com.xrosstools.xunit.Dispatcher;
 import com.xrosstools.xunit.Locator;
 import com.xrosstools.xunit.Processor;
+import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.Unit;
 import com.xrosstools.xunit.UnitPropertiesAware;
 import com.xrosstools.xunit.Validator;
@@ -21,7 +27,7 @@ import com.xrosstools.xunit.def.UnitDef;
  * @author jiehe
  *
  */
-public class DefaultUnitImpl implements Processor, Converter, Validator, Locator, Decorator, Adapter, ApplicationPropertiesAware, UnitPropertiesAware {
+public class DefaultUnitImpl implements Processor, Converter, Validator, Locator, Dispatcher, Decorator, Adapter, ApplicationPropertiesAware, UnitPropertiesAware {
     /**
      * public static final String constant with name start with PROP_KEY will be displayed 
      * in "Set property" context menu
@@ -49,6 +55,11 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
     private Map<String, String> appProperties;
     
 	private String defaultKey;
+
+	private CompletionMode mode;
+    private long timeout;
+    private TimeUnit timeUnit;
+
 
 	public DefaultUnitImpl(UnitDef unitDef){
 	}
@@ -108,6 +119,60 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
         	return (Boolean)value;
         return Boolean.parseBoolean(value.toString());
 	}
+
+    @Override
+    public void setCompletionMode(CompletionMode mode) {
+        this.mode = mode;
+    }
+
+    @Override
+    public CompletionMode getCompletionMode() {
+        return mode;
+    }
+
+    @Override
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
+    }
+
+    @Override
+    public long getTimeout() {
+        return timeout;
+    }
+
+    @Override
+    public void setTimeUnit(TimeUnit timeUnit) {
+        this.timeUnit = timeUnit;
+    }
+
+    @Override
+    public TimeUnit getTimeUnit() {
+        return timeUnit;
+    }
+
+    @Override
+    public Map<String, Context> dispatch(Context inputCtx, Map<String, TaskType> taskInfoMap) {
+        Map<String, Context> ctxMap = new HashMap<String, Context>();
+        // This is just an quick and dirty implementation, concurrent accessing risks are ignored
+        for(String taskId: taskInfoMap.keySet())
+            ctxMap.put(taskId, inputCtx);
+        return ctxMap;
+    }
+
+    @Override
+    public Context merge(Context inputCtx, List<Context> results) {
+        return results.get(0);
+    }
+
+    @Override
+    public Context onTaskError(Context inputCtx, Exception exception) {
+        return inputCtx;
+    }
+
+    @Override
+    public Context onInvokeError(Map<String, Context> dispatchedCtx, Exception exception) {
+        return dispatchedCtx.values().iterator().next();
+    }
 	
 	public Context convert(Context inputCtx) {
 	    displayMessage(inputCtx);

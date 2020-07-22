@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 
 import com.xrosstools.xunit.ApplicationPropertiesAware;
 import com.xrosstools.xunit.BehaviorType;
+import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.Unit;
 import com.xrosstools.xunit.UnitPropertiesAware;
 import com.xrosstools.xunit.XunitFactory;
@@ -20,7 +21,9 @@ public class UnitDef {
 	private String moduleName;
 	private String referenceName;
 	private String key;
-	private LinkedHashMap<String, String> properties;
+	private TaskType taskType;
+
+    private LinkedHashMap<String, String> properties;
 	
 	public void setUnitDefRepo(UnitDefRepo repo){
 		this.repo = repo;
@@ -46,7 +49,15 @@ public class UnitDef {
 		return name;
 	}
 
-	public void setName(String name) {
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
+    }
+
+    public void setName(String name) {
 		this.name = name;
 	}
 

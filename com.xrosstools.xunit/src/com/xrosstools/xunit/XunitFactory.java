@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -26,8 +27,10 @@ import com.xrosstools.xunit.def.BiBranchDef;
 import com.xrosstools.xunit.def.BranchDef;
 import com.xrosstools.xunit.def.ChainDef;
 import com.xrosstools.xunit.def.DecoratorDef;
+import com.xrosstools.xunit.def.DispatcherDef;
 import com.xrosstools.xunit.def.LocatorDef;
 import com.xrosstools.xunit.def.LoopDef;
+import com.xrosstools.xunit.def.ParallelBranchDef;
 import com.xrosstools.xunit.def.UnitDef;
 import com.xrosstools.xunit.def.UnitDefRepo;
 import com.xrosstools.xunit.def.ValidatorDef;
@@ -175,22 +178,26 @@ public class XunitFactory implements XunitConstants {
 		
 		if(PROCESSOR.equals(nodeName))
 			unitDef = createProcessorNode(node);
-		if(CONVERTER.equals(nodeName))
+		else if(CONVERTER.equals(nodeName))
 			unitDef = createConverterNode(node);
-		if(DECORATOR.equals(nodeName))
+		else if(DECORATOR.equals(nodeName))
 			unitDef = createDecoratorNode(node);
-		if(ADAPTER.equals(nodeName))
+		else if(ADAPTER.equals(nodeName))
 			unitDef = createAdapterNode(node);
 		else if(VALIDATOR.equals(nodeName))
 			unitDef = createValidatorNode(node);
 		else if(LOCATOR.equals(nodeName))
 			unitDef = createLocatorNode(node);
+        else if(DISPATCHER.equals(nodeName))
+            unitDef = createDispatcherNode(node);
 		else if(CHAIN.equals(nodeName))
 			unitDef = createChainNode(node);
 		else if(BI_BRANCH.equals(nodeName))
 			unitDef = createBiBranchNode(node);
 		else if(BRANCH.equals(nodeName))
 			unitDef = createBranchNode(node);
+        else if(PARALLEL_BRANCH.equals(nodeName))
+            unitDef = createParallelBranchNode(node);
 		else if(WHILE.equals(nodeName))
 			unitDef = createPreValidationLoopNode(node);
 		else if(DO_WHILE.equals(nodeName))
@@ -237,6 +244,8 @@ public class XunitFactory implements XunitConstants {
 			return BehaviorType.locator;
 		if(VALIDATOR.equals(nodeName))
 			return BehaviorType.validator;
+		if(DISPATCHER.equals(nodeName))
+            return BehaviorType.dispatcher;
 		
 		return BehaviorType.valueOf(getAttribute(node, TYPE));
 	}
@@ -303,6 +312,14 @@ public class XunitFactory implements XunitConstants {
 		return locatorDef;
 	}
 
+    private UnitDef createDispatcherNode(Node node){
+        DispatcherDef dispatcherDef = new DispatcherDef();
+        dispatcherDef.setCompletionMode(CompletionMode.valueOf(getAttribute(node, COMPLETION_MODE)));
+        dispatcherDef.setTimeout(Long.valueOf(getAttribute(node, TIMEOUT)));
+        dispatcherDef.setTimeUnit(TimeUnit.valueOf(getAttribute(node, TIME_UNIT)));
+        return dispatcherDef;
+    }
+
 	private UnitDef createChainNode(Node node){
 		ChainDef chainDef = new ChainDef();
 		
@@ -343,6 +360,26 @@ public class XunitFactory implements XunitConstants {
 		return branchDef;
 	}
 	
+    private UnitDef createParallelBranchNode(Node node){
+        ParallelBranchDef parallelBranchDef = new ParallelBranchDef();
+        parallelBranchDef.setDispatcherDef(createChildNode(node, DISPATCHER));
+
+        List<Node> children = getValidChildNodes(node);
+        for(int i = 0; i < children.size(); i++){
+            if(!isValidNode(children.get(i), BRANCH_UNIT))
+                continue;
+
+            Node found = children.get(i);
+            UnitDef branchUnit = createUnitNode(found);
+            String key = getAttribute(found, KEY);
+            branchUnit.setKey(key);
+            branchUnit.setTaskType(TaskType.valueOf(getAttribute(found, TASK_TYPE)));
+            parallelBranchDef.addBranchUnitDef(branchUnit);
+        }
+
+        return parallelBranchDef;
+    }
+    
 	private UnitDef createPreValidationLoopNode(Node node){
 		LoopDef whileLoop = new LoopDef(true);
 		whileLoop.setValidatorDef((ValidatorDef)createChildNode(node, VALIDATOR));

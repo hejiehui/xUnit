@@ -31,6 +31,10 @@ public interface XunitConstants {
 	String VALIDATOR = "validator";
 	String VALID_LABEL = "validLabel";
 	String INVALID_LABEL = "invalidLabel";
+    String DISPATCHER = "dispatcher";
+    String COMPLETION_MODE = "completion_mode";
+    String TIMEOUT = "timeout";
+    String TIME_UNIT = "time_unit";
 	String CHAIN = "chain";
 	String BI_BRANCH = "bi_branch";
 	String VALID_UNIT = "valid_unit";
@@ -38,6 +42,8 @@ public interface XunitConstants {
 	String BRANCH = "branch";
 	String BRANCH_UNIT = "branch_unit";
 	String KEY = "key";
+	String PARALLEL_BRANCH = "parallel_branch";
+	String TASK_TYPE = "task_type";
 	String WHILE = "while";
 	String DO_WHILE = "do_while";
 	String LOOP_UNIT = "loop_unit";
