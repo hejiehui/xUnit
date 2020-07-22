@@ -14,7 +14,9 @@ import com.xrosstools.xunit.editor.model.ChainNode;
 import com.xrosstools.xunit.editor.model.CompositeUnitNode;
 import com.xrosstools.xunit.editor.model.ConverterNode;
 import com.xrosstools.xunit.editor.model.DecoratorNode;
+import com.xrosstools.xunit.editor.model.DispatcherNode;
 import com.xrosstools.xunit.editor.model.LocatorNode;
+import com.xrosstools.xunit.editor.model.ParallelBranchNode;
 import com.xrosstools.xunit.editor.model.PostValidationLoopNode;
 import com.xrosstools.xunit.editor.model.PreValidationLoopNode;
 import com.xrosstools.xunit.editor.model.ProcessorNode;
@@ -86,12 +88,16 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 			node = createValidatorNode(doc, (ValidatorNode)unit);
 		else if(unit instanceof LocatorNode)
 			node = createLocatorNode(doc, (LocatorNode)unit);
+        else if(unit instanceof DispatcherNode)
+            node = createDispatcherNode(doc, (DispatcherNode)unit);
 		else if(unit instanceof ChainNode)
 			node = createChainNode(doc, (ChainNode)unit);
 		else if(unit instanceof BiBranchNode)
 			node = createBiBranchNode(doc, (BiBranchNode)unit);
 		else if(unit instanceof BranchNode)
 			node = createBranchNode(doc, (BranchNode)unit);
+        else if(unit instanceof ParallelBranchNode)
+            node = createParallelBranchNode(doc, (ParallelBranchNode)unit);
 		else if(unit instanceof PreValidationLoopNode)
 			node = createPreValidationLoopNode(doc, (PreValidationLoopNode)unit);
 		else if(unit instanceof PostValidationLoopNode)
@@ -166,7 +172,16 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 		return node;
 	}
 
-	private Element createDecoratorNode(Document doc, DecoratorNode unit){
+    private Element createDispatcherNode(Document doc, DispatcherNode unit){
+        Element node = (Element)doc.createElement(DISPATCHER);
+        node.setAttribute(COMPLETION_MODE, unit.getCompletionMode().name());
+        node.setAttribute(TIMEOUT, String.valueOf(unit.getTimeout()));
+        node.setAttribute(TIME_UNIT, unit.getTimeUnit().name());
+        
+        return node;
+    }
+
+    private Element createDecoratorNode(Document doc, DecoratorNode unit){
 		Element node = (Element)doc.createElement(DECORATOR);
 		if(unit.getUnit() != null){
 			Element childNode = (Element)doc.createElement(DECORATOR_UNIT);
@@ -228,6 +243,21 @@ public class UnitNodeDiagramWriter implements UnitConstants{
 		return node;
 	}
 	
+    private Element createParallelBranchNode(Document doc, ParallelBranchNode unit){
+        Element node = (Element)doc.createElement(PARALLEL_BRANCH);
+        node.appendChild(createUnitNode(doc, unit.getDispatcher()));
+
+        for(UnitNode child: unit.getContainerNode().getAll()){
+            Element childNode = (Element)doc.createElement(BRANCH_UNIT);
+            childNode.setAttribute(KEY, child.getInputLabel());
+            childNode.setAttribute(TASK_TYPE, child.getTaskType().name());
+            childNode.appendChild(createUnitNode(doc, child));
+            node.appendChild(childNode);
+        }
+
+        return node;
+    }
+    
 	private Element createPreValidationLoopNode(Document doc, PreValidationLoopNode unit){
 		Element node = (Element)doc.createElement(WHILE);
 		node.appendChild(createUnitNode(doc, unit.getValidator()));

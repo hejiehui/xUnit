@@ -20,8 +20,10 @@ import com.xrosstools.xunit.editor.model.BranchNode;
 import com.xrosstools.xunit.editor.model.ChainNode;
 import com.xrosstools.xunit.editor.model.ConverterNode;
 import com.xrosstools.xunit.editor.model.DecoratorNode;
+import com.xrosstools.xunit.editor.model.DispatcherNode;
 import com.xrosstools.xunit.editor.model.EndPointNode;
 import com.xrosstools.xunit.editor.model.LocatorNode;
+import com.xrosstools.xunit.editor.model.ParallelBranchNode;
 import com.xrosstools.xunit.editor.model.PostValidationLoopNode;
 import com.xrosstools.xunit.editor.model.PreValidationLoopNode;
 import com.xrosstools.xunit.editor.model.ProcessorNode;
@@ -49,10 +51,12 @@ public class UnitPaletteFactory {
     	{"Converter", ConverterNode.class, Activator.CONVERTER},
     	{"Validator", ValidatorNode.class, Activator.VALIDATOR},
     	{"Locator", LocatorNode.class, Activator.LOCATOR},
+        {"Dispatcher", DispatcherNode.class, Activator.DISPATCHER},
     	{},
     	{"Chain", ChainNode.class, Activator.CHAIN},
     	{"If/else", BiBranchNode.class, Activator.BI_BRANCH},
     	{"Branch", BranchNode.class, Activator.BRANCH},
+    	{"Parallel Branch", ParallelBranchNode.class, Activator.PARALLEL_BRANCH},
     	{"While loop", PreValidationLoopNode.class, Activator.WHILE},
     	{"Do while loop", PostValidationLoopNode.class, Activator.DO_WHILE},
     	{},

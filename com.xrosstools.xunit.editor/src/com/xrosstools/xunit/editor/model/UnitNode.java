@@ -6,20 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.gef.EditPart;
-import org.eclipse.ui.views.properties.ComboBoxPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.ui.views.properties.PropertyDescriptor;
-import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.xrosstools.xunit.BehaviorType;
+import com.xrosstools.xunit.TaskType;
 
 /**
  * TODO 1. if using reference, type should be set to referenced unit
  * @author jiehe
  *
  */
-public abstract class UnitNode implements UnitConstants, IPropertySource {
+public abstract class UnitNode extends PropertyAdapter {
 	private String name;
 	private String description;
 	
@@ -71,18 +68,6 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 		firePropertyChange(PROP_NODE);
 	}
 	
-	protected final IPropertyDescriptor getDescriptor(String propName){
-		PropertyDescriptor descriptor = new TextPropertyDescriptor(propName, propName);
-		descriptor.setCategory(getCategory(propName));
-		return descriptor;
-	}
-	
-	protected final IPropertyDescriptor getDescriptor(String propName, String[] values){
-		PropertyDescriptor descriptor = new ComboBoxPropertyDescriptor(propName, propName, values);
-		descriptor.setCategory(getCategory(propName));
-		return descriptor;
-	}
-	
 	public IPropertyDescriptor[] getBasicPropertyDescriptors(){
 		IPropertyDescriptor[] descriptors = new IPropertyDescriptor[]{
 				getDescriptor(PROP_NAME),
@@ -106,8 +91,6 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 	public IPropertyDescriptor[] getAdditionalPropertyDescriptors(){
 		return new IPropertyDescriptor[0];
 	}
-	
-	protected abstract String getCategory(String id);
 	
 	public String[] getReferenceValues(){
 	    return helper.getReferenceNames(this, part);
@@ -274,6 +257,17 @@ public abstract class UnitNode implements UnitConstants, IPropertySource {
 			input.setLabel(label);
 	}
 
+    public TaskType getTaskType(){
+        UnitNodeConnection input = getInput();
+        return input == null? null : input.getTaskType();
+    }
+    
+    public void setTaskType(TaskType type){
+        UnitNodeConnection input = getInput();
+        if(input != null)
+            input.setTaskType(type);
+    }
+    
 	public List<UnitNodeConnection> getOutputs() {
 		return outputs;
 	}

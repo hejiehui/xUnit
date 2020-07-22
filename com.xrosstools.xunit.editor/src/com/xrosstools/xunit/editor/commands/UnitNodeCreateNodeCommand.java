@@ -9,9 +9,11 @@ import com.xrosstools.xunit.editor.model.BranchNode;
 import com.xrosstools.xunit.editor.model.ChainNode;
 import com.xrosstools.xunit.editor.model.CompositeUnitNode;
 import com.xrosstools.xunit.editor.model.ConverterNode;
+import com.xrosstools.xunit.editor.model.DispatcherNode;
 import com.xrosstools.xunit.editor.model.EndPointNode;
 import com.xrosstools.xunit.editor.model.IconNode;
 import com.xrosstools.xunit.editor.model.LocatorNode;
+import com.xrosstools.xunit.editor.model.ParallelBranchNode;
 import com.xrosstools.xunit.editor.model.PostValidationLoopNode;
 import com.xrosstools.xunit.editor.model.PreValidationLoopNode;
 import com.xrosstools.xunit.editor.model.ProcessorNode;
@@ -134,6 +136,9 @@ public class UnitNodeCreateNodeCommand extends Command {
     		if(newNode instanceof LocatorNode)
     			return combinedNode = new BranchNode((LocatorNode)newNode, unit);
     		
+            if(newNode instanceof DispatcherNode)
+                return combinedNode = new ParallelBranchNode((DispatcherNode)newNode, unit);
+            
     		if(newNode instanceof StartPointNode)
     			return combinedNode = new PostValidationLoopNode(unit);
     		

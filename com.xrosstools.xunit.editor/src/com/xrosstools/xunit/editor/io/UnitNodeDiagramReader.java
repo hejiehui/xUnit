@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -12,6 +13,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.xrosstools.xunit.BehaviorType;
+import com.xrosstools.xunit.CompletionMode;
+import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.editor.model.AdapterNode;
 import com.xrosstools.xunit.editor.model.BiBranchNode;
 import com.xrosstools.xunit.editor.model.BranchNode;
@@ -19,7 +22,9 @@ import com.xrosstools.xunit.editor.model.ChainNode;
 import com.xrosstools.xunit.editor.model.CompositeUnitNode;
 import com.xrosstools.xunit.editor.model.ConverterNode;
 import com.xrosstools.xunit.editor.model.DecoratorNode;
+import com.xrosstools.xunit.editor.model.DispatcherNode;
 import com.xrosstools.xunit.editor.model.LocatorNode;
+import com.xrosstools.xunit.editor.model.ParallelBranchNode;
 import com.xrosstools.xunit.editor.model.PostValidationLoopNode;
 import com.xrosstools.xunit.editor.model.PreValidationLoopNode;
 import com.xrosstools.xunit.editor.model.ProcessorNode;
@@ -103,12 +108,16 @@ public class UnitNodeDiagramReader implements UnitConstants{
 			unit = createValidatorNode(node);
 		else if(LOCATOR.equals(nodeName))
 			unit = createLocatorNode(node);
+        else if(DISPATCHER.equals(nodeName))
+            unit = createDispatcherNode(node);
 		else if(CHAIN.equals(nodeName))
 			unit = createChainNode(node);
 		else if(BI_BRANCH.equals(nodeName))
 			unit = createBiBranchNode(node);
 		else if(BRANCH.equals(nodeName))
 			unit = createBranchNode(node);
+		else if(PARALLEL_BRANCH.equals(nodeName))
+            unit = createParalleBranchNode(node);
 		else if(WHILE.equals(nodeName))
 			unit = createPreValidationLoopNode(node);
 		else if(DO_WHILE.equals(nodeName))
@@ -184,6 +193,14 @@ public class UnitNodeDiagramReader implements UnitConstants{
 		return unit;
 	}
 
+    private DispatcherNode createDispatcherNode(Node node){
+        DispatcherNode unit = new DispatcherNode();
+        unit.setCompletionMode(CompletionMode.valueOf(getAttribute(node, COMPLETION_MODE)));
+        unit.setTimeout(Long.valueOf(getAttribute(node, TIMEOUT)));
+        unit.setTimeUnit(TimeUnit.valueOf(getAttribute(node, TIME_UNIT)));
+        return unit;
+    }
+
 	private UnitNode createDecoratorNode(Node node){
 		DecoratorNode unit = new DecoratorNode();
 		
@@ -238,6 +255,25 @@ public class UnitNodeDiagramReader implements UnitConstants{
 		return branch;
 	}
 	
+    private UnitNode createParalleBranchNode(Node node){
+        ParallelBranchNode branch = new ParallelBranchNode(true);
+        branch.setDispatcher((DispatcherNode)createChildNode(node, DISPATCHER));
+
+        NodeList children = node.getChildNodes();
+        for(int i = 0; i < children.getLength(); i++){
+            if(!isValidNode(children.item(i), BRANCH_UNIT))
+                continue;
+
+            Node found = children.item(i);
+            UnitNode branchUnit = createUnitNode(found);
+            String key = getAttribute(found, KEY);
+            TaskType type = TaskType.valueOf(getAttribute(found, TASK_TYPE));
+            branch.addUnit(key, branchUnit, type);
+        }
+
+        return branch;
+    }
+    
 	private UnitNode createPreValidationLoopNode(Node node){
 		PreValidationLoopNode whileLoop = new PreValidationLoopNode(true);
 		whileLoop.setValidator((ValidatorNode)createChildNode(node, VALIDATOR));

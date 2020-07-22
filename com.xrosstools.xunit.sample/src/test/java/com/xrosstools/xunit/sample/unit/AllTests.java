@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
     DefaultUnitImplTest.class,
     XunitBasicTest.class,
     MapContextTest.class,
+    ParallelTest.class,
 })
 public class AllTests {
 

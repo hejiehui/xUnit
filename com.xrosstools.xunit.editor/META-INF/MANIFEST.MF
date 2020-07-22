@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: xUnit Editor
 Bundle-SymbolicName: com.xrosstools.xunit.editor;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Bundle-Activator: com.xrosstools.xunit.editor.Activator
 Bundle-Vendor: he, jiehui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

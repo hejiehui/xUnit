@@ -10,16 +10,18 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
 import com.xrosstools.xunit.BehaviorType;
+import com.xrosstools.xunit.TaskType;
 
-public class UnitNodeConnection implements UnitConstants, PropertyChangeListener, IPropertySource, Serializable{
+public class UnitNodeConnection extends PropertyAdapter implements PropertyChangeListener, Serializable {
 	private boolean firstHalf;
 	private UnitNodePanel byPassed;
 	private String label;
 	private UnitNode source;
 	private UnitNode target;
 	private String srcPropName;
-	
-	private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
+	private TaskType taskType;
+
+    private PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 	
 	public static UnitNodeConnection linkStart(UnitNode source, UnitNode target){
 		return new UnitNodeConnection(source, target, null, null, true);
@@ -82,9 +84,16 @@ public class UnitNodeConnection implements UnitConstants, PropertyChangeListener
 		source.addOutput(this);
 		target.addInput(this);
 	}
-	
+
 	public IPropertyDescriptor[] getPropertyDescriptors() {
-		if(label == null && srcPropName == null)
+	    if(source instanceof DispatcherNode) {
+	        return new IPropertyDescriptor[] {
+	                getDescriptor(PROP_TASK_ID),
+	                getDescriptor(PROP_TASK_TYPE, TaskType.values())
+	            };
+	    }
+
+	    if(label == null && srcPropName == null)
 			return new IPropertyDescriptor[0];
 		IPropertyDescriptor[] descriptors;
 		descriptors = new IPropertyDescriptor[] {
@@ -96,12 +105,21 @@ public class UnitNodeConnection implements UnitConstants, PropertyChangeListener
 	public Object getPropertyValue(Object propName) {
 		if (PROP_LABEL.equals(propName))
 			return label;
-
+		if (PROP_TASK_ID.equals(propName))
+		    return label;
+		if (PROP_TASK_TYPE.equals(propName))
+            return taskType.ordinal();
+            
 		return null;
 	}
 	
 	public void setPropertyValue(Object propName, Object value){
-		if (!PROP_LABEL.equals(propName))
+        if (PROP_TASK_ID.equals(propName))
+            setLabel((String)value);
+        if (PROP_TASK_TYPE.equals(propName))
+            setTaskType(TaskType.values()[(Integer)value]);
+        
+        if (!PROP_LABEL.equals(propName))
 			return;
 		setLabel((String)value);
 		
@@ -152,6 +170,13 @@ public class UnitNodeConnection implements UnitConstants, PropertyChangeListener
 	public UnitNodePanel getByPassed(){
 		return byPassed;
 	}
+    public TaskType getTaskType() {
+        return taskType;
+    }
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
+        this.firePropertyChange(PROP_TASK_TYPE, null, taskType);
+    }
 	public PropertyChangeSupport getListeners() {
 		return listeners;
 	}
@@ -179,4 +204,9 @@ public class UnitNodeConnection implements UnitConstants, PropertyChangeListener
 		
 		setLabel((String)((IPropertySource)source).getPropertyValue(srcPropName));
 	}
+
+    @Override
+    protected String getCategory(String id) {
+        return null;
+    }
 }

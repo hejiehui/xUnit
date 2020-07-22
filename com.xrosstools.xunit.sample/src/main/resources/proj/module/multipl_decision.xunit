@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xunit description="" name="" packageId="">
+ <properties/>
+ <units>
+  <chain class="default" description="" name="a chain" type="processor">
+   <bi_branch class="default" description="" name="a bibranch" type="processor">
+    <validator class="default" description="" invalidLabel="false" module="" name="validator" reference="" validLabel="true"/>
+    <valid_unit>
+     <processor class="default" description="" module="" name="unit 1" reference=""/>
+    </valid_unit>
+   </bi_branch>
+   <bi_branch class="default" description="" name="a bibranch" type="processor">
+    <validator class="default" description="" invalidLabel="false" module="" name="validator" reference="" validLabel="true"/>
+    <valid_unit>
+     <processor class="default" description="" module="" name="unit 2" reference=""/>
+    </valid_unit>
+   </bi_branch>
+   <bi_branch class="default" description="" name="a bibranch" type="processor">
+    <validator class="default" description="" invalidLabel="false" module="" name="validator" reference="" validLabel="true"/>
+    <valid_unit>
+     <processor class="default" description="" module="" name="unit 3" reference=""/>
+    </valid_unit>
+   </bi_branch>
+  </chain>
+ </units>
+</xunit>

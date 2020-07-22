@@ -14,6 +14,7 @@ import org.eclipse.gef.requests.CreateRequest;
 import com.xrosstools.xunit.editor.commands.UnitNodeContainerAddCommand;
 import com.xrosstools.xunit.editor.commands.UnitNodeContainerCreateCommand;
 import com.xrosstools.xunit.editor.commands.UnitNodeContainerMoveChildCommand;
+import com.xrosstools.xunit.editor.model.DispatcherNode;
 import com.xrosstools.xunit.editor.model.EndPointNode;
 import com.xrosstools.xunit.editor.model.LocatorNode;
 import com.xrosstools.xunit.editor.model.StartPointNode;
@@ -111,6 +112,7 @@ public class UnitNodeContainerLayoutPolicy  extends FlowLayoutEditPolicy {
     	invalidTypes.add(EndPointNode.class);
     	invalidTypes.add(ValidatorNode.class);
     	invalidTypes.add(LocatorNode.class);
+    	invalidTypes.add(DispatcherNode.class);
     	
     	return invalidTypes;
     }

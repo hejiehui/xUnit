@@ -28,6 +28,11 @@ import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
  * 				<branch_unit key/>
  * 					<unit/>
  * 			</branch>
+ *          <parallel_branch name type class>
+ *              <dispatcher/>
+ *              <branch_unit key task_type/>
+ *                  <unit/>
+ *          </parallel_branch>
  * 			<while name type class>
  * 				<validator/>
  * 				<loop_unit/>

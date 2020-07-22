@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xunit description="" name="" packageId="">
+ <properties/>
+ <units>
+  <parallel_branch class="default" description="" name="Parallel All Mode" type="processor">
+   <dispatcher class="com.xrosstools.xunit.sample.parallel.TestDispatcher" completion_mode="all" description="" module="" name="dispatcher" reference="" time_unit="MILLISECONDS" timeout="10"/>
+   <branch_unit key="Task 1" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 1" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 2" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 2" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 3" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 3" reference=""/>
+   </branch_unit>
+   <branch_unit key="S 1" task_type="standalone">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="processor" reference=""/>
+   </branch_unit>
+   <branch_unit key="S 2" task_type="standalone">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="processor" reference=""/>
+   </branch_unit>
+   <property key="aaa" value=""/>
+  </parallel_branch>
+  <parallel_branch class="default" description="" name="Parallel Any Mode" type="processor">
+   <dispatcher class="com.xrosstools.xunit.sample.parallel.TestDispatcher" completion_mode="any" description="" module="" name="dispatcher" reference="" time_unit="MILLISECONDS" timeout="10"/>
+   <branch_unit key="S 1" task_type="standalone">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="processor" reference=""/>
+   </branch_unit>
+   <branch_unit key="S 2" task_type="standalone">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="processor" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 1" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 1" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 2" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 2" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 3" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 3" reference=""/>
+   </branch_unit>
+  </parallel_branch>
+  <parallel_branch class="default" description="" name="Parallel Critical Mode" type="processor">
+   <dispatcher class="com.xrosstools.xunit.sample.parallel.TestDispatcher" completion_mode="critical" description="" module="" name="dispatcher" reference="" time_unit="MILLISECONDS" timeout="10"/>
+   <branch_unit key="Task 2" task_type="mandatory">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 2" reference=""/>
+   </branch_unit>
+   <branch_unit key="S 1" task_type="standalone">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="processor" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 1" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 1" reference=""/>
+   </branch_unit>
+   <branch_unit key="S 2" task_type="standalone">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="processor" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 3" task_type="mandatory">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 3" reference=""/>
+   </branch_unit>
+  </parallel_branch>
+  <parallel_branch class="default" description="" name="Parallel None Mode" type="processor">
+   <dispatcher class="com.xrosstools.xunit.sample.parallel.TestDispatcher" completion_mode="none" description="" module="" name="dispatcher" reference="" time_unit="MILLISECONDS" timeout="10"/>
+   <branch_unit key="S 1" task_type="standalone">
+    <processor class="default" description="" module="" name="processor" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 1" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 1" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 2" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 2" reference=""/>
+   </branch_unit>
+   <branch_unit key="Task 3" task_type="normal">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="node 3" reference=""/>
+   </branch_unit>
+   <branch_unit key="S 2" task_type="standalone">
+    <processor class="com.xrosstools.xunit.sample.parallel.TestTask" description="" module="" name="processor" reference=""/>
+   </branch_unit>
+  </parallel_branch>
+  <chain class="default" description="" name="Parallel Adder" type="processor">
+   <processor class="com.xrosstools.xunit.sample.unit.IntergerProcessor" description="" module="" name="processor" reference=""/>
+   <parallel_branch class="default" description="" name="a parallel branch" type="processor">
+    <dispatcher class="com.xrosstools.xunit.sample.parallel.IntegerDispatcher" completion_mode="all" description="" module="" name="dispatcher" reference="" time_unit="SECONDS" timeout="1"/>
+    <branch_unit key="Task 1" task_type="normal">
+     <processor class="com.xrosstools.xunit.sample.unit.IntergerProcessor" description="" module="" name="node 1" reference=""/>
+    </branch_unit>
+    <branch_unit key="Task 2" task_type="normal">
+     <chain class="default" description="" name="a chain" type="processor">
+      <processor class="com.xrosstools.xunit.sample.unit.IntergerProcessor" description="" module="" name="node 2" reference=""/>
+      <parallel_branch class="default" description="" name="a parallel branch" type="processor">
+       <dispatcher class="com.xrosstools.xunit.sample.parallel.IntegerDispatcher" completion_mode="all" description="" module="" name="dispatcher" reference="" time_unit="SECONDS" timeout="1"/>
+       <branch_unit key="Task 1" task_type="normal">
+        <processor class="com.xrosstools.xunit.sample.unit.IntergerProcessor" description="" module="" name="node 1" reference=""/>
+       </branch_unit>
+       <branch_unit key="Task 2" task_type="normal">
+        <processor class="com.xrosstools.xunit.sample.unit.IntergerProcessor" description="" module="" name="node 2" reference=""/>
+       </branch_unit>
+       <branch_unit key="Task 3" task_type="normal">
+        <processor class="com.xrosstools.xunit.sample.unit.IntergerProcessor" description="" module="" name="node 3" reference=""/>
+       </branch_unit>
+      </parallel_branch>
+     </chain>
+    </branch_unit>
+    <branch_unit key="Task 3" task_type="normal">
+     <processor class="com.xrosstools.xunit.sample.unit.IntergerProcessor" description="" module="" name="node 3" reference=""/>
+    </branch_unit>
+   </parallel_branch>
+   <processor class="com.xrosstools.xunit.sample.unit.IntergerProcessor" description="" module="" name="processor" reference=""/>
+  </chain>
+ </units>
+</xunit>

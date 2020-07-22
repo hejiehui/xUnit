@@ -8,7 +8,9 @@ import com.xrosstools.xunit.editor.model.BiBranchNode;
 import com.xrosstools.xunit.editor.model.BranchNode;
 import com.xrosstools.xunit.editor.model.ChainNode;
 import com.xrosstools.xunit.editor.model.DecoratorNode;
+import com.xrosstools.xunit.editor.model.DispatcherNode;
 import com.xrosstools.xunit.editor.model.LocatorNode;
+import com.xrosstools.xunit.editor.model.ParallelBranchNode;
 import com.xrosstools.xunit.editor.model.PostValidationLoopNode;
 import com.xrosstools.xunit.editor.model.PreValidationLoopNode;
 import com.xrosstools.xunit.editor.model.UnitNode;
@@ -27,6 +29,8 @@ public class UnitNodeTreePartFactory implements EditPartFactory {
 			part = new BiBranchNodeTreePart();
 		else if (model instanceof BranchNode)
 			part = new BranchNodeTreePart();
+        else if (model instanceof ParallelBranchNode)
+            part = new ParallelBranchNodeTreePart();
 		else if (model instanceof ChainNode)
 			part = new ChainNodeTreePart();
 		else if (model instanceof AdapterNode)
@@ -35,6 +39,8 @@ public class UnitNodeTreePartFactory implements EditPartFactory {
 			part = new DecoratorNodeTreePart();
 		else if (model instanceof LocatorNode)
 			part = new LocatorNodeTreePart();
+        else if (model instanceof DispatcherNode)
+            part = new DispatcherNodeTreePart();
 		else if (model instanceof PostValidationLoopNode)
 			part = new PostValidationLoopNodeTreePart();
 		else if (model instanceof PreValidationLoopNode)

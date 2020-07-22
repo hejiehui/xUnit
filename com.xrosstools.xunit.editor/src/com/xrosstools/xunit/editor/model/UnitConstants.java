@@ -1,9 +1,12 @@
 package com.xrosstools.xunit.editor.model;
 
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.graphics.Color;
 
+import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.XunitConstants;
 import com.xrosstools.xunit.impl.BiBranchImpl;
 import com.xrosstools.xunit.impl.BranchImpl;
@@ -39,6 +42,10 @@ public interface UnitConstants extends XunitConstants {
 	String DEFAULT_VALID_LABEL = "true";
 	String DEFAULT_INVALID_LABEL = "false";
 	
+	long DEFAULT_TIMEOUT = 1;
+	TimeUnit DEFAULT_TIME_UNIT = TimeUnit.SECONDS;
+	TaskType DEFAULT_TASK_TYPE = TaskType.normal;
+	
 	String EMPTY_VALUE = "";
 	String PROP_NODE = "PROP_NODE";
 	String PROP_LOCATION = "PROP_LOCATION";
@@ -60,6 +67,11 @@ public interface UnitConstants extends XunitConstants {
 	String PROP_INVALID_LABEL = "invalidLabel";
 	String PROP_LABEL = "Label";
 	String PROP_DEFAULT_KEY = "Default key";
+	String PROP_TIMEOUT = "timeout";
+	String PROP_TIME_UNIT = "time unit";
+	String PROP_COMPLETION_MODE= "Completion Mode";
+	String PROP_TASK_ID = "Task Id";
+	String PROP_TASK_TYPE= "Task Type";
 	
 	String DEFAULT_PRIMARY_IMPL = DefaultUnitImpl.class.getName();
 	String DEFAULT_CHAIN_IMPL = ChainImpl.class.getName();

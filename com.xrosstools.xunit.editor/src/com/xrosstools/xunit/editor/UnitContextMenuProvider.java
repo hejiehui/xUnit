@@ -133,7 +133,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     }
 
     private void addDefinedPropertiesActions(IMenuManager menu, UnitNode node) {
-    	List<String> propKeys = new ArrayList<>();
+    	List<String> propKeys = new ArrayList();
     	UnitNodeProperties properties = node.getProperties();
     	
     	if(node.isValid(node.getImplClassName())){

@@ -12,8 +12,10 @@ import com.xrosstools.xunit.editor.model.BranchNode;
 import com.xrosstools.xunit.editor.model.ChainNode;
 import com.xrosstools.xunit.editor.model.ConverterNode;
 import com.xrosstools.xunit.editor.model.DecoratorNode;
+import com.xrosstools.xunit.editor.model.DispatcherNode;
 import com.xrosstools.xunit.editor.model.EndPointNode;
 import com.xrosstools.xunit.editor.model.LocatorNode;
+import com.xrosstools.xunit.editor.model.ParallelBranchNode;
 import com.xrosstools.xunit.editor.model.PostValidationLoopNode;
 import com.xrosstools.xunit.editor.model.PreValidationLoopNode;
 import com.xrosstools.xunit.editor.model.ProcessorNode;
@@ -38,6 +40,7 @@ public class Activator extends AbstractUIPlugin {
 	public static final String CONVERTER = BehaviorType.converter.name();
 	public static final String VALIDATOR = BehaviorType.validator.name();//"arrow_split";
 	public static final String LOCATOR = BehaviorType.locator.name();//"arrow_move";
+	public static final String DISPATCHER = BehaviorType.dispatcher.name();//"arrow_split";
 	
 	public static final String DECORATOR = StructureType.decorator.name();
 	public static final String ADAPTER = StructureType.adapter.name();
@@ -46,6 +49,7 @@ public class Activator extends AbstractUIPlugin {
 	public static final String BRANCH = StructureType.branch.name();//"wallpapers";
 	public static final String WHILE = StructureType.while_loop.name();//"stock_right_with_subpoints";
 	public static final String DO_WHILE = StructureType.do_while_loop.name();//"stock_left_with_subpoints";
+	public static final String PARALLEL_BRANCH = StructureType.parallel_branch.name();
 
 	// The shared instance
 	private static Activator	plugin;
@@ -77,6 +81,7 @@ public class Activator extends AbstractUIPlugin {
     	put(reg, END_POINT);
     	put(reg, VALIDATOR);
     	put(reg, LOCATOR);
+    	put(reg, DISPATCHER);
     	put(reg, NODE);
     	put(reg, PROCESSOR);
     	put(reg, CONVERTER);
@@ -84,6 +89,7 @@ public class Activator extends AbstractUIPlugin {
     	put(reg, ADAPTER);
     	put(reg, CHAIN);
     	put(reg, BI_BRANCH);
+    	put(reg, PARALLEL_BRANCH);
     	put(reg, BRANCH);
     	put(reg, WHILE);
     	put(reg, DO_WHILE);
@@ -105,6 +111,7 @@ public class Activator extends AbstractUIPlugin {
     	put(reg, EndPointNode.class, END_POINT);
     	put(reg, ValidatorNode.class, VALIDATOR);
     	put(reg, LocatorNode.class, LOCATOR);
+    	put(reg, DispatcherNode.class, DISPATCHER);
 
     	put(reg, ProcessorNode.class, PROCESSOR);
     	put(reg, ConverterNode.class, CONVERTER);
@@ -115,6 +122,7 @@ public class Activator extends AbstractUIPlugin {
     	put(reg, ChainNode.class, CHAIN);
     	put(reg, BiBranchNode.class, BI_BRANCH);
     	put(reg, BranchNode.class, BRANCH);
+    	put(reg, ParallelBranchNode.class, PARALLEL_BRANCH);
     	put(reg, PreValidationLoopNode.class, WHILE);
     	put(reg, PostValidationLoopNode.class, DO_WHILE);
     }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<decision_tree>
+ <factors>
+  <factor id="拍拍信消费端实例查询对应数据库" index="0">
+   <value>新库</value>
+   <value>老库</value>
+  </factor>
+  <factor id="factor1" index="1">
+   <value>value1</value>
+   <value>value2</value>
+  </factor>
+  <factor id="factor2" index="2">
+   <value>value1</value>
+   <value>value2</value>
+  </factor>
+ </factors>
+ <paths>
+  <path index="1">0:0</path>
+  <path index="2">0:1</path>
+  <path index="3">0:0|1:0</path>
+  <path index="4">0:0|1:1</path>
+  <path index="5">0:1|2:0</path>
+  <path index="6">0:1|2:1</path>
+ </paths>
+ <decisions>
+  <decision id="decision0" index="0"/>
+  <decision id="decision1" index="1"/>
+  <decision id="decision2" index="2"/>
+  <decision id="decision3" index="3"/>
+  <decision id="decision4" index="4"/>
+  <decision id="decision5" index="5"/>
+  <decision id="decision6" index="6"/>
+ </decisions>
+</decision_tree>
