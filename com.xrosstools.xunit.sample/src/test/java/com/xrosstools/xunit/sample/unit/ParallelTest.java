@@ -206,10 +206,12 @@ public class ParallelTest {
 
             ctx = process(CRITICAL_MODE, ctx);
             
+            // For critical mode, not every time all the tasks will be executed
             if(tasks.length > ctx.sucessTasks.size())
                 System.out.println("Tasks: " + tasks + " Count:" +ctx.sucessTasks.size());
 
-            assertTrue(tasks.length <= ctx.sucessTasks.size());
+            if(tasks.length != 3)
+                assertTrue(tasks.length <= ctx.sucessTasks.size());
             
             for(String task:tasks)
                 assertTrue(ctx.sucessTasks.contains(task));
@@ -224,7 +226,8 @@ public class ParallelTest {
             if(tasks.length > ctx.sucessTasks.size())
                 System.out.println("Tasks: " + tasks + " Count:" +ctx.sucessTasks.size());
 
-            assertTrue(tasks.length <= ctx.sucessTasks.size());
+            if(tasks.length != 3)
+                assertTrue(tasks.length <= ctx.sucessTasks.size());
             
             for(String task:tasks)
                 assertTrue(ctx.sucessTasks.contains(task));
@@ -253,11 +256,21 @@ public class ParallelTest {
     }
     
     @Test
-    public void testParallelAdd() throws Exception {
+    public void testParallelAddAllMode() throws Exception {
         IntegerContext ic=  new IntegerContext(0);
-        f.getProcessor("Parallel Adder").process(ic);
+        f.getProcessor("Parallel Adder All Mode").process(ic);
         
         assertEquals(8, ic.getValue().intValue());
+        
+    }
+
+    @Test
+    public void testParallelAddAnyMode() throws Exception {
+        IntegerContext ic=  new IntegerContext(0);
+        f.getProcessor("Parallel Adder Any Mode").process(ic);
+        
+        // Only the shortest path will be executed
+        assertEquals(3, ic.getValue().intValue());
         
     }
 
