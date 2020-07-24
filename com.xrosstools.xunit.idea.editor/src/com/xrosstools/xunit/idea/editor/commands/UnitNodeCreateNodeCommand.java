@@ -115,7 +115,10 @@ public class UnitNodeCreateNodeCommand extends Command {
     		
     		if(newNode instanceof LocatorNode)
     			return combinedNode = new BranchNode((LocatorNode)newNode, unit);
-    		
+
+			if(newNode instanceof DispatcherNode)
+				return combinedNode = new ParallelBranchNode((DispatcherNode)newNode, unit);
+
     		if(newNode instanceof StartPointNode)
     			return combinedNode = new PostValidationLoopNode(unit);
     		

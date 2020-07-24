@@ -28,6 +28,10 @@ public interface XunitConstants {
     String ADAPTER_UNIT = "adapter_unit";
     String LOCATOR = "locator";
     String DEFAULT_KEY = "default_key";
+    String DISPATCHER = "dispatcher";
+    String COMPLETION_MODE = "completion_mode";
+    String TIMEOUT = "timeout";
+    String TIME_UNIT = "time_unit";
     String VALIDATOR = "validator";
     String VALID_LABEL = "validLabel";
     String INVALID_LABEL = "invalidLabel";
@@ -36,6 +40,8 @@ public interface XunitConstants {
     String VALID_UNIT = "valid_unit";
     String INVALID_UNIT = "invalid_unit";
     String BRANCH = "branch";
+    String PARALLEL_BRANCH = "parallel_branch";
+    String TASK_TYPE = "task_type";
     String BRANCH_UNIT = "branch_unit";
     String KEY = "key";
     String WHILE = "while";

@@ -20,6 +20,7 @@ public class Activator {
     public static final String CONVERTER = BehaviorType.converter.name();
     public static final String VALIDATOR = BehaviorType.validator.name();//"arrow_split";
     public static final String LOCATOR = BehaviorType.locator.name();//"arrow_move";
+    public static final String DISPATCHER = BehaviorType.dispatcher.name();//"arrow_split";
 
     public static final String DECORATOR = StructureType.decorator.name();
     public static final String ADAPTER = StructureType.adapter.name();
@@ -28,6 +29,7 @@ public class Activator {
     public static final String BRANCH = StructureType.branch.name();//"wallpapers";
     public static final String WHILE = StructureType.while_loop.name();//"stock_right_with_subpoints";
     public static final String DO_WHILE = StructureType.do_while_loop.name();//"stock_left_with_subpoints";
+    public static final String PARALLEL_BRANCH = StructureType.parallel_branch.name();
 
     public static String getIconPath(String iconId) {
         return HOME + iconId + ICO;
@@ -46,6 +48,7 @@ public class Activator {
         reg.put(EndPointNode.class, END_POINT);
         reg.put(ValidatorNode.class, VALIDATOR);
         reg.put(LocatorNode.class, LOCATOR);
+        reg.put(DispatcherNode.class, DISPATCHER);
 
         reg.put(ProcessorNode.class, PROCESSOR);
         reg.put(ConverterNode.class, CONVERTER);
@@ -56,6 +59,7 @@ public class Activator {
         reg.put(ChainNode.class, CHAIN);
         reg.put(BiBranchNode.class, BI_BRANCH);
         reg.put(BranchNode.class, BRANCH);
+        reg.put(ParallelBranchNode.class, PARALLEL_BRANCH);
         reg.put(PreValidationLoopNode.class, WHILE);
         reg.put(PostValidationLoopNode.class, DO_WHILE);
     }

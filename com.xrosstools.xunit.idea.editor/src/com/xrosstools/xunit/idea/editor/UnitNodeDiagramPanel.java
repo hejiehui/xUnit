@@ -107,9 +107,11 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         toolbar.add(createButton("Converter", Activator.CONVERTER, ConverterNode.class));
         toolbar.add(createButton("Validator", Activator.VALIDATOR, ValidatorNode.class));
         toolbar.add(createButton("Locator", Activator.LOCATOR, LocatorNode.class));
+        toolbar.add(createButton("Dispatcher", Activator.DISPATCHER, DispatcherNode.class));
         toolbar.add(createButton("Chain", Activator.CHAIN, ChainNode.class));
         toolbar.add(createButton("If/else", Activator.BI_BRANCH, BiBranchNode.class));
         toolbar.add(createButton("Branch", Activator.BRANCH, BranchNode.class));
+        toolbar.add(createButton("Parallel Branch", Activator.PARALLEL_BRANCH, ParallelBranchNode.class));
         toolbar.add(createButton("While loop", Activator.WHILE, PreValidationLoopNode.class));
         toolbar.add(createButton("Do while loop", Activator.DO_WHILE, PostValidationLoopNode.class));
         toolbar.add(createButton("Start", Activator.START_POINT, StartPointNode.class));

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class UnitNodeDiagramReader implements UnitConstants {
 	private static Set<String> WRAPPED_UNITS = new HashSet<String>();
@@ -82,12 +83,16 @@ public class UnitNodeDiagramReader implements UnitConstants {
 			unit = createValidatorNode(node);
 		else if(LOCATOR.equals(nodeName))
 			unit = createLocatorNode(node);
+		else if(DISPATCHER.equals(nodeName))
+			unit = createDispatcherNode(node);
 		else if(CHAIN.equals(nodeName))
 			unit = createChainNode(node);
 		else if(BI_BRANCH.equals(nodeName))
 			unit = createBiBranchNode(node);
 		else if(BRANCH.equals(nodeName))
 			unit = createBranchNode(node);
+		else if(PARALLEL_BRANCH.equals(nodeName))
+			unit = createParalleBranchNode(node);
 		else if(WHILE.equals(nodeName))
 			unit = createPreValidationLoopNode(node);
 		else if(DO_WHILE.equals(nodeName))
@@ -163,6 +168,14 @@ public class UnitNodeDiagramReader implements UnitConstants {
 		return unit;
 	}
 
+	private DispatcherNode createDispatcherNode(Node node){
+		DispatcherNode unit = new DispatcherNode();
+		unit.setCompletionMode(CompletionMode.valueOf(getAttribute(node, COMPLETION_MODE)));
+		unit.setTimeout(Long.valueOf(getAttribute(node, TIMEOUT)));
+		unit.setTimeUnit(TimeUnit.valueOf(getAttribute(node, TIME_UNIT)));
+		return unit;
+	}
+
 	private UnitNode createDecoratorNode(Node node){
 		DecoratorNode unit = new DecoratorNode();
 		
@@ -216,6 +229,25 @@ public class UnitNodeDiagramReader implements UnitConstants {
 
 		return branch;
 	}
+
+    private UnitNode createParalleBranchNode(Node node){
+        ParallelBranchNode branch = new ParallelBranchNode(true);
+        branch.setDispatcher((DispatcherNode)createChildNode(node, DISPATCHER));
+
+        NodeList children = node.getChildNodes();
+        for(int i = 0; i < children.getLength(); i++){
+            if(!isValidNode(children.item(i), BRANCH_UNIT))
+                continue;
+
+            Node found = children.item(i);
+            UnitNode branchUnit = createUnitNode(found);
+            String key = getAttribute(found, KEY);
+            TaskType type = TaskType.valueOf(getAttribute(found, TASK_TYPE));
+            branch.addUnit(key, branchUnit, type);
+        }
+
+        return branch;
+    }
 	
 	private UnitNode createPreValidationLoopNode(Node node){
 		PreValidationLoopNode whileLoop = new PreValidationLoopNode(true);

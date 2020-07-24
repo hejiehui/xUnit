@@ -1,7 +1,7 @@
 package com.xrosstools.xunit.idea.editor.model;
 
 public enum BehaviorType {
-    processor, converter, validator, locator;
+    processor, converter, validator, locator, dispatcher;
 
     public static String[] names = getNames();
 

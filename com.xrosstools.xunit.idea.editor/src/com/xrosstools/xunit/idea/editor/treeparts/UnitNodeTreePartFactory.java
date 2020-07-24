@@ -21,6 +21,8 @@ public class UnitNodeTreePartFactory {
 			part = new BiBranchNodeTreePart();
 		else if (model instanceof BranchNode)
 			part = new BranchNodeTreePart();
+		else if (model instanceof ParallelBranchNode)
+			part = new ParallelBranchNodeTreePart();
 		else if (model instanceof ChainNode)
 			part = new ChainNodeTreePart();
 		else if (model instanceof AdapterNode)
@@ -29,6 +31,8 @@ public class UnitNodeTreePartFactory {
 			part = new DecoratorNodeTreePart();
 		else if (model instanceof LocatorNode)
 			part = new LocatorNodeTreePart();
+		else if (model instanceof DispatcherNode)
+			part = new DispatcherNodeTreePart();
 		else if (model instanceof PostValidationLoopNode)
 			part = new PostValidationLoopNodeTreePart();
 		else if (model instanceof PreValidationLoopNode)

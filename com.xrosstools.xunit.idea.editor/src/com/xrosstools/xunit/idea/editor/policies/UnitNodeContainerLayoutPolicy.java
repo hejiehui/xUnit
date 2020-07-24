@@ -82,6 +82,7 @@ public class UnitNodeContainerLayoutPolicy {
     	invalidTypes.add(EndPointNode.class);
     	invalidTypes.add(ValidatorNode.class);
     	invalidTypes.add(LocatorNode.class);
+        invalidTypes.add(DispatcherNode.class);
     	
     	return invalidTypes;
     }

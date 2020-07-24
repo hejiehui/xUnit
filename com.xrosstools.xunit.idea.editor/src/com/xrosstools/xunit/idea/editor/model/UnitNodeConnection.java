@@ -16,6 +16,7 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     private UnitNode source;
     private UnitNode target;
     private String srcPropName;
+    private TaskType taskType;
 
     public static UnitNodeConnection linkStart(UnitNode source, UnitNode target){
         return new UnitNodeConnection(source, target, null, null, true);
@@ -80,8 +81,16 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     }
 
     public IPropertyDescriptor[] getPropertyDescriptors() {
+        if(source instanceof DispatcherNode) {
+            return new IPropertyDescriptor[] {
+                    getDescriptor(PROP_TASK_ID),
+                    getDescriptor(PROP_TASK_TYPE, TaskType.values())
+            };
+        }
+
         if(label == null && srcPropName == null)
             return new IPropertyDescriptor[0];
+
         IPropertyDescriptor[] descriptors;
         descriptors = new IPropertyDescriptor[] {
                 new TextPropertyDescriptor(PROP_LABEL),
@@ -92,11 +101,20 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     public Object getPropertyValue(Object propName) {
         if (PROP_LABEL.equals(propName))
             return label;
+        if (PROP_TASK_ID.equals(propName))
+            return label;
+        if (PROP_TASK_TYPE.equals(propName))
+            return taskType.ordinal();
 
         return null;
     }
 
     public void setPropertyValue(Object propName, Object value){
+        if (PROP_TASK_ID.equals(propName))
+            setLabel((String)value);
+        if (PROP_TASK_TYPE.equals(propName))
+            setTaskType(TaskType.values()[(Integer)value]);
+
         if (!PROP_LABEL.equals(propName))
             return;
         setLabel((String)value);
@@ -148,7 +166,13 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     public UnitNodePanel getByPassed(){
         return byPassed;
     }
-
+    public TaskType getTaskType() {
+        return taskType;
+    }
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
+        this.firePropertyChange(PROP_TASK_TYPE, null, taskType);
+    }
     private boolean isValidatorLink(){
         return source != null && source.getType() == BehaviorType.validator;
     }

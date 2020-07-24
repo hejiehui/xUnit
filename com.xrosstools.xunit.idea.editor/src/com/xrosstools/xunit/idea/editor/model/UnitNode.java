@@ -58,18 +58,6 @@ public abstract class UnitNode extends PropertySource {
         firePropertyChange(PROP_NODE);
     }
 
-    protected final IPropertyDescriptor getDescriptor(String propName){
-        IPropertyDescriptor descriptor = new TextPropertyDescriptor(propName);
-        descriptor.setCategory(getCategory(propName));
-        return descriptor;
-    }
-
-    protected final IPropertyDescriptor getDescriptor(String propName, String[] values){
-        IPropertyDescriptor descriptor = new ComboBoxPropertyDescriptor(propName, propName, values);
-        descriptor.setCategory(getCategory(propName));
-        return descriptor;
-    }
-
     protected final IPropertyDescriptor getReferenceDescriptor(String propName) {
         ReferencePropertyDescriptor descriptor = new ReferencePropertyDescriptor(propName, this);
         descriptor.setCategory(getCategory(propName));
@@ -99,8 +87,6 @@ public abstract class UnitNode extends PropertySource {
     public IPropertyDescriptor[] getAdditionalPropertyDescriptors(){
         return new IPropertyDescriptor[0];
     }
-
-    protected abstract String getCategory(String id);
 
     public String[] getReferenceValues(){
         return helper.getReferenceNames(this, part);
@@ -265,6 +251,17 @@ public abstract class UnitNode extends PropertySource {
         UnitNodeConnection input = getInput();
         if(input != null)
             input.setLabel(label);
+    }
+
+    public TaskType getTaskType(){
+        UnitNodeConnection input = getInput();
+        return input == null? null : input.getTaskType();
+    }
+
+    public void setTaskType(TaskType type){
+        UnitNodeConnection input = getInput();
+        if(input != null)
+            input.setTaskType(type);
     }
 
     public List<UnitNodeConnection> getOutputs() {
