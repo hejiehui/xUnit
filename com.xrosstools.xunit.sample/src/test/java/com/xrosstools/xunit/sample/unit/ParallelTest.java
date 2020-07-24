@@ -210,11 +210,12 @@ public class ParallelTest {
             if(tasks.length > ctx.sucessTasks.size())
                 System.out.println("Tasks: " + tasks + " Count:" +ctx.sucessTasks.size());
 
-            if(tasks.length != 3)
+            if(tasks.length != 3) {
                 assertTrue(tasks.length <= ctx.sucessTasks.size());
-            
-            for(String task:tasks)
-                assertTrue(ctx.sucessTasks.contains(task));
+
+                for (String task : tasks)
+                    assertTrue(ctx.sucessTasks.contains(task));
+            }
         }
 
         for(Object[] caseData: criticalModeCases()) {
@@ -226,11 +227,12 @@ public class ParallelTest {
             if(tasks.length > ctx.sucessTasks.size())
                 System.out.println("Tasks: " + tasks + " Count:" +ctx.sucessTasks.size());
 
-            if(tasks.length != 3)
+            if(tasks.length != 3) {
                 assertTrue(tasks.length <= ctx.sucessTasks.size());
-            
-            for(String task:tasks)
-                assertTrue(ctx.sucessTasks.contains(task));
+
+                for (String task : tasks)
+                    assertTrue(ctx.sucessTasks.contains(task));
+            }
         }
     }
 
