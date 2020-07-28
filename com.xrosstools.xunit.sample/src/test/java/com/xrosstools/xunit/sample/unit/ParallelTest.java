@@ -13,7 +13,9 @@ import com.xrosstools.xunit.sample.parallel.ParallelContext;
 import com.xrosstools.xunit.sample.parallel.TaskContext;
 
 public class ParallelTest {
-    private static XunitFactory f;
+    private static XunitFactory processors;
+    private static XunitFactory converters;
+    private static XunitFactory counters;
     private static final String T1 = "Task 1";
     private static final String T2 = "Task 2";
     private static final String T3 = "Task 3";
@@ -28,7 +30,9 @@ public class ParallelTest {
     
     @BeforeClass
     public static void setup() throws Exception {
-        f = XunitFactory.load("parallel_unit.xunit");   
+        processors = XunitFactory.load("parallel_processor.xunit");
+        converters = XunitFactory.load("parallel_converter.xunit");
+        counters = XunitFactory.load("parallel_counter.xunit");
     }
     
     private static TaskContext normal() {
@@ -96,11 +100,11 @@ public class ParallelTest {
     }
     
     private static ParallelContext convert(String id, ParallelContext ctx) throws Exception {
-        return (ParallelContext)f.getConverter(id).convert(ctx);
+        return (ParallelContext)converters.getConverter(id).convert(ctx);
     }
 
     private static ParallelContext process(String id, ParallelContext ctx) throws Exception {
-        f.getProcessor(id).process(ctx);
+        processors.getProcessor(id).process(ctx);
         return ctx;
     }
     
@@ -198,7 +202,7 @@ public class ParallelTest {
     }
 
     @Test
-    public void testCriticalMode() throws Exception {
+    public void testCriticalModeProcessor() throws Exception {
         for(Object[] caseData: criticalModeCases()) {
             String mode = (String)caseData[0];
             ParallelContext ctx = (ParallelContext)caseData[1];
@@ -217,7 +221,10 @@ public class ParallelTest {
                     assertTrue(ctx.sucessTasks.contains(task));
             }
         }
-
+    }
+    
+    @Test
+    public void testCriticalModeConverter() throws Exception {
         for(Object[] caseData: criticalModeCases()) {
             String mode = (String)caseData[0];
             ParallelContext ctx = (ParallelContext)caseData[1];
@@ -246,7 +253,10 @@ public class ParallelTest {
             ctx = process(NONE_MODE, ctx);
             assertTrue(ctx.sucessTasks.isEmpty());
         }
-        
+    }
+    
+    @Test
+    public void testParallelNoneModeNormalConverter() throws Exception {
         for(Object[] caseData: noneModeCases()) {
             String mode = (String)caseData[0];
             ParallelContext ctx = (ParallelContext)caseData[1];
@@ -260,7 +270,7 @@ public class ParallelTest {
     @Test
     public void testParallelAddAllMode() throws Exception {
         IntegerContext ic=  new IntegerContext(0);
-        f.getProcessor("Parallel Adder All Mode").process(ic);
+        counters.getProcessor("Parallel Adder All Mode").process(ic);
         
         assertEquals(8, ic.getValue().intValue());
         
@@ -269,7 +279,7 @@ public class ParallelTest {
     @Test
     public void testParallelAddAnyMode() throws Exception {
         IntegerContext ic=  new IntegerContext(0);
-        f.getProcessor("Parallel Adder Any Mode").process(ic);
+        counters.getProcessor("Parallel Adder Any Mode").process(ic);
         
         // Only the shortest path will be executed
         assertEquals(3, ic.getValue().intValue());

@@ -4,11 +4,15 @@ import java.util.LinkedHashMap;
 
 import com.xrosstools.xunit.ApplicationPropertiesAware;
 import com.xrosstools.xunit.BehaviorType;
+import com.xrosstools.xunit.Converter;
+import com.xrosstools.xunit.Processor;
 import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.Unit;
 import com.xrosstools.xunit.UnitPropertiesAware;
 import com.xrosstools.xunit.XunitFactory;
+import com.xrosstools.xunit.impl.ConverterEnforcer;
 import com.xrosstools.xunit.impl.DefaultUnitImpl;
+import com.xrosstools.xunit.impl.ProcessorEnforcer;
 
 public class UnitDef {
 	protected UnitDefRepo repo;
@@ -151,19 +155,35 @@ public class UnitDef {
 	    }
 	}
 	
+	private Unit enforce(Unit newInstance) {
+	    if(type == BehaviorType.processor && newInstance instanceof Converter)
+	        return new ProcessorEnforcer(newInstance);
+	    
+	    if(type == BehaviorType.converter && newInstance instanceof Processor)
+	        return new ConverterEnforcer(newInstance);
+	    
+	    return newInstance;
+	}
+
 	/**
 	 * if it is singleton, we should return the only instance
 	 * @return
 	 * @throws Exception 
 	 */
 	public final Unit getInstance() throws Exception{
-		if(singleton)
-			if(instance != null)
-				return instance;
-			else
-				return instance = createInstance();
+		if(singleton && instance != null)
+			return instance;
+
+		if(singleton && instance == null) {
+		    synchronized(this) {
+		        if(instance != null)
+		            return instance;
+
+    			return instance = enforce(createInstance());
+		    }
+		}
 		
-		return createInstance();
+		return enforce(createInstance());
 	}
 	
 	/**

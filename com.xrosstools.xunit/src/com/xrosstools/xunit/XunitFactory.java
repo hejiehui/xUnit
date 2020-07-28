@@ -127,7 +127,7 @@ public class XunitFactory implements XunitConstants {
 	}
 
 	public Converter getConverter(String id) throws Exception{
-		return (Converter )getUnit(id);
+		return (Converter)getUnit(id);
 	}
 
 	private static XunitFactory getFromDocument(Document doc){
