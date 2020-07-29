@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.xrosstools.xunit.Adapter;
 import com.xrosstools.xunit.ApplicationPropertiesAware;
+import com.xrosstools.xunit.BehaviorType;
 import com.xrosstools.xunit.CompletionMode;
 import com.xrosstools.xunit.Context;
 import com.xrosstools.xunit.Converter;
@@ -18,6 +19,8 @@ import com.xrosstools.xunit.Locator;
 import com.xrosstools.xunit.Processor;
 import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.Unit;
+import com.xrosstools.xunit.UnitDefinition;
+import com.xrosstools.xunit.UnitDefinitionAware;
 import com.xrosstools.xunit.UnitPropertiesAware;
 import com.xrosstools.xunit.Validator;
 import com.xrosstools.xunit.def.UnitDef;
@@ -27,7 +30,7 @@ import com.xrosstools.xunit.def.UnitDef;
  * @author jiehe
  *
  */
-public class DefaultUnitImpl implements Processor, Converter, Validator, Locator, Dispatcher, Decorator, Adapter, ApplicationPropertiesAware, UnitPropertiesAware {
+public class DefaultUnitImpl implements Processor, Converter, Validator, Locator, Dispatcher, Decorator, Adapter, ApplicationPropertiesAware, UnitPropertiesAware, UnitDefinitionAware {
     /**
      * public static final String constant with name start with PROP_KEY will be displayed 
      * in "Set property" context menu
@@ -35,6 +38,7 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
     public static final String PROP_KEY_SHOW_MESSAGE = "showMessage";
     public static final String PROP_KEY_SHOW_FIELDS = "showFields";
     public static final String PROP_KEY_SHOW_APP_PROP = "showApplicationProperties";
+    public static final String PROP_KEY_SHOW_UNIT_DEFINITION = "showUnitDefinition";
     
     // The method take higher priority
     public static final String PROP_KEY_EVALUATE_METHOD = "evaluateMethod";
@@ -52,7 +56,11 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
     // Default is true
     private boolean validateDefault = true;
     
+    private boolean showUnitDefinition = false;
+    
     private Map<String, String> appProperties;
+    
+    private UnitDefinition unitDef;
     
 	private String defaultKey;
 
@@ -82,6 +90,13 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
             evaluateMethodName = evaluateMethodName.trim();
 
         validateDefault = properties.containsKey(PROP_KEY_VALIDATE_DEFAULT) ? Boolean.parseBoolean(properties.get(PROP_KEY_VALIDATE_DEFAULT)) : true;
+        
+        showUnitDefinition = properties.containsKey(PROP_KEY_SHOW_UNIT_DEFINITION) ? Boolean.parseBoolean(properties.get(PROP_KEY_SHOW_UNIT_DEFINITION)) : true;
+    }
+
+    @Override
+    public void setUnitDefinition(UnitDefinition unitDef) {
+        this.unitDef = unitDef;
     }
 
     private String[] parse(String value) {
@@ -254,6 +269,7 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
 	    showMessage();
 	    showFields(ctx);
 	    showAppProperties();
+	    showUnitDefinition();
 	}
 	
 	private void showMessage() {
@@ -281,6 +297,34 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
         
         for(String propName: applicationPropertiesToShow) {
             System.out.println(String.format("%s: %s", propName, appProperties.get(propName)));
+        }
+    }
+    
+    private void showUnitDefinition() {
+        if(!showUnitDefinition)
+            return;
+        
+        System.out.println(String.format("%s: %s", "name", unitDef.getName()));
+        System.out.println(String.format("%s: %s", "type", unitDef.getType()));
+        System.out.println(String.format("%s: %s", "description", unitDef.getDescription()));
+        System.out.println(String.format("%s: %s", "singleton", unitDef.isSingleton()));
+        System.out.println(String.format("%s: %s", "className", unitDef.getClassName()));
+        System.out.println(String.format("%s: %s", "key", unitDef.getKey()));
+        System.out.println(String.format("%s: %s", "taskType", unitDef.getTaskType()));
+        
+        if(BehaviorType.validator == unitDef.getType()) {
+            System.out.println(String.format("%s: %s", "validLabel", unitDef.getValidLabel()));
+            System.out.println(String.format("%s: %s", "invalidLabel", unitDef.getInvalidLabel()));
+        }
+        
+        if(BehaviorType.locator == unitDef.getType()) {
+            System.out.println(String.format("%s: %s", "defaultKey", defaultKey));
+        }
+        
+        if(BehaviorType.dispatcher == unitDef.getType()) {
+            System.out.println(String.format("%s: %s", "completionMode()", mode));
+            System.out.println(String.format("%s: %s", "timeout", timeout));
+            System.out.println(String.format("%s: %s", "timeUnit", timeUnit));
         }
     }
 }

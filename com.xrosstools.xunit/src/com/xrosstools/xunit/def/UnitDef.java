@@ -8,6 +8,8 @@ import com.xrosstools.xunit.Converter;
 import com.xrosstools.xunit.Processor;
 import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.Unit;
+import com.xrosstools.xunit.UnitDefinition;
+import com.xrosstools.xunit.UnitDefinitionAware;
 import com.xrosstools.xunit.UnitPropertiesAware;
 import com.xrosstools.xunit.XunitFactory;
 import com.xrosstools.xunit.impl.ConverterEnforcer;
@@ -116,35 +118,54 @@ public class UnitDef {
 	}
 	
 	protected Unit createDefault(){
-	    DefaultUnitImpl defaultimpl = new DefaultUnitImpl(this);
+	    return new DefaultUnitImpl(this);
+	}
+	
+	protected UnitDefinition createDefinition() {
+	    UnitDefinition ud = new UnitDefinition();
 	    
-	    defaultimpl.setApplicationProperties(new LinkedHashMap<String, String>(repo.getApplicationProperties()));
-	    defaultimpl.setUnitProperties(new LinkedHashMap<String, String>(properties));
-	    
-		return defaultimpl;
+	    ud.setName(name);
+	    ud.setType(type);
+	    ud.setDescription(description);
+	    ud.setSingleton(singleton);
+	    ud.setClassName(className);
+	    ud.setKey(key);
+	    ud.setTaskType(taskType);
+
+	    return ud;
 	}
 
 	protected Unit createInstance() throws Exception{
+	    Unit unit;
 		if(!isEmpty(className)){
-			Unit unit = (Unit)Class.forName(className).newInstance();
-			if(unit instanceof ApplicationPropertiesAware){
-				ApplicationPropertiesAware aware = (ApplicationPropertiesAware)unit;
-				// Make a copy
-				aware.setApplicationProperties(new LinkedHashMap<String, String>(repo.getApplicationProperties()));
-			}
-			
-			if(unit instanceof UnitPropertiesAware){
-				UnitPropertiesAware aware = (UnitPropertiesAware)unit;
-				// Make a copy
-				aware.setUnitProperties(new LinkedHashMap<String, String>(properties));
-			}
-			return unit;
+		    return setAware((Unit)Class.forName(className).newInstance());
 		}
 		
 		if(!isEmpty(referenceName))
 			return createReferenceInsance();
 		
-		return createDefault();
+		return setAware(createDefault());
+	}
+	
+	private Unit setAware(Unit unit) {
+        if(unit instanceof ApplicationPropertiesAware){
+            ApplicationPropertiesAware aware = (ApplicationPropertiesAware)unit;
+            // Make a copy
+            aware.setApplicationProperties(new LinkedHashMap<String, String>(repo.getApplicationProperties()));
+        }
+        
+        if(unit instanceof UnitPropertiesAware){
+            UnitPropertiesAware aware = (UnitPropertiesAware)unit;
+            // Make a copy
+            aware.setUnitProperties(new LinkedHashMap<String, String>(properties));
+        }
+        
+        if(unit instanceof UnitDefinitionAware){
+            UnitDefinitionAware aware = (UnitDefinitionAware)unit;
+            aware.setUnitDefinition(createDefinition());
+        }
+
+        return unit;
 	}
 	
 	protected Unit createReferenceInsance() throws Exception{

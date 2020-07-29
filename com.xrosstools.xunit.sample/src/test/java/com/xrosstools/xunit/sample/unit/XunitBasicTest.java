@@ -1,11 +1,14 @@
 package com.xrosstools.xunit.sample.unit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.xrosstools.xunit.Context;
+import com.xrosstools.xunit.Processor;
+import com.xrosstools.xunit.UnitDefinitionAware;
 import com.xrosstools.xunit.XunitFactory;
 
 public class XunitBasicTest {
@@ -24,6 +27,13 @@ public class XunitBasicTest {
 		assertEquals("Processed: my process test", ctx.getValue());
 	}
 
+    @Test
+    public void testUnitDefinitionAwareTest() throws Exception {
+        TextContext ctx = new TextContext("my process test");
+        
+        f.getProcessor("UnitDefinitionAware test").process(ctx);
+    }
+	
 	@Test
 	public void testConverter() throws Exception {
 		Context ctx = f.getConverter("Converter test").convert(new TextContext("123456789"));
