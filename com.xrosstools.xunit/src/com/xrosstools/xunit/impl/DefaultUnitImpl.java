@@ -91,7 +91,7 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
 
         validateDefault = properties.containsKey(PROP_KEY_VALIDATE_DEFAULT) ? Boolean.parseBoolean(properties.get(PROP_KEY_VALIDATE_DEFAULT)) : true;
         
-        showUnitDefinition = properties.containsKey(PROP_KEY_SHOW_UNIT_DEFINITION) ? Boolean.parseBoolean(properties.get(PROP_KEY_SHOW_UNIT_DEFINITION)) : true;
+        showUnitDefinition = properties.containsKey(PROP_KEY_SHOW_UNIT_DEFINITION) ? Boolean.parseBoolean(properties.get(PROP_KEY_SHOW_UNIT_DEFINITION)) : false;
     }
 
     @Override

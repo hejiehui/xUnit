@@ -5,7 +5,7 @@
  <units>
   <processor class="com.xrosstools.xunit.sample.unit.TextProcessor" description="" module="" name="Processor test" reference=""/>
   <processor class="default" description="" module="" name="UnitDefinitionAware test" reference="">
-   <property key="showUnitDefinition" value="true"/>
+   <property key="showUnitDefinition" value="false"/>
   </processor>
   <converter class="com.xrosstools.xunit.sample.unit.TextConverter" description="" module="" name="Converter test" reference=""/>
   <chain class="default" description="" name="Chain test" type="processor">
