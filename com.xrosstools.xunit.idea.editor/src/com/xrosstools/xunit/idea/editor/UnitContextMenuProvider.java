@@ -140,7 +140,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
                                 continue;
 
                             int end = text.indexOf('"', start + 1);
-                            propKeys.add(text.substring(start +1, end - 1));
+                            propKeys.add(text.substring(start +1, end));
                         }
                     }
                 }
