@@ -8,10 +8,19 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.eclipse.core.internal.resources.Folder;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -20,10 +29,37 @@ import com.xrosstools.xunit.editor.io.UnitNodeDiagramFactory;
 
 public class UnitNodeHelper implements UnitConstants {
 	private UnitNodeDiagram diagram;
+	private IPath resourceRoot;
+	
 	public UnitNodeHelper(UnitNodeDiagram diagram){
 		this.diagram = diagram;
+        IContainer parent = diagram.getFilePath().getParent();
+        IJavaProject i = JavaCore.create(diagram.getFilePath().getProject());
+        
+        try {
+            for(IClasspathEntry cpe: i.getRawClasspath()) {
+                if(parent.getFullPath().toOSString().startsWith(cpe.getPath().toOSString())) {
+                    resourceRoot = cpe.getPath();
+                    break;
+                }
+            }
+        } catch (JavaModelException e) {
+            e.printStackTrace();
+        }
 	}
 	
+	public IType getTypeFromName(String className) {
+	    IProject proj = diagram.getFilePath().getProject();
+	    try {
+            if(proj.hasNature(JavaCore.NATURE_ID))
+                return JavaCore.create(proj).findType(className);
+            else
+                return null;
+        } catch (Exception e) {
+            return null;
+        }
+	}
+
 	public String[] getReferenceNames(UnitNode node, EditPart curPart){
 		if(!node.isValid(node.getModuleName()) || node.getModuleName().equals(diagram.getFilePath())) {
 			String excluded = getTopLevelNodeName(curPart);
@@ -47,19 +83,39 @@ public class UnitNodeHelper implements UnitConstants {
 	}
 	
 	public List<String> getWorkSpaceModuleNames(){
-		List<String> names = new ArrayList<String>();
-		try {			
-			String curName = diagram.getFilePath().getName();
-			for(IResource res: diagram.getFilePath().getParent().members(false)) {
-				if(res.getFileExtension().equals("xunit") && !res.getName().equals(curName))
-					names.add(res.getName());
-			}
-		} catch (CoreException e) {
-			e.printStackTrace(System.err);
-		}
-		return names;
+		List<IPath> names = getWorkSpaceModuleNames(diagram.getFilePath().getParent());
+
+        // Make it relative
+        String rootStr = resourceRoot.toPortableString();
+        
+        List<String> modelList = new ArrayList<String>();
+        for(IPath p: names) {
+            if(!diagram.getFilePath().getFullPath().equals(p))
+                modelList.add(p.toPortableString().replaceFirst(rootStr, ""));
+        }
+        
+		return modelList;
 	}
 	
+    public List<IPath> getWorkSpaceModuleNames(IContainer folder){
+        List<IPath> names = new ArrayList<IPath>();
+        try {           
+            for(IResource res: folder.members()) {
+                if(res.getType() == IResource.FOLDER) {
+                    names.addAll(getWorkSpaceModuleNames((IContainer)res));
+                } else if(res.getType() == IResource.FILE) {
+                    String ext = res.getFileExtension();
+                    if(ext != null && ext.equals("xunit")) {
+                        names.add(res.getFullPath());
+                    }
+                }
+            }
+        } catch (CoreException e) {
+            e.printStackTrace(System.err);
+        }
+        return names;
+    }
+    
 	public boolean isFileExist(String moduleName) {
 	    if(!isValid(moduleName))
 	        return false;

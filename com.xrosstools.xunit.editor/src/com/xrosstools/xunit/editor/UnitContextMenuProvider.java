@@ -3,6 +3,8 @@ package com.xrosstools.xunit.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.jdt.core.IField;
@@ -140,6 +142,11 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
     		try {
                 UnitNodeDiagramPart undp = (UnitNodeDiagramPart)editor.getRootEditPart().getContents();
                 IType type = undp.getSourceType(node.getImplClassName());
+                if(type == null) {
+                    type = node.getHelper().getTypeFromName(node.getImplClassName());
+                    undp.setSourceType(type);
+                }
+                
                 if(type != null) {
                     for(IField f: type.getFields()) {
                         if(f.getElementName().startsWith(PROPERTY_KEY_PREFIX) &&
