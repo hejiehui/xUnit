@@ -3,8 +3,6 @@ package com.xrosstools.xunit.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.gef.ContextMenuProvider;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.jdt.core.IField;
@@ -28,7 +26,6 @@ import com.xrosstools.xunit.editor.actions.UnitActionConstants;
 import com.xrosstools.xunit.editor.model.UnitConstants;
 import com.xrosstools.xunit.editor.model.UnitNode;
 import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
-import com.xrosstools.xunit.editor.model.UnitNodeHelper;
 import com.xrosstools.xunit.editor.model.UnitNodeProperties;
 import com.xrosstools.xunit.editor.parts.BaseNodePart;
 import com.xrosstools.xunit.editor.parts.UnitNodeDiagramPart;
@@ -73,8 +70,7 @@ public class UnitContextMenuProvider  extends ContextMenuProvider implements Uni
         
         MenuManager moduleSub = new MenuManager(ASSIGN_MODULE);
         moduleSub.add(new AssignModuleAction(editor, node));
-        UnitNodeHelper helper = new UnitNodeHelper(diagram);
-        List<String> moduleNames = helper.getWorkSpaceModuleNames();
+        List<String> moduleNames = node.getHelper().getWorkSpaceModuleNames();
         if(moduleNames.size() > 0) {
             moduleSub.add(new Separator());
             for(String name: moduleNames)

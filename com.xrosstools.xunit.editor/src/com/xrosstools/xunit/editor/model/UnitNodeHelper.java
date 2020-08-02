@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -29,23 +28,28 @@ import com.xrosstools.xunit.editor.io.UnitNodeDiagramFactory;
 
 public class UnitNodeHelper implements UnitConstants {
 	private UnitNodeDiagram diagram;
-	private IPath resourceRoot;
 	
 	public UnitNodeHelper(UnitNodeDiagram diagram){
 		this.diagram = diagram;
+	}
+	
+	private IContainer getResourceRoot() {
         IContainer parent = diagram.getFilePath().getParent();
         IJavaProject i = JavaCore.create(diagram.getFilePath().getProject());
         
         try {
             for(IClasspathEntry cpe: i.getRawClasspath()) {
                 if(parent.getFullPath().toOSString().startsWith(cpe.getPath().toOSString())) {
-                    resourceRoot = cpe.getPath();
-                    break;
+                    while(!parent.getFullPath().equals(cpe.getPath())) {
+                        parent = parent.getParent();
+                    }
+                    return parent;
                 }
             }
         } catch (JavaModelException e) {
             e.printStackTrace();
         }
+        return null;
 	}
 	
 	public IType getTypeFromName(String className) {
@@ -83,10 +87,12 @@ public class UnitNodeHelper implements UnitConstants {
 	}
 	
 	public List<String> getWorkSpaceModuleNames(){
-		List<IPath> names = getWorkSpaceModuleNames(diagram.getFilePath().getParent());
+	    IContainer resourceRoot = getResourceRoot();
 
+		List<IPath> names = getWorkSpaceModuleNames(resourceRoot);
+		
         // Make it relative
-        String rootStr = resourceRoot.toPortableString();
+        String rootStr = resourceRoot.getFullPath().toPortableString();
         
         List<String> modelList = new ArrayList<String>();
         for(IPath p: names) {
@@ -121,7 +127,7 @@ public class UnitNodeHelper implements UnitConstants {
 	        return false;
 	    
         if(!new File(moduleName).exists()) {
-            IFile moduleFile = (IFile)diagram.getFilePath().getParent().findMember(moduleName);
+            IFile moduleFile = (IFile)getResourceRoot().findMember(moduleName);
             if(moduleFile == null) {
                 MessageDialog.openError(Display.getCurrent().getActiveShell(), "Can not locate \"" + moduleName + "\"", "Can not locate \"" + moduleName + "\"");
                 return false;
@@ -137,7 +143,7 @@ public class UnitNodeHelper implements UnitConstants {
         if(f.exists())
             in = new FileInputStream(f);
         else {                
-            IFile moduleFile = (IFile)diagram.getFilePath().getParent().findMember(moduleName);
+            IFile moduleFile = (IFile)getResourceRoot().findMember(moduleName);
             if(moduleFile == null)
                 return null;
             
@@ -145,7 +151,8 @@ public class UnitNodeHelper implements UnitConstants {
         }
         
         UnitNodeDiagramFactory diagramFactory = new UnitNodeDiagramFactory();
-        return diagramFactory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in));
+        UnitNodeDiagram diagram = diagramFactory.getFromDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(in));
+        return diagram;
 	}
 	
 	private String getTopLevelNodeName(EditPart curPart) {
