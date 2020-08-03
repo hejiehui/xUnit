@@ -209,7 +209,7 @@ public abstract class BaseNodePart extends AbstractGraphicalEditPart implements 
     	OpenTypeSelectionDialog dialog= new OpenTypeSelectionDialog(parent, true, PlatformUI.getWorkbench().getProgressService(), null, IJavaSearchConstants.TYPE);
 		dialog.setTitle(JavaUIMessages.OpenTypeAction_dialogTitle);
 		dialog.setMessage(JavaUIMessages.OpenTypeAction_dialogMessage);
-		dialog.setInitialPattern(getNode().getImplClassName(), 2);
+		dialog.setInitialPattern(getNode().getImplClassName() == null ? "" : getNode().getImplClassName(), 2);
 		
 		int result= dialog.open();
 		// if cancel clicked, will not change existing type;
