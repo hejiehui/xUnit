@@ -5,19 +5,19 @@
  <units>
   <chain class="default" description="" name="chain1" type="processor">
    <processor class="" description="" module="" name="unit 1" reference="chain2"/>
-   <processor class="" description="" module="unit_test.xunit" name="unit 2" reference="Chain test"/>
-   <processor class="default" description="" module="" name="unit 3" reference="">
+   <processor class="" description="" module="proj/module/modulet.xunit" name="unit 2" reference="proj/modulet.xunit:processor"/>
+   <processor class="" description="" module="proj/project.xunit" name="unit 3" reference="refer next processor">
     <property key="showMessage" value="4"/>
    </processor>
   </chain>
   <chain class="default" description="" name="chain2" type="processor">
-   <processor class="default" description="" module="" name="unit 1" reference="">
+   <processor class="com.xrosstools.xunit.sample.unit.UnitDefinitionAwareProcessor" description="" module="" name="reference.xunit:chain2:unit1" reference="">
     <property key="showMessage" value="1"/>
    </processor>
-   <processor class="default" description="" module="" name="unit 2" reference="">
+   <processor class="" description="" module="proj/project.xunit" name="unit 2" reference="proj/project.xunit:processor">
     <property key="showMessage" value="2"/>
    </processor>
-   <processor class="default" description="" module="" name="unit 3" reference="">
+   <processor class="com.xrosstools.xunit.sample.unit.UnitDefinitionAwareProcessor" description="" module="" name="reference.xunit:chain2:unit3" reference="">
     <property key="showMessage" value="3"/>
    </processor>
   </chain>

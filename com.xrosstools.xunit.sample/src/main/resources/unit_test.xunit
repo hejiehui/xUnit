@@ -4,6 +4,7 @@
  <properties/>
  <units>
   <processor class="com.xrosstools.xunit.sample.unit.TextProcessor" description="" module="" name="Processor test" reference=""/>
+  <processor class="com.xrosstools.xunit.sample.unit.UnitDefinitionAwareProcessor" description="" module="" name="unit_test:Reference Processor" reference=""/>
   <processor class="default" description="" module="" name="UnitDefinitionAware test" reference="">
    <property key="showUnitDefinition" value="false"/>
   </processor>

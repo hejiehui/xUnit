@@ -92,7 +92,7 @@ public class UnitNodeHelper implements UnitConstants {
 		List<IPath> names = getWorkSpaceModuleNames(resourceRoot);
 		
         // Make it relative
-        String rootStr = resourceRoot.getFullPath().toPortableString();
+        String rootStr = resourceRoot.getFullPath().addTrailingSeparator().toPortableString();
         
         List<String> modelList = new ArrayList<String>();
         for(IPath p: names) {
@@ -137,6 +137,13 @@ public class UnitNodeHelper implements UnitConstants {
             return true;
 	}
 	
+    public IFile getModule(String moduleName) {
+        IFile moduleFile = (IFile)getResourceRoot().findMember(moduleName);
+        if(moduleFile == null)
+            MessageDialog.openError(Display.getCurrent().getActiveShell(), "Can not locate \"" + moduleName + "\"", "Can not locate \"" + moduleName + "\"");
+        return moduleFile;
+    }
+    
 	private UnitNodeDiagram load(String moduleName) throws Exception {
         InputStream in;
         File f = new File(moduleName);

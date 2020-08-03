@@ -4,10 +4,11 @@
  <properties/>
  <units>
   <chain class="default" description="" name="a chain" type="processor">
-   <processor class="com.xrosstools.xunit.sample.unit.IntergerProcessor" description="" module="" name="unit 1111" reference=""/>
-   <processor class="" description="" module="" name="unit 2" reference="processor"/>
+   <processor class="default" description="" module="" name="unit 1111" reference=""/>
+   <processor class="" description="" module="unit_test.xunit" name="unit 2" reference="Chain test"/>
    <processor class="default" description="" module="" name="unit 3" reference=""/>
   </chain>
-  <processor class="default" description="" module="" name="processor" reference=""/>
+  <processor class="com.xrosstools.xunit.sample.unit.UnitDefinitionAwareProcessor" description="" module="" name="proj/project.xunit:processor" reference=""/>
+  <processor class="" description="" module="proj/module/modulet.xunit" name="refer next processor" reference="refence processor"/>
  </units>
 </xunit>

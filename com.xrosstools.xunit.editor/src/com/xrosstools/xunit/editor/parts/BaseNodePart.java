@@ -4,6 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
@@ -28,8 +29,13 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 
+import com.xrosstools.xunit.editor.UnitDiagramGraphicalEditor;
 import com.xrosstools.xunit.editor.commands.AssignClassCommand;
 import com.xrosstools.xunit.editor.figures.TopLevelUnitFigure;
 import com.xrosstools.xunit.editor.model.UnitConstants;
@@ -124,18 +130,26 @@ public abstract class BaseNodePart extends AbstractGraphicalEditPart implements 
 	}
 
     public void performRequest(Request req) {
-        if(req.getType().equals(RequestConstants.REQ_OPEN)){
-        	UnitNode node = getNode();
-        	if(node.isValid(node.getClassName()))
-        		openClass();
-        	else if(!node.isValid(node.getReferenceName()))
-            	assignClass();
-        }
+        if(!req.getType().equals(RequestConstants.REQ_OPEN))
+            return;
+
+        UnitNode node = getNode();
+    	if(node.isValid(node.getClassName()))
+    		openClass();
+    	else if(node.isValid(node.getReferenceName()))
+    	    openReference();
+    	else
+    	    assignClass();
     }
     
     public void openClass(){
-    	if(getSourceType() == null)
-    		assignClass();
+    	if(getSourceType() == null) {
+            IType newType = this.getNode().getHelper().getTypeFromName(getNode().getImplClassName());
+            if(newType != null)
+                setSourceType(newType);
+            else
+                assignClass();
+    	}    		
 
     	if(getSourceType() == null)
     		return;
@@ -147,9 +161,41 @@ public abstract class BaseNodePart extends AbstractGraphicalEditPart implements 
 		}
     }
     
+    public void openReference(){
+        if(!getNode().isValid(getNode().getModuleName()))
+            return;
+
+        IFile f = getNode().getHelper().getModule(getNode().getModuleName());
+        
+        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IEditorPart part = null;
+        try {
+            part = IDE.openEditor(page, f);
+        } catch (PartInitException x) {
+            ExceptionHandler.handle(x, JavaUIMessages.OpenTypeAction_errorTitle, JavaUIMessages.OpenTypeAction_errorMessage);
+            return;
+        }
+        
+        if(!(part instanceof UnitDiagramGraphicalEditor))
+            return;
+        
+        UnitDiagramGraphicalEditor udPart = (UnitDiagramGraphicalEditor)part;
+        UnitNodeDiagramPart undp = (UnitNodeDiagramPart)udPart.getRootEditPart().getContents();
+        for(Object o: undp.getChildren()) {
+            EditPart p = (EditPart)o;
+            UnitNode node = (UnitNode)p.getModel();
+            if(node.getName() != null && node.getName().equals(getNode().getReferenceName())) {
+                undp.getViewer().reveal(p);
+                undp.getViewer().select(p);
+                break;
+            }
+        }
+    }
+    
     public void assignClass(){
-    	IType newType = openDialog();
-		if(newType == null)
+        IType newType = openDialog();
+
+        if(newType == null)
 			return;
 		
 		setSourceType(newType);
