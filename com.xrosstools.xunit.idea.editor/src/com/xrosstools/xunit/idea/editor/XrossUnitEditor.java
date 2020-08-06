@@ -30,6 +30,10 @@ public class XrossUnitEditor implements FileEditor, FileEditorManagerListener {
         this.virtualFile = virtualFile;
     }
 
+    public void select(String name) {
+        ((UnitNodeDiagramPanel)panel).selectUnit(name);
+    }
+
     @NotNull
     @Override
     public JComponent getComponent() {

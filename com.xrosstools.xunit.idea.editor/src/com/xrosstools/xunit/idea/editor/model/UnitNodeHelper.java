@@ -1,15 +1,21 @@
 package com.xrosstools.xunit.idea.editor.model;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiManager;
 import com.xrosstools.xunit.idea.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.idea.editor.parts.EditPart;
+import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
@@ -47,13 +53,42 @@ public class UnitNodeHelper implements UnitConstants {
         }
     }
 
+    public VirtualFile findResourcesRoot() {
+        String modelPath = diagram.getFilePath().getPath();
+        for (Module m : ModuleManager.getInstance(diagram.getProject()).getModules()) {
+            for (VirtualFile resourceDirectory : ModuleRootManager.getInstance(m).getSourceRoots(JavaModuleSourceRootTypes.RESOURCES)) {
+                if (modelPath.contains(resourceDirectory.getPath())) {
+                    return resourceDirectory;
+                }
+            }
+        }
+        return diagram.getFilePath().getParent();
+    }
+
     public List<String> getWorkSpaceModuleNames(){
-        List<String> names = new ArrayList<String>();
+        VirtualFile root = findResourcesRoot();
+        List<VirtualFile> names = getWorkSpaceModuleNames(root);
+
+        List<String> displayNames = new ArrayList<>();
+        for(VirtualFile res: names) {
+            if(!res.equals(diagram.getFilePath())) {
+                displayNames.add(res.getPath().replaceFirst(root.getPath() + '/', ""));
+            }
+        }
+        return displayNames;
+    }
+
+    public List<VirtualFile> getWorkSpaceModuleNames(VirtualFile root){
+        List<VirtualFile> names = new ArrayList<>();
         try {
-            String curName = diagram.getFilePath().getName();
-            for(VirtualFile res: diagram.getFilePath().getParent().getChildren()) {
-                if(!res.isDirectory() && res.getExtension().equals("xunit") && !res.getName().equals(curName))
-                    names.add(res.getName());
+            for(VirtualFile res: root.getChildren()) {
+                if(res.isDirectory()){
+                    names.addAll(getWorkSpaceModuleNames(res));
+                } else {
+                    if(res.getExtension().equals("xunit")) {
+                        names.add(res);
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);

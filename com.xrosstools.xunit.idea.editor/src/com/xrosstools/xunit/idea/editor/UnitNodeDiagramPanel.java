@@ -214,6 +214,41 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         return selected == null ? rootFigure : selected;
     }
 
+    public void selectUnit(String name) {
+        if (name == null)
+            return;
+
+        UnitNode referencedNode = null;
+        for (UnitNode node : diagram.getUnits()) {
+            if (node.getName().equals(name)) {
+                referencedNode = node;
+                break;
+            }
+        }
+
+        if (referencedNode == null)
+            return;
+
+        selectUnit(referencedNode);
+    }
+
+    private void selectUnit(UnitNode selectedNode) {
+        Figure selected = root.getContext().findFigure(selectedNode);
+
+        if(selected == null || selected == lastSelected)
+            return;
+
+        selectedFigure(selected);
+
+        DefaultMutableTreeNode treeNode = treeRoot.findEditPart(selectedNode).getTreeNode();
+        if (treeNode != null)
+            treeNavigator.setSelectionPath(new TreePath(treeNode.getPath()));
+
+        adjust(innerDiagramPane.getVerticalScrollBar(), lastSelected.getY(), lastSelected.getHeight());
+        adjust(innerDiagramPane.getHorizontalScrollBar(), lastSelected.getX(), lastSelected.getWidth());
+
+    }
+
     private void updateHover(MouseEvent e) {
         Figure f = root.getFigure().findFigureAt(e.getX(), e.getY());
         f = f == null ? root.getFigure() : f;
@@ -271,7 +306,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                     if(obj == null || !(obj instanceof UnitNode))
                         return;
 
-                    OpenClassAction.openClass(project, ((UnitNode)obj).getImplClassName());
+                    OpenClassAction.openClassOrReference(project, ((UnitNode)obj));
                 }
             }
 
@@ -363,15 +398,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
             return;
 
         TreeEditPart treePart = (TreeEditPart)node.getUserObject();
-        Figure selected = treePart.getContext().findFigure(treePart.getModel());
-
-        if(selected == null || selected == lastSelected)
-            return;
-
-        selectedFigure(selected);
-
-        adjust(innerDiagramPane.getVerticalScrollBar(), lastSelected.getY(), lastSelected.getHeight());
-        adjust(innerDiagramPane.getHorizontalScrollBar(), lastSelected.getX(), lastSelected.getWidth());
+        selectUnit((UnitNode) treePart.getModel());
     }
 
     private void adjust(JScrollBar scrollBar, int start, int length ) {
