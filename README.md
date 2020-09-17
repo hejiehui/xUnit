@@ -16,10 +16,10 @@ Xross Unit尤其适合重构老系统。特别是跨语言的重构，通过Xros
 1. 模型归模型，代码归代码，查看代码仅需双击进入
 1. 可以在应用或构建单元层次上面配置参数
 
-![overview](https://github.com/hejiehui/xUnit/blob/master/doc/overview.png) 
+![overview](https://oscimg.oschina.net/oscnet/up-8c5e650e33e28e7c4a2ec1d26c6feb088d8.png) 
 
 #### Idea版
-![overview_idea](https://github.com/hejiehui/xUnit/blob/master/doc/overview_idea.png) 
+![overview_idea](https://oscimg.oschina.net/oscnet/up-c3ae7017420fd4551452f03e911a6ef89ab.png) 
 
 ###### 安装方法
 [下载插件](https://github.com/hejiehui/xUnit/raw/master/com.xrosstools.xunit.idea.editor/com.xrosstools.xunit.idea.editor.zip)
