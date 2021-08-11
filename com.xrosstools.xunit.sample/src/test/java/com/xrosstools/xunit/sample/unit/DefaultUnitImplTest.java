@@ -1,11 +1,15 @@
 package com.xrosstools.xunit.sample.unit;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
+import com.xrosstools.xunit.MapContext;
 import com.xrosstools.xunit.impl.DefaultUnitImpl;
 
 public class DefaultUnitImplTest {
@@ -33,6 +37,20 @@ public class DefaultUnitImplTest {
         properties.put(test.PROP_KEY_EVALUATE_FIELD, "locatorFieldPub");
         test.setUnitProperties(properties);
         assertEquals("locatorFieldPub", test.locate(ctx));
+    }
+
+    @Test
+    public void testLocateByFieldForMapContext() throws Exception {
+        MapContext ctx = new MapContext();
+
+        ctx.put("testStringField", "abc");
+        ctx.put("testBooleanField", true);
+
+        DefaultUnitImpl test = new DefaultUnitImpl(null);
+        Map<String, String> properties = new HashMap<>();
+        properties.put(test.PROP_KEY_EVALUATE_FIELD, "testStringField");
+        test.setUnitProperties(properties);
+        assertEquals("abc", test.locate(ctx));
     }
 
     @Test
@@ -77,6 +95,22 @@ public class DefaultUnitImplTest {
         properties.put(test.PROP_KEY_EVALUATE_FIELD, "validFieldPub");
         test.setUnitProperties(properties);
         assertTrue(test.validate(ctx));
+    }
+
+    @Test
+    public void testValidateByFieldForMapContext() throws Exception {
+        MapContext ctx = new MapContext();
+
+        DefaultUnitImpl test = new DefaultUnitImpl(null);
+        Map<String, String> properties = new HashMap<>();
+        properties.put(test.PROP_KEY_EVALUATE_FIELD, "testKeyName");
+        
+        ctx.put("testKeyName", true);
+        test.setUnitProperties(properties);
+        assertTrue(test.validate(ctx));
+        
+        ctx.put("testKeyName", false);
+        assertFalse(test.validate(ctx));
     }
 
     @Test
@@ -140,6 +174,22 @@ public class DefaultUnitImplTest {
         DefaultUnitImpl test = new DefaultUnitImpl(null);
         Map<String, String> properties = new HashMap<>();
         properties.put(test.PROP_KEY_SHOW_FIELDS, "locatorFieldPrv,locatorFieldGetter,locatorFieldPub,validFieldPrv,validFieldGetter,validFieldPub");
+        
+        test.setUnitProperties(properties);
+        
+        test.process(ctx);
+    }
+    
+    @Test
+    public void testShowFieldsForMapContext() throws Exception {
+        MapContext ctx = new MapContext();
+
+        ctx.put("testStringField", "abc");
+        ctx.put("testBooleanField", true);
+
+        DefaultUnitImpl test = new DefaultUnitImpl(null);
+        Map<String, String> properties = new HashMap<>();
+        properties.put(test.PROP_KEY_SHOW_FIELDS, "testStringField,testBooleanField");
         
         test.setUnitProperties(properties);
         

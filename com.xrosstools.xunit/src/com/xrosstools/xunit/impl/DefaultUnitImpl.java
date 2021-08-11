@@ -16,6 +16,7 @@ import com.xrosstools.xunit.Converter;
 import com.xrosstools.xunit.Decorator;
 import com.xrosstools.xunit.Dispatcher;
 import com.xrosstools.xunit.Locator;
+import com.xrosstools.xunit.MapContext;
 import com.xrosstools.xunit.Processor;
 import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.Unit;
@@ -219,6 +220,10 @@ public class DefaultUnitImpl implements Processor, Converter, Validator, Locator
     }
 	
 	private Object getValueFromField(Context ctx, String fieldName) {
+	    //Support MapContext per user's request
+	    if(ctx instanceof MapContext)
+            return ((MapContext)ctx).get(fieldName);
+
 	    try {
             Field field = ctx.getClass().getDeclaredField(fieldName);
             
