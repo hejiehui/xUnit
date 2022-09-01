@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xunit description="" name="" packageId="">
+ <properties/>
+ <units>
+  <bi_branch class="default" description="" name="reward" type="processor">
+   <validator class="default" description="" invalidLabel="不能返奖" module="" name="validator" reference="" validLabel="可以返奖"/>
+   <valid_unit>
+    <chain class="default" description="" name="a chain" type="processor">
+     <branch class="default" description="" name="a branch" type="processor">
+      <locator class="default" default_key="" description="" module="" name="locator" reference=""/>
+      <branch_unit key="新用户普通">
+       <processor class="com.xrosstools.xunit.sample.meituan.NewUserOrdinaryRewardProcessor" description="" module="" name="普通奖励" reference=""/>
+      </branch_unit>
+      <branch_unit key="新用户梯度">
+       <processor class="default" description="" module="" name="梯度奖" reference=""/>
+      </branch_unit>
+      <branch_unit key="老用户类型1">
+       <processor class="default" description="" module="" name="普通奖励1" reference=""/>
+      </branch_unit>
+      <branch_unit key="老用户类型2">
+       <processor class="default" description="" module="" name="普通奖励2" reference=""/>
+      </branch_unit>
+     </branch>
+     <processor class="default" description="" module="" name="更新奖金进行结算" reference=""/>
+    </chain>
+   </valid_unit>
+   <invalid_unit>
+    <processor class="default" description="" module="" name="遗憾通知" reference=""/>
+   </invalid_unit>
+  </bi_branch>
+ </units>
+</xunit>
