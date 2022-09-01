@@ -352,7 +352,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                     return;
                 }
 
-                if (e.isPopupTrigger())
+                if (isPopupTrigger(e))
                     showContexMenu(e.getX(), e.getY());
             }
         });
@@ -404,6 +404,10 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     private void adjust(JScrollBar scrollBar, int start, int length ) {
         if (scrollBar.getValue() > start || scrollBar.getValue() + scrollBar.getVisibleAmount() < start + length)
             scrollBar.setValue(start - 100);
+    }
+
+    private boolean isPopupTrigger(MouseEvent evt) {
+        return evt.isPopupTrigger() || evt.getButton() == MouseEvent.BUTTON3;
     }
 
     private void showContexMenu(int x, int y) {

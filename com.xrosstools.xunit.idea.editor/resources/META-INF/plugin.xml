@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xunit.editor</id>
   <name>Xross Unit Designer</name>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -10,6 +10,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      2.0.2 release<br>
+      <em>Fix saving file issue and right button no show</em>
       2.0 release<br>
       <em>With Parallel branch added</em>
     ]]>
