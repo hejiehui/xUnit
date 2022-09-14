@@ -232,7 +232,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         selectUnit(referencedNode);
     }
 
-    private void selectUnit(UnitNode selectedNode) {
+    private void selectUnit(Object selectedNode) {
         Figure selected = root.getContext().findFigure(selectedNode);
 
         if(selected == null || selected == lastSelected)
@@ -243,6 +243,9 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         DefaultMutableTreeNode treeNode = treeRoot.findEditPart(selectedNode).getTreeNode();
         if (treeNode != null)
             treeNavigator.setSelectionPath(new TreePath(treeNode.getPath()));
+
+        if(selectedNode instanceof UnitNodeDiagram)
+            return;
 
         adjust(innerDiagramPane.getVerticalScrollBar(), lastSelected.getY(), lastSelected.getHeight());
         adjust(innerDiagramPane.getHorizontalScrollBar(), lastSelected.getX(), lastSelected.getWidth());
@@ -398,7 +401,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
             return;
 
         TreeEditPart treePart = (TreeEditPart)node.getUserObject();
-        selectUnit((UnitNode) treePart.getModel());
+        selectUnit(treePart.getModel());
     }
 
     private void adjust(JScrollBar scrollBar, int start, int length ) {
