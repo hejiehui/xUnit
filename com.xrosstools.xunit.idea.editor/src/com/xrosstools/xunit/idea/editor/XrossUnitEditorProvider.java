@@ -3,11 +3,12 @@ package com.xrosstools.xunit.idea.editor;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
 import com.intellij.openapi.fileEditor.FileEditorProvider;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
-public class XrossUnitEditorProvider implements FileEditorProvider {
+public class XrossUnitEditorProvider implements FileEditorProvider, DumbAware {
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
         return virtualFile.getFileType() == XunitFileType.INSTANCE || virtualFile.getExtension().equalsIgnoreCase(XunitFileType.EXTENSION);
