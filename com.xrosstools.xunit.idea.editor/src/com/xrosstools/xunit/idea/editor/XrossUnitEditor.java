@@ -122,4 +122,11 @@ public class XrossUnitEditor implements FileEditor, FileEditorManagerListener {
     public <T> void putUserData(@NotNull Key<T> key, @Nullable T t) {
 
     }
+
+
+    @NotNull
+    @Override
+    public VirtualFile getFile() {
+        return virtualFile;
+    }
 }
