@@ -1,15 +1,22 @@
 <idea-plugin>
   <id>com.xrosstools.xunit.editor</id>
-  <name>Xross Unit Designer</name>
+  <name>Xross Unit Editor</name>
   <version>2.0.3</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
-      Xross Tools.<br>
-      <em>Xross Unit Editor</em>
+      The Xross Unit Editor is a flexible low code tool for building backend module.<br>
+      Users can quickly build control processes and backend system skeleton in a WYSIWYG manner in IDE using flowchat.<br>
+      Using flowchart allows user better understanding and maintaiing the system.<br>
+      Clicking on the process node can directly open the code corresponding to the node. Enable you to grasp the overall structure and specific details of the system anytime and anywhere.<br>
+      Xross Unit is particularly suitable for building new system or refactoring old ones.Especially for cross language refactoring.<br>
+      E.g. Xross Unit can efficiently enable developers familiar with old systems and languages to transform their knowledge of old systems into new systems.
+      For more infomation, please visit https://github.com/hejiehui/xUnit
     ]]></description>
 
   <change-notes><![CDATA[
+      2.0.3 release<br>
+      <em>Enrich plugin discription</em>
       2.0.2 release<br>
       <em>Fix DumeAware issue and select diagram error</em>
       2.0.2 release<br>
