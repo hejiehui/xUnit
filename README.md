@@ -1,7 +1,7 @@
 xUnit
 =====
 
-A common system builder
+A common system builder. [Click here for english guide](https://github.com/hejiehui/xUnit/wiki).
 
 # 简介
 Xross unit 编辑器是一个灵活的系统构建器。用户可以在Eclipse里以所见即所得的方式快速构建控制流程，打造系统的骨架。
@@ -28,15 +28,15 @@ Xross Unit尤其适合重构老系统。特别是跨语言的重构，通过Xros
 
 Idea IDEA，File-->Settings-->Plugins-->Install Plugin from disk...
 
-### [设计思想和组件介绍](https://github.com/hejiehui/xUnit/wiki/Design)
+### [设计思想和组件介绍](https://github.com/hejiehui/xUnit/wiki/%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF)
 
-### [使用方法](https://github.com/hejiehui/xUnit/wiki/Editor-Usage)
+### [使用方法](https://github.com/hejiehui/xUnit/wiki/%E7%BC%96%E8%BE%91%E5%99%A8%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95)
 
-### [集成步骤](https://github.com/hejiehui/xUnit/wiki/Integration-Guide)
+### [集成步骤](https://github.com/hejiehui/xUnit/wiki/%E9%9B%86%E6%88%90%E6%8C%87%E5%8D%97)
 
-### [实际案例和用户反馈](https://github.com/hejiehui/xUnit/wiki/Application-and-Feedback)
+### [实际案例和用户反馈](https://github.com/hejiehui/xUnit/wiki/%E6%A1%88%E4%BE%8B%E5%92%8C%E5%8F%8D%E9%A6%88)
 
-### [使用问题集合](https://github.com/hejiehui/xUnit/wiki/Guideline)
+### [使用问题集合](https://github.com/hejiehui/xUnit/wiki/%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98)
 
 ### [Demo项目](https://github.com/hejiehui/xUnit/tree/master/com.xrosstools.xunit.sample)
 
