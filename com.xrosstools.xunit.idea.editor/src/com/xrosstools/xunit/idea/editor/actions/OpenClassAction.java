@@ -36,7 +36,7 @@ public class OpenClassAction extends WorkbenchPartAction implements UnitActionCo
 
     public static void openClassOrReference(Project project, UnitNode node) {
 	    if(node.isValid(node.getClassName()))
-            openClass(project, node.getClassName());
+            openClass(project, node.getImplClassName());
 	    else
 	        openReference(project, node.getHelper().findResourcesRoot().findFileByRelativePath(node.getModuleName()), node.getReferenceName());
     }

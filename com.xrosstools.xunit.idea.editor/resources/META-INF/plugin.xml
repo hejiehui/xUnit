@@ -15,16 +15,11 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      2.0.4 release<br>
-      <em>Explicitly declare java dependency according to plugin development standard</em>
-      2.0.3 release<br>
-      <em>Enrich plugin discription</em>
-      2.0.2 release<br>
-      <em>Fix DumeAware issue and select diagram error</em>
-      2.0.2 release<br>
-      <em>Fix saving file issue and right button no show</em>
-      2.0 release<br>
-      <em>With Parallel branch added</em>
+      <em>2.0.4 Release</em> Explicitly declare java dependency according to plugin development standard<br>
+      <em>2.0.3 Release</em> Enrich plugin discription<br>
+      <em>2.0.2 Release</em> Fix DumeAware issue and select diagram error<br>
+      <em>2.0.2 Release</em> Fix saving file issue and right button no show<br>
+      <em>2.0 Release</em> With Parallel branch added<br>
     ]]>
   </change-notes>
 
