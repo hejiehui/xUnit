@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xunit.editor</id>
   <name>Xross Unit Editor</name>
-  <version>2.0.3</version>
+  <version>2.0.4</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -15,6 +15,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      2.0.4 release<br>
+      <em>Explicitly declare java dependency according to plugin development standard</em>
       2.0.3 release<br>
       <em>Enrich plugin discription</em>
       2.0.2 release<br>
@@ -31,9 +33,8 @@
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
-  <!-- uncomment to enable plugin in all products
   <depends>com.intellij.modules.lang</depends>
-  -->
+  <depends>com.intellij.modules.java</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <fileEditorProvider implementation="com.xrosstools.xunit.idea.editor.XrossUnitEditorProvider"/>
