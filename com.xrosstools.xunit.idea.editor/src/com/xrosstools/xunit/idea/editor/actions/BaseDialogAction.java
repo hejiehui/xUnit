@@ -3,8 +3,7 @@ package com.xrosstools.xunit.idea.editor.actions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidator;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.IconLoader;
-import com.xrosstools.xunit.idea.editor.Activator;
+import com.xrosstools.xunit.idea.editor.XrossUnitIcons;
 import com.xrosstools.xunit.idea.editor.commands.Command;
 
 public abstract class BaseDialogAction extends WorkbenchPartAction implements UnitActionConstants {
@@ -33,7 +32,7 @@ public abstract class BaseDialogAction extends WorkbenchPartAction implements Un
 	abstract protected Command createCommand(String value);
 
 	public Command createCommand() {
-		Messages.InputDialog dialog = new Messages.InputDialog(project, dialogTitle, dialogMessage, IconLoader.findIcon(Activator.getIconPath("chain")), initialValue, new InputValidator() {
+		Messages.InputDialog dialog = new Messages.InputDialog(project, dialogTitle, dialogMessage, XrossUnitIcons.Chain, initialValue, new InputValidator() {
 			@Override
 			public boolean checkInput(String s) {
 				return true;

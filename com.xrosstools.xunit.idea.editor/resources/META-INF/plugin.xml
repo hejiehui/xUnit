@@ -15,6 +15,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>2.0.5 Release</em> Fix deprecated API reference
       <em>2.0.4 Release</em> Explicitly declare java dependency according to plugin development standard<br>
       <em>2.0.3 Release</em> Enrich plugin discription<br>
       <em>2.0.2 Release</em> Fix DumeAware issue and select diagram error<br>

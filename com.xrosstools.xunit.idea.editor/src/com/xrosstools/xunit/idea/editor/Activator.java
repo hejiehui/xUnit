@@ -1,7 +1,9 @@
 package com.xrosstools.xunit.idea.editor;
 
+import com.intellij.openapi.util.IconLoader;
 import com.xrosstools.xunit.idea.editor.model.*;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,11 +37,15 @@ public class Activator {
         return HOME + iconId + ICO;
     }
 
+    public static Icon getIcon(String iconId){
+        return IconLoader.getIcon(Activator.getIconPath(iconId), XrossUnitIcons.class);
+    }
+
     private static Map<Class, String> reg = new HashMap<>();
 
-    public static String getIconPath(Class clazz){
+    public static Icon getIcon(Class clazz){
         String iconId = reg.get(clazz);
-        return HOME + iconId + ICO;
+        return getIcon(iconId);
     }
 
     static {

@@ -1,6 +1,5 @@
 package com.xrosstools.xunit.idea.editor.treeparts;
 
-import com.intellij.openapi.util.IconLoader;
 import com.xrosstools.xunit.idea.editor.Activator;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 
@@ -22,6 +21,6 @@ public class BaseNodeTreePart extends TreeEditPart {
     }
 
 	public Icon getImage() {
-        return IconLoader.findIcon(Activator.getIconPath(getModel().getClass()));
+        return Activator.getIcon(getModel().getClass());
     }
 }

@@ -2,7 +2,6 @@ package com.xrosstools.xunit.idea.editor;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollPane;
@@ -103,21 +102,21 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         GridLayout layout = new GridLayout(0, 1, 10,0);
         toolbar.setLayout(layout);
         toolbar.add(createResetButton());
-        toolbar.add(createButton("Processor", Activator.PROCESSOR, ProcessorNode.class));
-        toolbar.add(createButton("Converter", Activator.CONVERTER, ConverterNode.class));
-        toolbar.add(createButton("Validator", Activator.VALIDATOR, ValidatorNode.class));
-        toolbar.add(createButton("Locator", Activator.LOCATOR, LocatorNode.class));
-        toolbar.add(createButton("Dispatcher", Activator.DISPATCHER, DispatcherNode.class));
-        toolbar.add(createButton("Chain", Activator.CHAIN, ChainNode.class));
-        toolbar.add(createButton("If/else", Activator.BI_BRANCH, BiBranchNode.class));
-        toolbar.add(createButton("Branch", Activator.BRANCH, BranchNode.class));
-        toolbar.add(createButton("Parallel Branch", Activator.PARALLEL_BRANCH, ParallelBranchNode.class));
-        toolbar.add(createButton("While loop", Activator.WHILE, PreValidationLoopNode.class));
-        toolbar.add(createButton("Do while loop", Activator.DO_WHILE, PostValidationLoopNode.class));
-        toolbar.add(createButton("Start", Activator.START_POINT, StartPointNode.class));
-        toolbar.add(createButton("End", Activator.END_POINT, EndPointNode.class));
-        toolbar.add(createButton("Decorator", Activator.DECORATOR, DecoratorNode.class));
-        toolbar.add(createButton("Adapter", Activator.ADAPTER, AdapterNode.class));
+        toolbar.add(createButton("Processor", XrossUnitIcons.Processor, ProcessorNode.class));
+        toolbar.add(createButton("Converter", XrossUnitIcons.Converter, ConverterNode.class));
+        toolbar.add(createButton("Validator", XrossUnitIcons.Validator, ValidatorNode.class));
+        toolbar.add(createButton("Locator", XrossUnitIcons.Locator, LocatorNode.class));
+        toolbar.add(createButton("Dispatcher", XrossUnitIcons.Dispatcher, DispatcherNode.class));
+        toolbar.add(createButton("Chain", XrossUnitIcons.Chain, ChainNode.class));
+        toolbar.add(createButton("If/else", XrossUnitIcons.Bi_branch, BiBranchNode.class));
+        toolbar.add(createButton("Branch", XrossUnitIcons.Branch, BranchNode.class));
+        toolbar.add(createButton("Parallel Branch", XrossUnitIcons.Parallel_branch, ParallelBranchNode.class));
+        toolbar.add(createButton("While loop", XrossUnitIcons.While_loop, PreValidationLoopNode.class));
+        toolbar.add(createButton("Do while loop", XrossUnitIcons.Do_while_loop, PostValidationLoopNode.class));
+        toolbar.add(createButton("Start", XrossUnitIcons.Start_point, StartPointNode.class));
+        toolbar.add(createButton("End", XrossUnitIcons.End_point, EndPointNode.class));
+        toolbar.add(createButton("Decorator", XrossUnitIcons.Decorator, DecoratorNode.class));
+        toolbar.add(createButton("Adapter", XrossUnitIcons.Adapter, AdapterNode.class));
         mainPanel.add(toolbar, BorderLayout.WEST);
 
         unitPanel = new UnitPanel();
@@ -434,7 +433,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private JButton createResetButton() {
-        JButton btn = new JButton("Select", IconLoader.findIcon(Activator.getIconPath(Activator.PROCESSOR)));
+        JButton btn = new JButton("Select", XrossUnitIcons.Processor);
         btn.setContentAreaFilled(false);
         btn.addActionListener(new ActionListener() {
             @Override
@@ -445,8 +444,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         return btn;
     }
 
-    private JButton createButton(String name, String icon, final Class unitNodeClass) {
-        JButton btn = new JButton(name, IconLoader.findIcon(Activator.getIconPath(icon)));
+    private JButton createButton(String name, Icon icon, final Class unitNodeClass) {
+        JButton btn = new JButton(name, icon);
         btn.setContentAreaFilled(false);
         btn.addActionListener(new ActionListener() {
             @Override

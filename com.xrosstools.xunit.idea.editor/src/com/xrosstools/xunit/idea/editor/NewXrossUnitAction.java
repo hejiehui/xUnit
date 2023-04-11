@@ -8,16 +8,10 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidator;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.Navigatable;
-import com.intellij.util.OpenSourceUtil;
-import com.xrosstools.xunit.idea.editor.util.XmlHelper;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class NewXrossUnitAction extends AnAction {
     @Override
@@ -35,7 +29,7 @@ public class NewXrossUnitAction extends AnAction {
 
         final VirtualFile dir = selected;
 
-        Messages.InputDialog dialog = new Messages.InputDialog(project, "New Xross Unit Model", "Name: ", IconLoader.findIcon(Activator.getIconPath("chain")), "new_xunit_file", new InputValidator() {
+        Messages.InputDialog dialog = new Messages.InputDialog(project, "New Xross Unit Model", "Name: ", XunitFileType.ICON, "new_xunit_file", new InputValidator() {
             @Override
             public boolean checkInput(String s) {
                 return true;
@@ -59,8 +53,9 @@ public class NewXrossUnitAction extends AnAction {
         });
         dialog.show();
 
-        if (dialog.getExitCode() != 0)
+        if (dialog.getExitCode() != 0) {
             return;
+        }
 
         final String name = dialog.getInputString();
 

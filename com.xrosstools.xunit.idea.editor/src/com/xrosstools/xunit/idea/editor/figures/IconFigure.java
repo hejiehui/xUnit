@@ -1,11 +1,9 @@
 package com.xrosstools.xunit.idea.editor.figures;
 
-import com.intellij.openapi.util.IconLoader;
 import com.xrosstools.xunit.idea.editor.Activator;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.ImageObserver;
 
 public class IconFigure extends Figure {
     private Icon image;
@@ -30,7 +28,7 @@ public class IconFigure extends Figure {
     public void paintSelection(Graphics graphics) {}
 
     public void setSource(String source) {
-        image = source == null ? null: IconLoader.findIcon(Activator.getIconPath(source));
+        image = source == null ? null: Activator.getIcon(source);
         if (image == null)
             setSize(0,16);
         else {

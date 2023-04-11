@@ -1,15 +1,12 @@
 package com.xrosstools.xunit.idea.editor.treeparts;
 
-import com.intellij.openapi.util.IconLoader;
 import com.xrosstools.xunit.idea.editor.Activator;
 import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.parts.EditContext;
-import com.xrosstools.xunit.idea.editor.parts.EditPart;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -56,7 +53,7 @@ public class TreeEditPart implements UnitConstants, PropertyChangeListener {
     }
 
     public Icon getImage() {
-        return IconLoader.findIcon(Activator.getIconPath(getModel().getClass()));
+        return Activator.getIcon(getModel().getClass());
     }
 
     public void refresh() {
