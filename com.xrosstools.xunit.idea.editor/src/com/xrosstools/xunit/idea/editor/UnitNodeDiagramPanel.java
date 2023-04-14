@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -433,7 +434,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private JButton createResetButton() {
-        JButton btn = new JButton("Select", XrossUnitIcons.Processor);
+        JButton btn = new JButton("Select", AllIcons.Actions.Back);
         btn.setContentAreaFilled(false);
         btn.addActionListener(new ActionListener() {
             @Override

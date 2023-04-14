@@ -1,26 +1,17 @@
 <idea-plugin>
   <id>com.xrosstools.xunit.editor</id>
   <name>Xross Unit Editor</name>
-  <version>2.0.4</version>
+  <version>2.0.5</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
-      The Xross Unit Editor is a flexible low code tool for building backend module.<br>
-      Users can quickly build control processes and backend system skeleton in a WYSIWYG manner in IDE using flowchat.<br>
-      Using flowchart allows user better understanding and maintaiing the system.<br>
-      Clicking on the process node can directly open the code corresponding to the node. Enable you to grasp the overall structure and specific details of the system anytime and anywhere.<br>
-      Xross Unit is particularly suitable for building new system or refactoring old ones.Especially for cross language refactoring.<br>
-      E.g. Xross Unit can efficiently enable developers familiar with old systems and languages to transform their knowledge of old systems into new systems.
-      For more infomation, please visit https://github.com/hejiehui/xUnit
+      The Xross Unit Editor is a low code tool designed for backend developers.<br>
+      It models backend logic with flowchart, and linking code to node of the chart.<br>
+      For more infomation, please visit <a href="https://github.com/hejiehui/xUnit">Xross Unit</a>
     ]]></description>
 
   <change-notes><![CDATA[
-      <em>2.0.5 Release</em> Fix deprecated API reference
-      <em>2.0.4 Release</em> Explicitly declare java dependency according to plugin development standard<br>
-      <em>2.0.3 Release</em> Enrich plugin discription<br>
-      <em>2.0.2 Release</em> Fix DumeAware issue and select diagram error<br>
-      <em>2.0.2 Release</em> Fix saving file issue and right button no show<br>
-      <em>2.0 Release</em> With Parallel branch added<br>
+      Fix deprecated API reference and using build-in icon for select menu
     ]]>
   </change-notes>
 
