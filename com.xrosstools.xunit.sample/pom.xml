@@ -11,7 +11,7 @@
 		<dependency>
 			<groupId>com.xrosstools</groupId>
 			<artifactId>xunit</artifactId>
-			<version>2.2.0</version>
+			<version>2.2.1</version>
 		</dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -19,16 +19,6 @@
             <version>4.4</version>
         </dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>xtools-repo</id>
-			<url>https://raw.github.com/hejiehui/xtools-repo/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
     <build>
         <plugins>
             <plugin>
