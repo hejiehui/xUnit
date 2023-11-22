@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xunit.editor</id>
   <name>Xross Unit Editor</name>
-  <version>2.0.5</version>
+  <version>2.0.6</version>
   <vendor email="he_jiehui@163.com" url="https://github.com/hejiehui/xross-tools-installer">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -11,7 +11,8 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      Fix deprecated API reference and using build-in icon for select menu
+      <em>2.0.6</em> Allow assign implementation class from not only current project, but also from maven dependency..<br>
+      <em>2.0.5</em> Fix deprecated API reference and using build-in icon for select menu.<br>
     ]]>
   </change-notes>
 

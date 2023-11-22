@@ -21,7 +21,9 @@ public class AssignClassNameAction extends WorkbenchPartAction implements UnitAc
 	}
 
     public Command createCommand() {
-        TreeClassChooser chooser = TreeClassChooserFactory.getInstance(project).createProjectScopeChooser("");
+        UnitNode node = (UnitNode)nodePart.getModel();
+        String className = node.getImplClassName();
+        TreeClassChooser chooser = TreeClassChooserFactory.getInstance(project).createAllProjectScopeChooser(className == null ? "" : className);
         chooser.showDialog();
         PsiClass selected = chooser.getSelected();
         if(selected == null)
