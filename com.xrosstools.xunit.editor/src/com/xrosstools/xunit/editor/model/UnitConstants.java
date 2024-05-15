@@ -12,6 +12,7 @@ import com.xrosstools.xunit.impl.BiBranchImpl;
 import com.xrosstools.xunit.impl.BranchImpl;
 import com.xrosstools.xunit.impl.ChainImpl;
 import com.xrosstools.xunit.impl.DefaultUnitImpl;
+import com.xrosstools.xunit.impl.ParallelBranchImpl;
 import com.xrosstools.xunit.impl.PostValidationLoopImpl;
 import com.xrosstools.xunit.impl.PreValidationLoopImpl;
 
@@ -77,6 +78,7 @@ public interface UnitConstants extends XunitConstants {
 	String DEFAULT_CHAIN_IMPL = ChainImpl.class.getName();
 	String DEFAULT_BI_BRANCH_IMPL = BiBranchImpl.class.getName();
 	String DEFAULT_BRANCH_IMPL = BranchImpl.class.getName();
+	String DEFAULT_PARALLEL_BRANCH_IMPL = ParallelBranchImpl.class.getName();
 	String DEFAULT_WHILE_LOOP_IMPL = PreValidationLoopImpl.class.getName();
 	String DEFAULT_DO_WHILE_LOOP_IMPL = PostValidationLoopImpl.class.getName();
 	String DEFAULT_DECORATOR_IMPL = DEFAULT_PRIMARY_IMPL;

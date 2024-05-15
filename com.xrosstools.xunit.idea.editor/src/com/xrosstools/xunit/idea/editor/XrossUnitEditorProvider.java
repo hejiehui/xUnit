@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class XrossUnitEditorProvider implements FileEditorProvider, DumbAware {
     @Override
     public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return virtualFile.getFileType() == XunitFileType.INSTANCE || (virtualFile.getExtension() != null && virtualFile.getExtension().equalsIgnoreCase(XunitFileType.EXTENSION));
+        return virtualFile.getFileType() == XunitFileType.INSTANCE || XunitFileType.EXTENSION.equalsIgnoreCase(virtualFile.getExtension());
     }
 
     @NotNull

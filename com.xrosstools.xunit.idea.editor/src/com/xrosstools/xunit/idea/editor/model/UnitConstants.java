@@ -63,6 +63,7 @@ public interface UnitConstants extends XunitConstants {
     String DEFAULT_CHAIN_IMPL = "com.xrosstools.xunit.impl.ChainImpl";
     String DEFAULT_BI_BRANCH_IMPL = "com.xrosstools.xunit.impl.BiBranchImpl";
     String DEFAULT_BRANCH_IMPL = "com.xrosstools.xunit.impl.BranchImpl";
+    String DEFAULT_PARALLEL_BRANCH_IMPL = "com.xrosstools.xunit.impl.ParallelBranchImpl";
     String DEFAULT_WHILE_LOOP_IMPL = "com.xrosstools.xunit.impl.PreValidationLoopImpl";
     String DEFAULT_DO_WHILE_LOOP_IMPL = "com.xrosstools.xunit.impl.PostValidationLoopImpl";
     String DEFAULT_DECORATOR_IMPL = DEFAULT_PRIMARY_IMPL;

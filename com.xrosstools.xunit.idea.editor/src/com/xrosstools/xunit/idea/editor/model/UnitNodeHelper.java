@@ -13,6 +13,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
+import com.xrosstools.xunit.idea.editor.XunitFileType;
 import com.xrosstools.xunit.idea.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.idea.editor.parts.EditPart;
 import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
@@ -85,7 +86,7 @@ public class UnitNodeHelper implements UnitConstants {
                 if(res.isDirectory()){
                     names.addAll(getWorkSpaceModuleNames(res));
                 } else {
-                    if(res.getExtension().equals("xunit")) {
+                    if(XunitFileType.EXTENSION.equalsIgnoreCase(res.getExtension())) {
                         names.add(res);
                     }
                 }

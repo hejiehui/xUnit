@@ -32,7 +32,7 @@ public class ParallelBranchNode extends CompositeUnitNode {
     }
     
     public String getDefaultImplName(){
-        return DEFAULT_BRANCH_IMPL;
+        return DEFAULT_PARALLEL_BRANCH_IMPL;
     }
 
     protected String getCategory(String id) {

@@ -11,7 +11,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <em>2.0.7</em> Fix NPE when file extension is empty.<br>
+      <em>2.0.7</em> Fix NPE when file extension is empty; Fix ParallelBranch default implementation reference<br>
       <em>2.0.6</em> Allow assign implementation class from not only current project, but also from maven dependency.<br>
       <em>2.0.5</em> Fix deprecated API reference and using build-in icon for select menu.<br>
     ]]>
