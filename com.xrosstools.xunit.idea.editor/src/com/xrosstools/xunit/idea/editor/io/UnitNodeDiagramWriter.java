@@ -217,7 +217,8 @@ public class UnitNodeDiagramWriter implements UnitConstants {
 
 		for(UnitNode child: unit.getContainerNode().getAll()){
 			Element childNode = (Element)doc.createElement(BRANCH_UNIT);
-			childNode.setAttribute(KEY, child.getInputLabel());
+			childNode.setAttribute(KEY, child.getInputKey());
+			childNode.setAttribute(LABEL, child.getInputLabel());
 			childNode.appendChild(createUnitNode(doc, child));
 			node.appendChild(childNode);
 		}
@@ -231,7 +232,8 @@ public class UnitNodeDiagramWriter implements UnitConstants {
 
         for(UnitNode child: unit.getContainerNode().getAll()){
             Element childNode = (Element)doc.createElement(BRANCH_UNIT);
-            childNode.setAttribute(KEY, child.getInputLabel());
+			childNode.setAttribute(KEY, child.getInputKey());
+			childNode.setAttribute(LABEL, child.getInputLabel());
             childNode.setAttribute(TASK_TYPE, child.getTaskType().name());
             childNode.appendChild(createUnitNode(doc, child));
             node.appendChild(childNode);

@@ -44,6 +44,7 @@ public interface XunitConstants {
     String TASK_TYPE = "task_type";
     String BRANCH_UNIT = "branch_unit";
     String KEY = "key";
+    String LABEL = "label";
     String WHILE = "while";
     String DO_WHILE = "do_while";
     String LOOP_UNIT = "loop_unit";

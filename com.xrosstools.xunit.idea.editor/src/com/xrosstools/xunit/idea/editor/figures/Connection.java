@@ -51,7 +51,7 @@ public class Connection extends Figure {
         pl = router.route(connection);
         updatePath();
 
-        String text = connection.getLabel();
+        String text = connection.getDisplayText();
         if(text != null) {
             label.setText(text);
             label.setSize(label.getPreferredSize());
@@ -69,6 +69,9 @@ public class Connection extends Figure {
 //        shape.contains(new Point2D.Float(x, y))
         if(pl == null)
             return false;
+
+        if(label.containsPoint(x, y))
+            return true;
 
         int count = pl.getPoints();
         for(int i = 1; i < count; i++) {

@@ -20,13 +20,13 @@ public class BranchNode extends CompositeUnitNode {
     public BranchNode(LocatorNode locator, UnitNode unit){
         this(true);
         setLocator(locator);
-        addUnit("key 1", unit);
+        addUnit("key 1", null, unit);
     }
 
     private void init(){
         setLocator(new LocatorNode());
         for(int i = 0; i < 3; i++)
-            addUnit("key" + (i + 1), createSampleNode("node " + (i + 1)));
+            addUnit("key" + (i + 1), null, createSampleNode("node " + (i + 1)));
     }
 
     public String getDefaultImplName(){
@@ -42,9 +42,10 @@ public class BranchNode extends CompositeUnitNode {
         return locator;
     }
 
-    public void addUnit(String key, UnitNode unit){
+    public void addUnit(String key, String label, UnitNode unit){
         unitsPanel.add(unit);
-        unit.setInputLabel(key);
+        unit.setInputKey(key);
+        unit.setInputLabel(label);
     }
 
     public void setLocator(LocatorNode locator) {

@@ -51,6 +51,7 @@ public interface UnitConstants extends XunitConstants {
     String PROP_MODULE = "Reference Module";
     String PROP_VALID_LABEL = "validLabel";
     String PROP_INVALID_LABEL = "invalidLabel";
+    String PROP_KEY = "key";
     String PROP_LABEL = "Label";
     String PROP_DEFAULT_KEY = "Default key";
     String PROP_TIMEOUT = "timeout";

@@ -11,7 +11,7 @@ public class UnitNodeLayoutPolicy {
         return target != null && target.getModel() instanceof UnitNode;
     }
 	public Command getAddCommand(EditPart target, EditPart child) {
-        if(!isActionAllowed(target))
+        if(!isActionAllowed(target) || !(child.getModel() instanceof UnitNode))
             return null;
 
         return new UnitNodeAddNodeCommand(

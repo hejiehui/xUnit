@@ -92,7 +92,7 @@ public class UnitNodeDiagramReader implements UnitConstants {
 		else if(BRANCH.equals(nodeName))
 			unit = createBranchNode(node);
 		else if(PARALLEL_BRANCH.equals(nodeName))
-			unit = createParalleBranchNode(node);
+			unit = createParallelBranchNode(node);
 		else if(WHILE.equals(nodeName))
 			unit = createPreValidationLoopNode(node);
 		else if(DO_WHILE.equals(nodeName))
@@ -224,13 +224,14 @@ public class UnitNodeDiagramReader implements UnitConstants {
 			Node found = children.item(i);
 			UnitNode branchUnit = createUnitNode(found);
 			String key = getAttribute(found, KEY);
-			branch.addUnit(key, branchUnit);
+			String label = getAttribute(found, LABEL);
+			branch.addUnit(key, label, branchUnit);
 		}
 
 		return branch;
 	}
 
-    private UnitNode createParalleBranchNode(Node node){
+    private UnitNode createParallelBranchNode(Node node){
         ParallelBranchNode branch = new ParallelBranchNode(true);
         branch.setDispatcher((DispatcherNode)createChildNode(node, DISPATCHER));
 
@@ -242,8 +243,9 @@ public class UnitNodeDiagramReader implements UnitConstants {
             Node found = children.item(i);
             UnitNode branchUnit = createUnitNode(found);
             String key = getAttribute(found, KEY);
+			String label = getAttribute(found, LABEL);
             TaskType type = TaskType.valueOf(getAttribute(found, TASK_TYPE));
-            branch.addUnit(key, branchUnit, type);
+            branch.addUnit(key, label, branchUnit, type);
         }
 
         return branch;

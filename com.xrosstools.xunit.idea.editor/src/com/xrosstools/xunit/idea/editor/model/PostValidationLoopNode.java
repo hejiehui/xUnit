@@ -34,7 +34,7 @@ public class PostValidationLoopNode extends BaseLoopNode {
 
     protected void linkUnit(){
         UnitNode unit = getUnit();
-        UnitNodeConnection.linkStart(validator, startPoint, unitsPanel).setPropName(PROP_VALID_LABEL);;
+        UnitNodeConnection.linkStart(validator, startPoint, unitsPanel).setPropName(PROP_VALID_LABEL);
         UnitNodeConnection.linkStart(unit, validator);
         UnitNodeConnection.linkStart(startPoint, unit);
     }

@@ -12,6 +12,7 @@ import java.io.Serializable;
 public class UnitNodeConnection extends PropertySource implements PropertyChangeListener, Serializable {
     private boolean firstHalf;
     private UnitNodePanel byPassed;
+    private String key;
     private String label;
     private UnitNode source;
     private UnitNode target;
@@ -81,10 +82,18 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     }
 
     public IPropertyDescriptor[] getPropertyDescriptors() {
-        if(source instanceof DispatcherNode) {
+        if(isDispatcherLink()) {
             return new IPropertyDescriptor[] {
                     getDescriptor(PROP_TASK_ID),
+                    getDescriptor(PROP_LABEL),
                     getDescriptor(PROP_TASK_TYPE, TaskType.values())
+            };
+        }
+
+        if(isLocatorLink()) {
+            return new IPropertyDescriptor[] {
+                    getDescriptor(PROP_KEY),
+                    getDescriptor(PROP_LABEL)
             };
         }
 
@@ -99,9 +108,9 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     }
 
     public Object getPropertyValue(Object propName) {
+        if (PROP_TASK_ID.equals(propName) || PROP_KEY.equals(propName))
+            return key;
         if (PROP_LABEL.equals(propName))
-            return label;
-        if (PROP_TASK_ID.equals(propName))
             return label;
         if (PROP_TASK_TYPE.equals(propName))
             return taskType.ordinal();
@@ -110,19 +119,17 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     }
 
     public void setPropertyValue(Object propName, Object value){
-        if (PROP_TASK_ID.equals(propName))
-            setLabel((String)value);
+        if (PROP_TASK_ID.equals(propName) || PROP_KEY.equals(propName))
+            setKey((String)value);
         if (PROP_TASK_TYPE.equals(propName))
             setTaskType(TaskType.values()[(Integer)value]);
 
-        if (!PROP_LABEL.equals(propName))
-            return;
-        setLabel((String)value);
+        if (PROP_LABEL.equals(propName)) {
+            setLabel((String)value);
 
-        if(propName == null || !isValidatorLink())
-            return;
-
-        ((IPropertySource)source).setPropertyValue(srcPropName, label);
+            if(isValidatorLink())
+                ((IPropertySource)source).setPropertyValue(srcPropName, label);
+        }
     }
 
     public Object getEditableValue(){
@@ -136,12 +143,28 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     public void resetPropertyValue(Object propName){
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+        this.firePropertyChange(PROP_KEY, null, label);
+    }
+
     public void setLabel(String label){
-        this.label = label;
+        this.label = label == null ? null : label.trim();
         this.firePropertyChange(PROP_LABEL, null, label);
     }
 
     public String getLabel(){
+        return label;
+    }
+
+    public String getDisplayText(){
+        if(isDispatcherLink() || isLocatorLink()) {
+            return label == null || label.length() == 0 ? key : label;
+        }
         return label;
     }
 
@@ -173,8 +196,17 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
         this.taskType = taskType;
         this.firePropertyChange(PROP_TASK_TYPE, null, taskType);
     }
+
     private boolean isValidatorLink(){
         return source != null && source.getType() == BehaviorType.validator;
+    }
+
+    private boolean isLocatorLink(){
+        return source != null && source.getType() == BehaviorType.locator;
+    }
+
+    private boolean isDispatcherLink(){
+        return source != null && source.getType() == BehaviorType.dispatcher;
     }
 
     public void setPropName(String propName){

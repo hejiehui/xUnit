@@ -253,6 +253,17 @@ public abstract class UnitNode extends PropertySource {
             input.setLabel(label);
     }
 
+    public String getInputKey(){
+        UnitNodeConnection input = getInput();
+        return input == null? null : input.getKey();
+    }
+
+    public void setInputKey(String key){
+        UnitNodeConnection input = getInput();
+        if(input != null)
+            input.setKey(key);
+    }
+
     public TaskType getTaskType(){
         UnitNodeConnection input = getInput();
         return input == null? null : input.getTaskType();
