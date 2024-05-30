@@ -14,6 +14,9 @@ public class UnitNodeLayoutPolicy {
         if(!isActionAllowed(target) || !(child.getModel() instanceof UnitNode))
             return null;
 
+        if(child == target)
+            throw new NullPointerException();
+
         return new UnitNodeAddNodeCommand(
 				target.getParent().getModel(),
         		(UnitNode)target.getModel(),

@@ -1,6 +1,7 @@
 package com.xrosstools.xunit.idea.editor;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -9,6 +10,8 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
 import com.xrosstools.xunit.idea.editor.actions.OpenClassAction;
+import com.xrosstools.xunit.idea.editor.commands.Command;
+import com.xrosstools.xunit.idea.editor.commands.CommandStack;
 import com.xrosstools.xunit.idea.editor.commands.DeleteNodeCommand;
 import com.xrosstools.xunit.idea.editor.figures.Connection;
 import com.xrosstools.xunit.idea.editor.figures.Figure;
@@ -24,6 +27,7 @@ import com.xrosstools.xunit.idea.editor.policies.UnitNodeLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.treeparts.TreeEditPart;
 import com.xrosstools.xunit.idea.editor.treeparts.UnitNodeTreePartFactory;
 import com.xrosstools.xunit.idea.editor.util.*;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -63,6 +67,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
     private UnitNodeContainerLayoutPolicy unitNodeContainerLayoutPolicy = new UnitNodeContainerLayoutPolicy();
     private UnitNodeLayoutPolicy nodeLayoutPolicy = new UnitNodeLayoutPolicy();
+
+    private CommandStack commandStack = new CommandStack();
 
     public UnitNodeDiagramPanel(Project project, VirtualFile virtualFile) throws Exception {
         this.project = project;
@@ -128,6 +134,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         innerDiagramPane.getVerticalScrollBar().setUnitIncrement(50);
 
         mainPanel.add(innerDiagramPane, BorderLayout.CENTER);
+        mainPanel.add(createToolbar(),  BorderLayout.NORTH);
 
         return mainPanel;
     }
@@ -157,6 +164,42 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         scrollPane.getVerticalScrollBar().setUnitIncrement(50);
 
         return scrollPane;
+    }
+
+    private JComponent createToolbar() {
+        ActionManager actionManager = ActionManager.getInstance();
+        DefaultActionGroup actionGroup = new DefaultActionGroup();
+
+        actionGroup.add(new AnAction("Undo", "Undo", XrossUnitIcons.Do_while_loop) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+                undo();
+            }
+
+            @Override
+            public void update(AnActionEvent e) {
+                super.update(e);
+                Presentation presentation = e.getPresentation();
+                presentation.setEnabled(commandStack.canUndo());
+            }
+        });
+
+        actionGroup.add(new AnAction("Redo", "Redo", XrossUnitIcons.While_loop) {
+            @Override
+            public void actionPerformed(@NotNull AnActionEvent anActionEvent) {
+                redo();
+            }
+
+            @Override
+            public void update(AnActionEvent e) {
+                super.update(e);
+                Presentation presentation = e.getPresentation();
+                presentation.setEnabled(commandStack.canRedo());
+            }
+        });
+
+        ActionToolbar toolbar = actionManager.createActionToolbar("XrossToolsToolbar", actionGroup, true);
+        return toolbar.getComponent();
     }
 
     private void save() {
@@ -461,14 +504,28 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         return btn;
     }
 
-    private void update(Runnable action) {
-        if(action == null)
+    private void update(Command command) {
+        if(command == null)
             return;
 
-        action.run();
+        commandStack.execute(command);
+        postExecute();
+    }
+
+    private void postExecute() {
         rebuild();
         reset();
         save();
+    }
+
+    private void undo() {
+        commandStack.undo();
+        postExecute();
+    }
+
+    private void redo() {
+        commandStack.redo();
+        postExecute();
     }
 
     private void updateVisual() {
