@@ -4,7 +4,8 @@ import com.xrosstools.xunit.idea.editor.figures.Figure;
 import com.xrosstools.xunit.idea.editor.treeparts.TreeEditPart;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditContext {
     private JComponent contentPane;
@@ -20,6 +21,9 @@ public class EditContext {
 
     public void add(EditPart part, Object model) {
         Trinity trinity = findContent(model);
+
+        if(trinity != null)
+            trinity=trinity;
 
         if(trinity == null) {
             trinity = new Trinity();
@@ -49,6 +53,8 @@ public class EditContext {
     }
 
     public Figure findFigure(Object model) {
+        if(findContent(model) == null)
+            return null;
         return findContent(model).getEditPart().getFigure();
     }
 
@@ -67,4 +73,5 @@ public class EditContext {
         EditPart getEditPart(){return editPart;}
         TreeEditPart getTreeEditPart(){return treeEditPart;}
     }
+
 }

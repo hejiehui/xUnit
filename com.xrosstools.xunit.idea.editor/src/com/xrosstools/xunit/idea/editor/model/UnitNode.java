@@ -345,4 +345,8 @@ public abstract class UnitNode extends PropertySource {
         if(unit != null)
             unit.removeAllOutputs();
     }
+
+    public String toString() {
+        return this.getClass().getName() + ": " + name;
+    }
 }

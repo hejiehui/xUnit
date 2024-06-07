@@ -4,6 +4,7 @@ import com.xrosstools.xunit.idea.editor.commands.Command;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public abstract class WorkbenchPartAction implements ActionListener {
@@ -35,8 +36,7 @@ public abstract class WorkbenchPartAction implements ActionListener {
         if(c == null)
             return;
 
-        c.execute();
-        listener.propertyChange(null);
+        listener.propertyChange(new PropertyChangeEvent(this, null, null, c));
     }
 
     public abstract Command createCommand();

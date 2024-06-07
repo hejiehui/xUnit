@@ -5,12 +5,15 @@ import java.util.Objects;
 public abstract class BaseLoopNode extends CompositeUnitNode {
     protected ValidatorNode validator = new ValidatorNode();
     protected UnitNodePanel unitsPanel = new UnitNodePanel(this, 1);
+    protected UnitNodeConnection emptyConnection = new UnitNodeConnection();
 
     public BaseLoopNode(String name, StructureType structureType){
         super(name, structureType);
+        emptyConnection.setLabel(MSG_EMPTY);
     }
 
     protected abstract void linkUnit();
+    protected abstract void linkByPassConnection();
 
     protected String getCategory(String id) {
         return Objects.equals(id, PROP_CLASS) || Objects.equals(id, PROP_REFERENCE) ?
@@ -19,16 +22,23 @@ public abstract class BaseLoopNode extends CompositeUnitNode {
 
     public final void reconnect(){
         UnitNode unit = getUnit();
+
         removeAllConnections(getStartNode());
         removeAllConnections(getEndNode());
         removeAllConnections(getUnit());
 
-        if(unit == null)
-            UnitNodeConnection.linkStart(getStartNode(), getEndNode(), MSG_EMPTY);
-        else
+        if(unit == null) {
+            linkEmptyConnection();
+        } else {
             linkUnit();
+            linkByPassConnection();
+        }
 
         firePropertyChange(PROP_NODE);
+    }
+
+    public void linkEmptyConnection() {
+        emptyConnection.link(getStartNode(), getEndNode());
     }
 
     public UnitNodeContainer getContainerNode(){

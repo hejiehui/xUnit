@@ -1,21 +1,27 @@
 package com.xrosstools.xunit.idea.editor.commands;
 
-import com.xrosstools.xunit.idea.editor.model.UnitNodeProperties;
+import com.xrosstools.xunit.idea.editor.util.IPropertySource;
+
+import java.beans.PropertyChangeEvent;
 
 public class SetPropertyValueCommand extends Command {
-	private UnitNodeProperties properties;
-	private String key;
-	private String oldValue;
-	private String value;
+	private IPropertySource properties;
+	private Object key;
+	private Object oldValue;
+	private Object value;
 	
 	public SetPropertyValueCommand(
-			UnitNodeProperties properties, 
-			String key,
-			String value){
+			IPropertySource properties,
+			Object key,
+			Object value){
 		this.properties = properties;
 		this.key = key;
 		this.value = value;
-		this.oldValue = properties.getProperty(key);
+		this.oldValue = properties.getPropertyValue(key);
+	}
+
+	public SetPropertyValueCommand(PropertyChangeEvent evt) {
+		this((IPropertySource)evt.getSource(), evt.getPropertyName(), evt.getNewValue());
 	}
 	
 	public void execute() {

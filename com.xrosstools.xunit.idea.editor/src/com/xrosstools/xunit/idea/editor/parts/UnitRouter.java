@@ -37,7 +37,12 @@ public class UnitRouter extends AbstractRouter implements UnitConstants {
     @Override
     public Point locate(PointList pl, Text label) {
         Point p = pl.getPoints() == 3 ? pl.get(1) : pl.get(0);
-        return new Point(p.x + 10, p.y - label.getHeight() - 5);
+        Point p2 = pl.getPoints() == 3 ? pl.get(2) : pl.get(1);
+
+        if(p.x + 20 + label.getWidth() > p2.x)
+            return new Point(p2.x - 10 - label.getWidth(), p2.y - label.getHeight() - 5);
+        else
+            return new Point(p.x + 10, p.y - label.getHeight() - 5);
     }
 
     private void findMiddle(PointList pl, Point start, Point end, boolean firstHalf){

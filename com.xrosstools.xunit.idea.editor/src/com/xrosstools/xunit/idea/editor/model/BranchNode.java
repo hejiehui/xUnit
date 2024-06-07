@@ -17,10 +17,9 @@ public class BranchNode extends CompositeUnitNode {
         this(false);
     }
 
-    public BranchNode(LocatorNode locator, UnitNode unit){
+    public BranchNode(LocatorNode locator){
         this(true);
         setLocator(locator);
-        addUnit("key 1", null, unit);
     }
 
     private void init(){
@@ -34,7 +33,7 @@ public class BranchNode extends CompositeUnitNode {
     }
 
     protected String getCategory(String id) {
-        return id == PROP_CLASS || id == PROP_REFERENCE ?
+        return PROP_CLASS.equals(id) || PROP_REFERENCE.equals(id) ?
                 CATEGORY_OPTIONAL : CATEGORY_COMMON;
     }
 
@@ -51,14 +50,17 @@ public class BranchNode extends CompositeUnitNode {
     public void setLocator(LocatorNode locator) {
         LocatorNode oldLocator = this.locator;
         this.locator = locator;
-        String key;
         for(UnitNode node: unitsPanel.getAll()){
-            key = MSG_NOT_SPECIFIED;
+            String key = MSG_NOT_SPECIFIED;
+            String label = null;
             if(oldLocator != null){
-                key = node.getInputLabel();
+                key = node.getInputKey();
+                label = node.getInputLabel();
                 node.removeAllInputs();
             }
-            UnitNodeConnection.linkStart(locator, node, key);
+            UnitNodeConnection.linkStart(locator, node);
+            node.setInputKey(key);
+            node.setInputLabel(label);
         }
         firePropertyChange(PROP_NODE);
     }
@@ -84,12 +86,14 @@ public class BranchNode extends CompositeUnitNode {
     public void unitAdded(int index, UnitNode unit) {
         unit.removeAllConnections();
         UnitNodeConnection.linkEnd(unit, endPoint);
-        UnitNodeConnection.linkStart(locator, unit, MSG_NOT_SPECIFIED);
+        UnitNodeConnection.linkStart(locator, unit).setKey(UnitConstants.MSG_NOT_SPECIFIED);
         checkLink();
         firePropertyChange(PROP_NODE);
     }
 
     public void unitRemoved(UnitNode unit) {
         unit.removeAllConnections();
+        checkLink();
+        firePropertyChange(PROP_NODE);
     }
 }

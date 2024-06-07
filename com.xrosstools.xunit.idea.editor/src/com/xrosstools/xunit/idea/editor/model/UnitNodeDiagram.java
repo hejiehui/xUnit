@@ -93,14 +93,11 @@ public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer
 
     public void remove(UnitNode unit) {
         units.remove(unit);
+        unit.removeAllConnections();
         firePropertyChange(PROP_NODE, null, null);
     }
 
     public void move(int newIndex, UnitNode unit){
-        int index = units.indexOf(unit);
-        if(index < newIndex)
-            newIndex-=1;
-
         remove(unit);
         add(newIndex, unit);
         firePropertyChange(PROP_NODE, null, null);
@@ -196,7 +193,7 @@ public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer
             setDescription((String)value);
         else if (PACKAGE_ID.equals(id))
             setPackageId((String)value);
-
-        properties.setPropertyValue(id, value);
+        else
+            properties.setPropertyValue(id, value);
     }
 }

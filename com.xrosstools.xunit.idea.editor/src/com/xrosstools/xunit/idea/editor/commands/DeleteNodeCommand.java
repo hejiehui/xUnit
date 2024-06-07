@@ -2,22 +2,24 @@ package com.xrosstools.xunit.idea.editor.commands;
 
 import com.xrosstools.xunit.idea.editor.model.BaseLoopNode;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
+import com.xrosstools.xunit.idea.editor.model.UnitNodeConnection;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeContainer;
 
 public class DeleteNodeCommand extends Command {
-    @Override
-    public void run() {
-        execute();
-    }
-
     private Object parent;
     private UnitNode unit;
     int index = -1;
     boolean removed = false;
 
+    private UnitNodeConnection oldInput;
+    private UnitNodeConnection oldOutput;
+
     public DeleteNodeCommand(Object parent, UnitNode unit){
         this.parent = parent;
         this.unit = unit;
+
+        this.oldInput = unit.getInput();
+        this.oldOutput = unit.getOutput();
     }
     public void execute() {
         if(parent instanceof UnitNodeContainer){
@@ -29,7 +31,7 @@ public class DeleteNodeCommand extends Command {
     }
 
     public String getLabel() {
-        return "delete node";
+        return "Delete node";
     }
 
     public void redo() {
@@ -43,6 +45,8 @@ public class DeleteNodeCommand extends Command {
         if(parent instanceof BaseLoopNode){
             addToLoop();
         }
+
+        UnitNodeConnection.restoreConnections(oldInput, unit, oldOutput);
     }
 
     private void deleteFromContainer(){

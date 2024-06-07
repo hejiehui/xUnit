@@ -4,7 +4,7 @@ import com.xrosstools.xunit.idea.editor.util.IPropertyDescriptor;
 
 public abstract class CompositeUnitNode extends UnitNode {
     private boolean vertical;
-    private StructureType structureType = StructureType.primary;
+    private StructureType structureType;
 
     public CompositeUnitNode(String name, StructureType structureType){
         this(name, structureType, false);

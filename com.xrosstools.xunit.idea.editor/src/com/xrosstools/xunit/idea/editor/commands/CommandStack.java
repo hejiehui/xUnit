@@ -3,13 +3,23 @@ package com.xrosstools.xunit.idea.editor.commands;
 import java.util.Stack;
 
 public class CommandStack {
+    private static class CommandModelPair {
+        Command command;
+        Object model;
+        CommandModelPair(Command command, Object model) {
+            this.command = command;
+            this.model = model;
+        }
+    }
 
-    private Stack<Command> undoStack = new Stack<>();
-    private Stack<Command> redoStack = new Stack<>();
+    private Stack<CommandModelPair> undoStack = new Stack<>();
+    private Stack<CommandModelPair> redoStack = new Stack<>();
 
-    public void execute(Command command) {
+    private Object curModel;
+
+    public void execute(Command command, Object model) {
         command.execute();
-        undoStack.push(command);
+        undoStack.push(new CommandModelPair(command, model));
         redoStack.clear();
     }
 
@@ -17,9 +27,10 @@ public class CommandStack {
         if (undoStack.isEmpty()) {
             return false;
         }
-        Command command = undoStack.pop();
-        redoStack.push(command);
-        command.undo();
+        CommandModelPair pair = undoStack.pop();
+        redoStack.push(pair);
+        pair.command.undo();
+        curModel = pair.model;
         return true;
     }
 
@@ -27,9 +38,10 @@ public class CommandStack {
         if (redoStack.isEmpty()) {
             return false;
         }
-        Command command = redoStack.pop();
-        undoStack.push(command);
-        command.redo();
+        CommandModelPair pair = redoStack.pop();
+        undoStack.push(pair);
+        pair.command.redo();
+        curModel = pair.model;
         return true;
     }
 
@@ -37,7 +49,19 @@ public class CommandStack {
         return !undoStack.isEmpty();
     }
 
+    public String getUndoCommandLabel() {
+        return undoStack.peek().command.getLabel();
+    }
+
     public boolean canRedo() {
         return !redoStack.isEmpty();
+    }
+
+    public String getRedoCommandLabel() {
+        return redoStack.peek().command.getLabel();
+    }
+
+    public Object getCurModel() {
+        return curModel;
     }
 }

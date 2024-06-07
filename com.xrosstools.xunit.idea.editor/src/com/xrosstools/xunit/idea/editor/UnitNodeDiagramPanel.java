@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor;
 
+import com.intellij.codeInsight.template.postfix.templates.ElseExpressionPostfixTemplateBase;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
@@ -10,9 +11,11 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
 import com.xrosstools.xunit.idea.editor.actions.OpenClassAction;
+import com.xrosstools.xunit.idea.editor.actions.WorkbenchPartAction;
 import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.commands.CommandStack;
 import com.xrosstools.xunit.idea.editor.commands.DeleteNodeCommand;
+import com.xrosstools.xunit.idea.editor.commands.SetPropertyValueCommand;
 import com.xrosstools.xunit.idea.editor.figures.Connection;
 import com.xrosstools.xunit.idea.editor.figures.Figure;
 import com.xrosstools.xunit.idea.editor.figures.UnitNodeContainerFigure;
@@ -21,12 +24,14 @@ import com.xrosstools.xunit.idea.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.idea.editor.model.*;
 import com.xrosstools.xunit.idea.editor.parts.EditContext;
 import com.xrosstools.xunit.idea.editor.parts.EditPart;
+import com.xrosstools.xunit.idea.editor.parts.UnitNodeConnectionPart;
 import com.xrosstools.xunit.idea.editor.parts.UnitNodePartFactory;
 import com.xrosstools.xunit.idea.editor.policies.UnitNodeContainerLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.policies.UnitNodeLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.treeparts.TreeEditPart;
 import com.xrosstools.xunit.idea.editor.treeparts.UnitNodeTreePartFactory;
 import com.xrosstools.xunit.idea.editor.util.*;
+import gherkin.lexer.Fi;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -69,6 +74,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     private UnitNodeLayoutPolicy nodeLayoutPolicy = new UnitNodeLayoutPolicy();
 
     private CommandStack commandStack = new CommandStack();
+    private boolean inProcessing;
 
     public UnitNodeDiagramPanel(Project project, VirtualFile virtualFile) throws Exception {
         this.project = project;
@@ -181,6 +187,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                 super.update(e);
                 Presentation presentation = e.getPresentation();
                 presentation.setEnabled(commandStack.canUndo());
+                if(presentation.isEnabled())
+                    presentation.setText("Undo " + commandStack.getUndoCommandLabel());
             }
         });
 
@@ -195,6 +203,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                 super.update(e);
                 Presentation presentation = e.getPresentation();
                 presentation.setEnabled(commandStack.canRedo());
+                if(presentation.isEnabled())
+                    presentation.setText("Redo " + commandStack.getRedoCommandLabel());
             }
         });
 
@@ -229,6 +239,9 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         treeNavigator.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
+                if (inProcessing)
+                    return;
+
                 selectedNode();
             }
         });
@@ -278,12 +291,15 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     private void selectUnit(Object selectedNode) {
         Figure selected = root.getContext().findFigure(selectedNode);
 
-        if(selected == null || selected == lastSelected)
+        if(selected == null) {
+            selectedFigure(root.getFigure());
             return;
+        }
 
         selectedFigure(selected);
 
-        DefaultMutableTreeNode treeNode = treeRoot.findEditPart(selectedNode).getTreeNode();
+        TreeEditPart treePart= treeRoot.findEditPart(selectedNode);
+        DefaultMutableTreeNode treeNode = treePart == null ? null : treePart.getTreeNode();
         if (treeNode != null)
             treeNavigator.setSelectionPath(new TreePath(treeNode.getPath()));
 
@@ -389,11 +405,16 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                 }
 
                 // Drag and drop
-                if (lastSelected != null && lastHover != null && lastSelected != lastHover) {
+                // Drag to itself or child is not allowed
+                if (lastSelected != null && lastHover != null && lastSelected != lastHover && !lastSelected.containsPoint(e.getX(), e.getY())) {
                     updateHover(e);
-                    if (lastHover instanceof UnitNodeDiagramFigure || lastHover instanceof UnitNodeContainerFigure)
-                        update(unitNodeContainerLayoutPolicy.createAddCommand(lastHover, lastSelected.getPart()));
-                    else
+                    if (lastHover instanceof UnitNodeDiagramFigure || lastHover instanceof UnitNodeContainerFigure) {
+                        // In same parent
+                        if(lastHover.getPart() == lastSelected.getPart().getParent())
+                            update(unitNodeContainerLayoutPolicy.createMoveChildCommand(lastHover, lastSelected.getPart()));
+                        else
+                            update(unitNodeContainerLayoutPolicy.createAddCommand(lastHover, lastSelected.getPart()));
+                    } else
                         update(nodeLayoutPolicy.getAddCommand(lastHover.getPart(), lastSelected.getPart()));
                     return;
                 }
@@ -411,7 +432,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
 
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_DELETE :
-                        update(new DeleteNodeCommand(lastSelected.getPart().getParent().getModel(), (UnitNode)lastSelected.getPart().getModel()));
+                        if (lastSelected.getPart().getModel() instanceof UnitNode)
+                            update(new DeleteNodeCommand(lastSelected.getPart().getParent().getModel(), (UnitNode)lastSelected.getPart().getModel()));
                 }
             }
         });
@@ -424,10 +446,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private void selectedFigure(Figure selected) {
-        if(lastSelected == selected)
-            return;
-
-        if(lastSelected != null)
+        if(lastSelected != null && lastSelected != selected)
             lastSelected.setSelected(false);
 
         if(selected != null) {
@@ -462,6 +481,8 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
     }
 
     private void reset() {
+        inProcessing = false;
+
         if(lastSelected != null) {
             lastSelected.setSelected(false);
             lastSelected = null;
@@ -508,41 +529,75 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         if(command == null)
             return;
 
-        commandStack.execute(command);
-        postExecute();
+        Object model = newUnitNode;
+        if(model == null)
+            model = lastSelected == null ? null : lastSelected.getPart().getModel();
+
+        inProcessing = true;
+        commandStack.execute(command, model);
+
+        if(newUnitNode != null)
+            newUnitNode = null;
+
+        postExecute(model);
     }
 
-    private void postExecute() {
+    private void postExecute(Object model) {
         rebuild();
-        reset();
         save();
+        selectUnit(model);
+        inProcessing = false;
+        refresh();
     }
 
     private void undo() {
+        inProcessing = true;
         commandStack.undo();
-        postExecute();
+        postExecute(commandStack.getCurModel());
     }
 
     private void redo() {
+        inProcessing = true;
         commandStack.redo();
-        postExecute();
+        postExecute(commandStack.getCurModel());
     }
 
     private void updateVisual() {
+        if(inProcessing)
+            return;
+
         if(lastSelected!=null) {
-            PropertyTableModel model = new PropertyTableModel((IPropertySource) lastSelected.getPart().getModel(), this);
-            setModel(model);
+          PropertyTableModel model = new PropertyTableModel((IPropertySource) lastSelected.getPart().getModel(), this);
+          setModel(model);
         }
 
+
         int height = unitPanel.getPreferredSize().height;
+        int width = unitPanel.getPreferredSize().width;
         innerDiagramPane.getVerticalScrollBar().setMaximum(height);
+        innerDiagramPane.getHorizontalScrollBar().setMaximum(width);
+
+        if(lastSelected != null) {
+            Figure selected = lastSelected;
+            if(lastSelected instanceof Connection)
+                selected = lastSelected.getPart().findFigure(((UnitNodeConnection)lastSelected.getPart().getModel()).getSource());
+
+            if(selected != root.getFigure()) {
+                adjust(innerDiagramPane.getVerticalScrollBar(), selected.getY(), selected.getHeight());
+                adjust(innerDiagramPane.getHorizontalScrollBar(), selected.getX(), selected.getWidth());
+            }
+        }
+
         repaint();
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        rebuild();
-        save();
+        if(evt.getSource() instanceof WorkbenchPartAction) {
+            update((Command) evt.getNewValue());
+        }else if (evt.getSource() instanceof IPropertySource) {
+            update(new SetPropertyValueCommand(evt));
+        }
     }
 
     private class UnitPanel extends JPanel {

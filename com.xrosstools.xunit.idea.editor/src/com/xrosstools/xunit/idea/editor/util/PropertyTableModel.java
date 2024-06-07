@@ -1,6 +1,7 @@
 package com.xrosstools.xunit.idea.editor.util;
 
 import javax.swing.table.AbstractTableModel;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
@@ -114,7 +115,15 @@ public class PropertyTableModel extends AbstractTableModel {
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        source.setPropertyValue(internalRows.get(rowIndex).propertyName, aValue);
-        listener.propertyChange(null);
+        String propName = String.valueOf(internalRows.get(rowIndex).propertyName);
+
+        if(Objects.equals(aValue, source.getPropertyValue(propName)))
+            return;
+
+        listener.propertyChange(new PropertyChangeEvent(
+                source,
+                propName,
+                source.getPropertyValue(propName),
+                aValue));
     }
 }

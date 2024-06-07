@@ -24,7 +24,7 @@ public class AssignModuleCommand extends Command {
 	}
 	
     public String getLabel() {
-        return "Reference Module";
+        return "Assign reference module";
     }
 
     public void redo() {

@@ -26,13 +26,6 @@ public class ChainNode extends CompositeUnitNode {
         addUnit(createSampleNode("unit 1"));
         addUnit(createSampleNode("unit 2"));
         addUnit(createSampleNode("unit 3"));
-        reconnect();
-    }
-
-    public ChainNode(UnitNode first, UnitNode second){
-        this(true);
-        addUnit(first);
-        addUnit(second);
     }
 
     public ChainNode(){
@@ -54,6 +47,10 @@ public class ChainNode extends CompositeUnitNode {
 
     public void addUnit(UnitNode unit) {
         unitsPanel.add(unit);
+    }
+
+    public void removeUnit(UnitNode unit) {
+        unitsPanel.remove(unit);
     }
 
     public void reconnect(){

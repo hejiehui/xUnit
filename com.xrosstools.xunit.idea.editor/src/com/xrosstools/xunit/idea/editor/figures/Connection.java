@@ -43,6 +43,27 @@ public class Connection extends Figure {
         shape.closePath();
     }
 
+    private void updateLocation() {
+        if(!isSelected())
+            return;
+
+        int x0=0, x1  = 0;
+        int y0=0, y1  = 0;
+
+        for (int x: pl.getXPoints()) {
+            x0 = Math.min(x0, x);
+            x1 = Math.max(x0, x);
+        }
+
+        for (int y: pl.getYPoints()) {
+            y0 = Math.min(y0, y);
+            y1 = Math.max(y0, y);
+        }
+
+        setLocation(x0, y0);
+        setSize(x1 - x0, y1 - y0);
+    }
+
     @Override
     public void paint(Graphics graphics) {
         Stroke s = setLineWidth(graphics, isSelected() ? 2 : 1);
@@ -50,6 +71,7 @@ public class Connection extends Figure {
         AbstractRouter router = connection.getByPassed() == null ? new UnitRouter(getPart()) : new LoopUnitRouter(getPart());
         pl = router.route(connection);
         updatePath();
+//        updateLocation();
 
         String text = connection.getDisplayText();
         if(text != null) {

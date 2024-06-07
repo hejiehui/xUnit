@@ -8,6 +8,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UnitNodeConnection extends PropertySource implements PropertyChangeListener, Serializable {
     private boolean firstHalf;
@@ -40,7 +42,9 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     public static void remove(UnitNode source, UnitNode target){
         if(source == null || target == null)
             return;
-        for(UnitNodeConnection conn: source.getOutputs()){
+
+        List<UnitNodeConnection> candidates = new ArrayList<>(source.getOutputs());
+        for(UnitNodeConnection conn: candidates){
             if(conn.getTarget() == target){
                 source.removeOutput(conn);
             }
@@ -50,7 +54,9 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     public static void remove(UnitNode source, UnitNode target, String label){
         if(source == null || target == null)
             return;
-        for(UnitNodeConnection conn: source.getOutputs()){
+
+        List<UnitNodeConnection> candidates = new ArrayList<>(source.getOutputs());
+        for(UnitNodeConnection conn: candidates){
             if(conn.getTarget() == target){
                 if(label == conn.getLabel() || conn.getLabel() != null && conn.getLabel().equals(label)){
                     source.removeOutput(conn);
@@ -67,6 +73,8 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
                 return true;
         return false;
     }
+
+    public UnitNodeConnection() {}
 
     public UnitNodeConnection(UnitNode source, UnitNode target, String label, UnitNodePanel byPassed, boolean firstHalf){
         if(source == null || target == null || contains(source, target))
@@ -180,6 +188,41 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     public void setTarget(UnitNode target) {
         this.target = target;
     }
+
+    public static void restoreConnections(UnitNodeConnection input, UnitNode unit, UnitNodeConnection output) {
+        if(input == null || output== null)
+            return;
+
+        unit.removeAllConnections();
+        input.restoreInput(unit);
+        output.restoreOutput(unit);
+    }
+
+    public void restore() {
+        if(source == null || target == null)
+            return;
+
+        link(source, target);
+    }
+
+    public void restoreInput(UnitNode unit) {
+        link(source, unit);
+    }
+
+    public void restoreOutput(UnitNode unit) {
+        link(unit, target);
+    }
+
+    public void link(UnitNode source, UnitNode target) {
+        setSource(source);
+        if(!source.getOutputs().contains(this))
+            source.addOutput(this);
+
+        setTarget(target);
+        if(!target.getInputs().contains(this))
+            target.addInput(this);
+
+    }
     public boolean isFirstHalf() {
         return firstHalf;
     }
@@ -188,6 +231,9 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     }
     public UnitNodePanel getByPassed(){
         return byPassed;
+    }
+    public void setByPassed(UnitNodePanel byPassed){
+        this.byPassed = byPassed;
     }
     public TaskType getTaskType() {
         return taskType;

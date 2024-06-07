@@ -17,10 +17,9 @@ public class ParallelBranchNode extends CompositeUnitNode {
         this(false);
     }
 
-    public ParallelBranchNode(DispatcherNode dispatcher, UnitNode unit){
+    public ParallelBranchNode(DispatcherNode dispatcher){
         this(true);
         setDispatcher(dispatcher);
-        addUnit("Task 1", null, unit, TaskType.normal);
     }
     
     private void init(){
@@ -52,14 +51,17 @@ public class ParallelBranchNode extends CompositeUnitNode {
     public void setDispatcher(DispatcherNode dispatcher) {
         DispatcherNode oldDispatcher= this.dispatcher;
         this.dispatcher = dispatcher;
-        String key;
         for(UnitNode node: unitsPanel.getAll()){
-            key = MSG_NOT_SPECIFIED;
+            String key = MSG_NOT_SPECIFIED;
+            String label = null;
             if(oldDispatcher != null){
                 key = node.getInputLabel();
+                label = node.getInputLabel();
                 node.removeAllInputs();
             }
-            UnitNodeConnection.linkStart(dispatcher, node, key);
+            UnitNodeConnection.linkStart(dispatcher, node);
+            node.setInputKey(key);
+            node.setInputLabel(label);
         }
         firePropertyChange(PROP_NODE);
     }
@@ -85,7 +87,7 @@ public class ParallelBranchNode extends CompositeUnitNode {
     public void unitAdded(int index, UnitNode unit) {
         unit.removeAllConnections();
         UnitNodeConnection.linkEnd(unit, endPoint);
-        UnitNodeConnection.linkStart(dispatcher, unit, MSG_NOT_SPECIFIED);
+        UnitNodeConnection.linkStart(dispatcher, unit).setKey(MSG_NOT_SPECIFIED);
         unit.setTaskType(DEFAULT_TASK_TYPE);
         checkLink();
         firePropertyChange(PROP_NODE);

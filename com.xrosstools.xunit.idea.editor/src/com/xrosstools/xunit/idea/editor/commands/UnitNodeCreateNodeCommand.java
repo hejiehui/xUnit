@@ -10,12 +10,20 @@ public class UnitNodeCreateNodeCommand extends Command {
 	private Object parent;
 	private UnitNode unit;
 	private UnitNode newNode;
-	private UnitNode combinedNode;
-	
+	private CompositeUnitNode combinedNode;
+	private UnitNodeConnection input;
+	private UnitNodeConnection output;
+
+	private UnitNodeConnection combinedInput;
+	private UnitNodeConnection combinedOutput;
+
 	public UnitNodeCreateNodeCommand(Object parent, UnitNode unit, UnitNode newNode){
 		this.parent = parent;
 		this.unit = unit;
 		this.newNode = newNode;
+
+		this.input = unit.getInput();
+		this.output = unit.getOutput();
 	}
 	
 	public void execute() {
@@ -29,7 +37,7 @@ public class UnitNodeCreateNodeCommand extends Command {
 	}
 	
     public String getLabel() {
-        return "Create node";
+        return "Create node on node";
     }
 
     public void redo() {
@@ -58,6 +66,16 @@ public class UnitNodeCreateNodeCommand extends Command {
 
     		UnitNodeContainer container = ((CompositeUnitNode)unit).getContainerNode();
     		performed = container.add(newNode);
+
+    		if(!performed)
+    			return;
+
+			if(combinedInput == null) {
+				combinedInput = newNode.getInput();
+				combinedOutput = newNode.getOutput();
+			} else {
+				UnitNodeConnection.restoreConnections(combinedInput, newNode, combinedOutput);
+			}
     	}
     	
     	public void undo(){
@@ -87,10 +105,11 @@ public class UnitNodeCreateNodeCommand extends Command {
     			return;
 
     		int index = container.indexOf(unit);
-    		String label = unit.getInputLabel();
     		container.remove(unit);
     		container.add(index, combineNodes());
-    		combinedNode.setInputLabel(label);
+
+			UnitNodeConnection.restoreConnections(input, combinedNode, output);
+
     		performed = true;
     	}
     	
@@ -99,39 +118,71 @@ public class UnitNodeCreateNodeCommand extends Command {
     		int index = container.indexOf(combinedNode);
     		if(index < 0)
     			return;
-    		
-    		String label = combinedNode.getInputLabel();
+
     		container.remove(combinedNode);
+			combinedNode.getContainerNode().remove(unit);
     		container.add(index, unit);
-    		unit.setInputLabel(label);
-    		performed = false;
+
+			UnitNodeConnection.restoreConnections(input, unit, output);
+
+			performed = false;
     	}
-    	
-    	private UnitNode combineNodes(){
-    		unit.removeAllConnections();
-    		newNode.removeAllConnections();
-    		if(newNode instanceof ValidatorNode)
-    			return combinedNode = new BiBranchNode((ValidatorNode)newNode, unit);
-    		
-    		if(newNode instanceof LocatorNode)
-    			return combinedNode = new BranchNode((LocatorNode)newNode, unit);
 
-			if(newNode instanceof DispatcherNode)
-				return combinedNode = new ParallelBranchNode((DispatcherNode)newNode, unit);
+    	// rename to getCombinedNode?
+    	private CompositeUnitNode combineNodes(){
+    		if(combinedNode == null)
+				combinedNode = createCombinedNode();
 
-    		if(newNode instanceof StartPointNode)
-    			return combinedNode = new PostValidationLoopNode(unit);
-    		
-    		if(newNode instanceof EndPointNode)
-    			return combinedNode = new PreValidationLoopNode(unit);
-    		
-    		if(newNode instanceof ProcessorNode && unit.getType() == BehaviorType.converter)
-    			return combinedNode = new AdapterNode(BehaviorType.processor, unit);
+    		if(combinedNode instanceof BiBranchNode)
+				((BiBranchNode)combinedNode).setValidUnit(unit);
+    		else if(combinedNode instanceof BranchNode)
+				((BranchNode)combinedNode).addUnit("key 1", null, unit);
+			else if(combinedNode instanceof ParallelBranchNode)
+				((ParallelBranchNode)combinedNode).addUnit("Task 1", null, unit, TaskType.normal);
+			else if(combinedNode instanceof BaseLoopNode)
+				((BaseLoopNode)combinedNode).setUnit(unit);
+			else if(combinedNode instanceof AdapterNode && unit.getType() == BehaviorType.converter)
+				((AdapterNode)combinedNode).setUnit(unit);
+    		else {
+    			//ChainNode
+				combinedNode.getContainerNode().add(0, unit);
+			}
 
-    		if(newNode instanceof ConverterNode && unit.getType() == BehaviorType.processor)
-    			return combinedNode = new AdapterNode(BehaviorType.converter, unit);
-    		
-    		return combinedNode = new ChainNode(unit, newNode);
+    		if(combinedInput == null) {
+    			combinedInput = unit.getInput();
+    			combinedOutput = unit.getOutput();
+			} else {
+    			UnitNodeConnection.restoreConnections(combinedInput, unit, combinedOutput);
+			}
+
+    		return combinedNode;
     	}
     }
+
+    private CompositeUnitNode createCombinedNode() {
+		if(newNode instanceof ValidatorNode)
+			return new BiBranchNode((ValidatorNode)newNode);
+
+		if(newNode instanceof LocatorNode)
+			return new BranchNode((LocatorNode)newNode);
+
+		if(newNode instanceof DispatcherNode)
+			return new ParallelBranchNode((DispatcherNode)newNode);
+
+		if(newNode instanceof StartPointNode)
+			return new PostValidationLoopNode(true);
+
+		if(newNode instanceof EndPointNode)
+			return new PreValidationLoopNode(true);
+
+		if(newNode instanceof ProcessorNode && unit.getType() == BehaviorType.converter)
+			return new AdapterNode(BehaviorType.processor);
+
+		if(newNode instanceof ConverterNode && unit.getType() == BehaviorType.processor)
+			return new AdapterNode(BehaviorType.converter);
+
+		ChainNode chain = new ChainNode(true);
+		chain.addUnit(newNode);
+		return chain;
+	}
 }

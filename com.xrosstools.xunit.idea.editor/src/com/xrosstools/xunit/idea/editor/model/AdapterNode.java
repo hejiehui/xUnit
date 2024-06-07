@@ -9,10 +9,9 @@ public class AdapterNode extends CompositeUnitNode {
         super("an adapter", StructureType.adapter, true);
     }
 
-    public AdapterNode(BehaviorType type, UnitNode unit){
+    public AdapterNode(BehaviorType type){
         this();
         setType(type);
-        setUnit(unit);
     }
 
     public String getDefaultImplName(){

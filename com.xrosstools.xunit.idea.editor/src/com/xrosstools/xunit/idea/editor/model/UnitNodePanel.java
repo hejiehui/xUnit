@@ -89,6 +89,10 @@ public class UnitNodePanel implements UnitNodeContainer {
         return fixedSize != size();
     }
 
+    public CompositeUnitNode getParent() {
+        return parent;
+    }
+
     public boolean add(int index, UnitNode unit) {
         if(!checkDropAllowed(index))
             return false;
@@ -103,12 +107,13 @@ public class UnitNodePanel implements UnitNodeContainer {
             else
                 return false;
         }
-        else
+        else {
+            unit.removeAllConnections();
             units.add(index, unit);
+            parent.unitAdded(index, unit);
+            firePropertyChange(PROP_NODE);
+        }
 
-        forceRefresh();
-        parent.unitAdded(index, unit);
-        firePropertyChange(PROP_NODE);
         return true;
     }
 
@@ -131,6 +136,9 @@ public class UnitNodePanel implements UnitNodeContainer {
         if(!checkDropAllowed(index))
             return;
 
+        if(unit != null)
+            unit.removeAllConnections();
+
         units.set(index, unit);
         parent.unitSet(index, unit);
         firePropertyChange(PROP_NODE);
@@ -145,6 +153,7 @@ public class UnitNodePanel implements UnitNodeContainer {
         else
             units.remove(unit);
 
+        unit.removeAllConnections();
         parent.unitRemoved(unit);
         firePropertyChange(PROP_NODE);
     }
@@ -152,39 +161,24 @@ public class UnitNodePanel implements UnitNodeContainer {
     public void move(int newIndex, UnitNode unit){
         // For non fixed size or full fixed size
         if(!isFixedSize()){
-            UnitNode after = newIndex < units.size() ? units.get(newIndex) : null;
+            // No connection change
             units.remove(unit);
-            units.add(after == null ? units.size() : units.indexOf(after), unit);
+            units.add(newIndex, unit);
         }else{
             // just switch. should only be the bi-branch case
             Collections.reverse(units);
         }
 
-        forceRefresh();
         parent.unitMoved(unit);
         firePropertyChange(PROP_NODE);
     }
 
-    private void forceRefresh(){
-        if(!isFixedSize())
-            return;
-
-        List<UnitNode> tmpUnits = new ArrayList<UnitNode>(units);
-        // Force
-        for(int i = 0; i < fixedSize; i++)
-            units.set(i, null);
-        firePropertyChange(PROP_NODE);
-        for(int i = 0; i < fixedSize; i++)
-            units.set(i, tmpUnits.get(i));
-        firePropertyChange(PROP_NODE);
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        listeners.addPropertyChangeListener(listener);
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener lilistener) {
-        listeners.addPropertyChangeListener(lilistener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener lilistener) {
-        listeners.removePropertyChangeListener(lilistener);
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        listeners.removePropertyChangeListener(listener);
     }
 }
 
