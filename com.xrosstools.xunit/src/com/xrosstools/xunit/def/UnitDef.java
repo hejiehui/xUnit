@@ -6,6 +6,7 @@ import com.xrosstools.xunit.ApplicationPropertiesAware;
 import com.xrosstools.xunit.BehaviorType;
 import com.xrosstools.xunit.Converter;
 import com.xrosstools.xunit.Processor;
+import com.xrosstools.xunit.XunitSpring;
 import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.Unit;
 import com.xrosstools.xunit.UnitDefinition;
@@ -17,6 +18,17 @@ import com.xrosstools.xunit.impl.DefaultUnitImpl;
 import com.xrosstools.xunit.impl.ProcessorEnforcer;
 
 public class UnitDef {
+	private static boolean enableSpring;
+	
+	static {
+		try {
+			Class.forName("org.springframework.context.ApplicationContext");
+			enableSpring = true;
+		} catch (ClassNotFoundException e) {
+			enableSpring = false;
+		}
+	}
+	
 	protected UnitDefRepo repo;
 	private String name;
 	private BehaviorType type;
@@ -136,9 +148,15 @@ public class UnitDef {
 	}
 
 	protected Unit createInstance() throws Exception{
-	    Unit unit;
+	    Unit unit = null;
 		if(!isEmpty(className)){
-		    return setAware((Unit)Class.forName(className).newInstance());
+			if(enableSpring)
+				unit = XunitSpring.getBean(className);
+
+			if(unit == null)
+				unit = (Unit)Class.forName(className).getDeclaredConstructor().newInstance();
+
+		    return setAware(unit);
 		}
 		
 		if(!isEmpty(referenceName))
