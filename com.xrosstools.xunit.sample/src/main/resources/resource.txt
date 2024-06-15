@@ -1,1 +1,1 @@
-my test content for spring
+xunit support spring now from release 2.3.0

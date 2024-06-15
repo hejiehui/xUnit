@@ -7,7 +7,7 @@ import com.xrosstools.xunit.Context;
 import com.xrosstools.xunit.Processor;
 
 @Component
-public class UserInfoProcessor implements Processor {
+public class BestBuyerProcessor implements Processor {
 	@Autowired
 	Promotion promotion;
 

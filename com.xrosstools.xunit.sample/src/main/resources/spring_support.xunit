@@ -6,8 +6,11 @@
   <bi_branch class="default" description="" name="test" type="processor">
    <validator class="com.xrosstools.xunit.sample.spring.UserValidator" description="" invalidLabel="false" module="" name="validator" reference="" validLabel="true"/>
    <valid_unit>
-    <processor class="com.xrosstools.xunit.sample.spring.UserInfoProcessor" description="" module="" name="processor" reference=""/>
+    <processor class="com.xrosstools.xunit.sample.spring.BestBuyerProcessor" description="" module="" name="processor" reference=""/>
    </valid_unit>
+   <invalid_unit>
+    <processor class="com.xrosstools.xunit.sample.spring.NormalBuyerProcessor" description="" module="" name="processor" reference=""/>
+   </invalid_unit>
   </bi_branch>
  </units>
 </xunit>
