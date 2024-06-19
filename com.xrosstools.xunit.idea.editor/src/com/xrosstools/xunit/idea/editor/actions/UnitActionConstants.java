@@ -15,6 +15,7 @@ public interface UnitActionConstants {
 	String ASSIGN_CLASS = "Assign implementation class";
 	String OPEN_CLASS = "Open implementation class";
 	String ASSIGN_DEFAULT_CLASS = "Set implementation to \"default\"";
+	String REFERENCE_METHOD_MSG = "Refer to ";
 	String ASSIGN_MODULE = "Reference module";
 	String ASSIGN_TO_MODULE = "Reference to module ...";
 	String ASSIGN_REFERENCE = "Reference to unit";

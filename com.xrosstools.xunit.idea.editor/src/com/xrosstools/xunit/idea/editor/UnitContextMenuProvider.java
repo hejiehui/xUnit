@@ -2,6 +2,7 @@ package com.xrosstools.xunit.idea.editor;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.intellij.openapi.project.Project;
@@ -42,6 +43,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     	UnitNode node = (UnitNode)nodePart.getModel();
     	menu.add(createItem(new AssignClassNameAction(project, nodePart)));
     	menu.add(createItem(new OpenClassAction(project, nodePart)));
+		addMethodAction(project, menu, node);
     	menu.addSeparator();
     	menu.add(createItem(new AssignDefaultAction(node)));
 
@@ -49,6 +51,18 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     	
     	addPropertiesActions(project, menu, node);
     }
+
+	private void addMethodAction(Project project, JPopupMenu menu, UnitNode node) {
+    	if(!ChangeMethodAction.isMethodSupported(node) || MSG_DEFAULT.equals(node.getClassName()))
+    		return;
+
+		JMenu methodMenu = new JMenu(REFERENCE_METHOD_MSG + node.getMethodName());
+		methodMenu.add(createItem(new ChangeMethodAction(node, XunitConstants.DEFAULT_METHOD)));
+		for(String m: ChangeMethodAction.getMethods(project, node.getClassNamePart())) {
+			methodMenu .add(createItem(new ChangeMethodAction(node, m)));
+		}
+		menu.add(methodMenu);
+	}
 
     private void addReferenceAction(Project project, JPopupMenu menu, UnitNode node, UnitNodeDiagram diagram) {
         if(!node.isReferenceAllowed())

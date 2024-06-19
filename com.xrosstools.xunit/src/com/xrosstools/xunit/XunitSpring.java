@@ -15,12 +15,12 @@ public class XunitSpring implements ApplicationContextAware {
         }
     }
   
-    public static Unit getBean(String className) throws ClassNotFoundException {
+    public static Object getBean(String className) throws ClassNotFoundException {
     	if(applicationContext == null)
     		return null;
 
     	try {
-    		return (Unit)applicationContext.getBean(Class.forName(className));
+    		return applicationContext.getBean(Class.forName(className));
     	}catch(BeansException e) {
     		return null;
     	}

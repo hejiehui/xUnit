@@ -49,4 +49,6 @@ public interface XunitConstants {
     String DO_WHILE = "do_while";
     String LOOP_UNIT = "loop_unit";
     String PROPERTY_KEY_PREFIX = "PROP_KEY";
+    String SEPARATOR = "::";
+    String DEFAULT_METHOD = "#default";
 }

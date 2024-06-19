@@ -10,6 +10,8 @@ import org.junit.runners.Suite.SuiteClasses;
     XunitBasicTest.class,
     MapContextTest.class,
     ParallelTest.class,
+    UnitMethodSupportTest.class,
+    UnitMethodSpringSupportTest.class,
 })
 public class AllTests {
 

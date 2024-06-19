@@ -6,18 +6,19 @@ import com.xrosstools.xunit.ApplicationPropertiesAware;
 import com.xrosstools.xunit.BehaviorType;
 import com.xrosstools.xunit.Converter;
 import com.xrosstools.xunit.Processor;
-import com.xrosstools.xunit.XunitSpring;
 import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.Unit;
 import com.xrosstools.xunit.UnitDefinition;
 import com.xrosstools.xunit.UnitDefinitionAware;
 import com.xrosstools.xunit.UnitPropertiesAware;
+import com.xrosstools.xunit.XunitConstants;
 import com.xrosstools.xunit.XunitFactory;
+import com.xrosstools.xunit.XunitSpring;
 import com.xrosstools.xunit.impl.ConverterEnforcer;
 import com.xrosstools.xunit.impl.DefaultUnitImpl;
 import com.xrosstools.xunit.impl.ProcessorEnforcer;
 
-public class UnitDef {
+public class UnitDef implements XunitConstants {
 	private static boolean enableSpring;
 	
 	static {
@@ -35,7 +36,7 @@ public class UnitDef {
 	private String description;
 	private boolean singleton;
 	private Unit instance;
-	private String className;
+	private String classMethodName;
 	private String moduleName;
 	private String referenceName;
 	private String key;
@@ -96,11 +97,11 @@ public class UnitDef {
 	}
 
 	public String getClassName() {
-		return className;
+		return classMethodName;
 	}
 
 	public void setClassName(String className) {
-		this.className = className;
+		this.classMethodName = className;
 	}
 
 	public String getModuleName() {
@@ -140,7 +141,7 @@ public class UnitDef {
 	    ud.setType(type);
 	    ud.setDescription(description);
 	    ud.setSingleton(singleton);
-	    ud.setClassName(className);
+	    ud.setClassName(classMethodName);
 	    ud.setKey(key);
 	    ud.setTaskType(taskType);
 
@@ -148,24 +149,36 @@ public class UnitDef {
 	}
 
 	protected Unit createInstance() throws Exception{
-	    Unit unit = null;
-		if(!isEmpty(className)){
+		if(!isEmpty(classMethodName)){
+			String className = classMethodName;
+			String methodName = null;
+			if(classMethodName.contains(SEPARATOR)) {
+				String[] parts = classMethodName.split(SEPARATOR);
+				className = parts[0];
+				methodName = parts[1];
+			}
+
+		    Object unit = null;
 			if(enableSpring)
 				unit = XunitSpring.getBean(className);
 
 			if(unit == null)
-				unit = (Unit)Class.forName(className).getDeclaredConstructor().newInstance();
-
-		    return setAware(unit);
+				unit = Class.forName(className).getDeclaredConstructor().newInstance();
+			
+			setAware(unit);
+			
+			return methodName == null ? (Unit)unit : UnitMethodWrapper.create(type, unit, methodName);
 		}
 		
 		if(!isEmpty(referenceName))
 			return createReferenceInsance();
 		
-		return setAware(createDefault());
+		Unit unit = createDefault();
+		setAware(unit);
+		return unit;
 	}
 	
-	private Unit setAware(Unit unit) {
+	private void setAware(Object unit) {
         if(unit instanceof ApplicationPropertiesAware){
             ApplicationPropertiesAware aware = (ApplicationPropertiesAware)unit;
             // Make a copy
@@ -182,8 +195,6 @@ public class UnitDef {
             UnitDefinitionAware aware = (UnitDefinitionAware)unit;
             aware.setUnitDefinition(createDefinition());
         }
-
-        return unit;
 	}
 	
 	protected Unit createReferenceInsance() throws Exception{

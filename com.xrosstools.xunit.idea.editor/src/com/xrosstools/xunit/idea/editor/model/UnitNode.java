@@ -8,7 +8,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UnitNode extends PropertySource {
+public abstract class UnitNode extends PropertySource implements XunitConstants {
     private String name;
     private String description;
 
@@ -33,7 +33,7 @@ public abstract class UnitNode extends PropertySource {
 
     public String getImplClassName(){
         if(className == null || !MSG_DEFAULT.equalsIgnoreCase(className))
-            return className;
+            return getClassNamePart();
 
         return getDefaultImplName();
     }
@@ -185,6 +185,14 @@ public abstract class UnitNode extends PropertySource {
         return className;
     }
 
+    public String getClassNamePart() {
+        return className.contains(SEPARATOR) ? className.split(SEPARATOR)[0] : className;
+    }
+
+    public String getMethodName() {
+        return className.contains(SEPARATOR) ? className.split(SEPARATOR)[1] : DEFAULT_METHOD;
+    }
+
     public boolean isValid(String value){
         if(value == null)
             return false;
@@ -220,6 +228,13 @@ public abstract class UnitNode extends PropertySource {
             this.className = className;
         }
         firePropertyChange(PROP_NODE);
+    }
+
+    public void setMethodName(String methodName) {
+        if(DEFAULT_METHOD.equals(methodName) || methodName == null || methodName.trim().length() == 0)
+            setClassName(getClassName().split(SEPARATOR)[0]);
+        else
+            setClassName(getImplClassName() + SEPARATOR + methodName);
     }
 
     public String getReferenceName() {

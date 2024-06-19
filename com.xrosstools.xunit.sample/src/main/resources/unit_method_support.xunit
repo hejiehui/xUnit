@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xunit description="" name="" packageId="">
+ <properties>
+  <property key="stringValue" value="key1"/>
+  <property key="intValue" value="100"/>
+ </properties>
+ <units>
+  <processor class="com.xrosstools.xunit.sample.UnitMethodSupport::processMethod" description="" module="" name="processor" reference="">
+   <property key="stringValue" value="abc"/>
+  </processor>
+  <converter class="com.xrosstools.xunit.sample.UnitMethodSupport::convertMethod" description="" module="" name="converter" reference="">
+   <property key="intValue" value="123"/>
+  </converter>
+  <bi_branch class="default" description="" name="validator" type="processor">
+   <validator class="com.xrosstools.xunit.sample.UnitMethodSupport::validateMethod" description="" invalidLabel="false" module="" name="validator" reference="" validLabel="true">
+    <property key="booleanValue" value="true"/>
+   </validator>
+   <valid_unit>
+    <processor class="com.xrosstools.xunit.sample.UnitMethodSupport::processMethod" description="" module="" name="valid node" reference="">
+     <property key="stringValue" value="true"/>
+    </processor>
+   </valid_unit>
+   <invalid_unit>
+    <processor class="default" description="" module="" name="invalide node" reference=""/>
+   </invalid_unit>
+  </bi_branch>
+  <branch class="default" description="" name="locator" type="converter">
+   <locator class="com.xrosstools.xunit.sample.UnitMethodSupport::locateMethodApp" default_key="" description="" module="" name="locator" reference=""/>
+   <branch_unit key="key1" label="">
+    <converter class="com.xrosstools.xunit.sample.UnitMethodSupport::convertMethodApp" description="" module="" name="converter" reference=""/>
+   </branch_unit>
+   <branch_unit key="key2" label="">
+    <processor class="default" description="" module="" name="node 2" reference=""/>
+   </branch_unit>
+   <branch_unit key="key3" label="">
+    <processor class="default" description="" module="" name="node 3" reference=""/>
+   </branch_unit>
+  </branch>
+ </units>
+</xunit>
