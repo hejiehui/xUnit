@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xunit.editor</id>
   <name>Xross Unit Editor</name>
-  <version>2.2.1</version>
+  <version>2.3.0</version>
   <vendor email="he_jiehui@163.com" url="https://www.xrosstools.com">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -11,6 +11,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>2.3.0</em> Support delegate unit behavior to noe-default method.<br>
       <em>2.2.1</em> Fix undo and redo bug and optimize branch label location when it is too long.<br>
       <em>2.2.0</em> Add toolbar to support undo and redo.<br>
       <em>2.1.0</em> Support new attribute: "key" for branch and parallel branch. Allowing connection selection via label.<br>
