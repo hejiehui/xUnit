@@ -129,6 +129,48 @@ public class XunitFactory implements XunitConstants {
 	public Converter getConverter(String id) throws Exception{
 		return (Converter)getUnit(id);
 	}
+	
+	public ProcessorCreator processorCreator(String id) {
+		return new ProcessorCreator(this, id);
+	}
+	
+	public ConverterCreator converterCreator(String id) {
+		return new ConverterCreator(this, id);
+	}
+	
+	private static class UnitCreator {
+	    protected XunitFactory factory;
+	    protected String id;
+
+	    public UnitCreator(XunitFactory factory, String id) {
+	        this.factory = factory;
+	        this.id = id;
+	    }
+
+	    public String getId() {
+	    	return id;
+	    }
+	}
+
+	public static class ProcessorCreator extends UnitCreator {
+	    public ProcessorCreator(XunitFactory factory, String id) {
+	        super(factory, id);
+	    }
+
+	    public Processor create() throws Exception {
+	        return factory.getProcessor(id);
+	    }
+	}
+
+	public static class ConverterCreator extends UnitCreator {
+	    public ConverterCreator(XunitFactory factory, String id) {
+	    	super(factory, id);
+	    }
+
+	    public Converter create() throws Exception {
+	        return factory.getConverter(id);
+	    }
+	}
 
 	private static XunitFactory getFromDocument(Document doc){
 		XunitFactory factory = new XunitFactory();
