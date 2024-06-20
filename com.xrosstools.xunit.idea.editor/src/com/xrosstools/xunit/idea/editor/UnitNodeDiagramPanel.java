@@ -1,6 +1,5 @@
 package com.xrosstools.xunit.idea.editor;
 
-import com.intellij.codeInsight.template.postfix.templates.ElseExpressionPostfixTemplateBase;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
@@ -10,6 +9,8 @@ import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
+import com.xrosstools.xunit.idea.editor.actions.GenerateHelperAction;
+import com.xrosstools.xunit.idea.editor.actions.GenerateTestAction;
 import com.xrosstools.xunit.idea.editor.actions.OpenClassAction;
 import com.xrosstools.xunit.idea.editor.actions.WorkbenchPartAction;
 import com.xrosstools.xunit.idea.editor.commands.Command;
@@ -24,14 +25,12 @@ import com.xrosstools.xunit.idea.editor.io.UnitNodeDiagramFactory;
 import com.xrosstools.xunit.idea.editor.model.*;
 import com.xrosstools.xunit.idea.editor.parts.EditContext;
 import com.xrosstools.xunit.idea.editor.parts.EditPart;
-import com.xrosstools.xunit.idea.editor.parts.UnitNodeConnectionPart;
 import com.xrosstools.xunit.idea.editor.parts.UnitNodePartFactory;
 import com.xrosstools.xunit.idea.editor.policies.UnitNodeContainerLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.policies.UnitNodeLayoutPolicy;
 import com.xrosstools.xunit.idea.editor.treeparts.TreeEditPart;
 import com.xrosstools.xunit.idea.editor.treeparts.UnitNodeTreePartFactory;
 import com.xrosstools.xunit.idea.editor.util.*;
-import gherkin.lexer.Fi;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -130,6 +129,11 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         toolbar.add(createButton("End", XrossUnitIcons.End_point, EndPointNode.class));
         toolbar.add(createButton("Decorator", XrossUnitIcons.Decorator, DecoratorNode.class));
         toolbar.add(createButton("Adapter", XrossUnitIcons.Adapter, AdapterNode.class));
+
+        //Add code gen
+        toolbar.add(createPaletteButton(new GenerateHelperAction(project, virtualFile, diagram), XrossUnitIcons.GENERATE_HLPER, GENERATE_HELPER));
+        toolbar.add(createPaletteButton(new GenerateTestAction(diagram), XrossUnitIcons.GENERATE_TEST, GENERATE_TEST));
+
         mainPanel.add(toolbar, BorderLayout.WEST);
 
         unitPanel = new UnitPanel();
@@ -522,6 +526,12 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
                 }
             }
         });
+        return btn;
+    }
+    public JButton createPaletteButton(ActionListener action, Icon icon, String tooltip) {
+        JButton btn = new JButton(tooltip, icon);
+        btn.setContentAreaFilled(false);
+        btn.addActionListener(action);
         return btn;
     }
 

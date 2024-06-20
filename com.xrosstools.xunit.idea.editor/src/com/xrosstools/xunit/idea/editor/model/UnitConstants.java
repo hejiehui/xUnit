@@ -69,4 +69,7 @@ public interface UnitConstants extends XunitConstants {
     String DEFAULT_DO_WHILE_LOOP_IMPL = "com.xrosstools.xunit.impl.PostValidationLoopImpl";
     String DEFAULT_DECORATOR_IMPL = DEFAULT_PRIMARY_IMPL;
     String DEFAULT_ADAPTER_IMPL = DEFAULT_PRIMARY_IMPL;
+
+    String GENERATE_HELPER = "Generate helper";
+    String GENERATE_TEST = "Generate test";
 }

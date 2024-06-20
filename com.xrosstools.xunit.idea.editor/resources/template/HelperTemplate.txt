@@ -1,0 +1,35 @@
+package !PACKAGE!;
+
+import com.xrosstools.xunit.XunitFactory;
+import static com.xrosstools.xunit.XunitFactory.ProcessorCreator;
+import static com.xrosstools.xunit.XunitFactory.ConverterCreator;
+
+/**
+    IMPORTANT NOTE!
+    This is generated code based on Xross Unit model file !MODEL_FILE!.
+    In case the model file changes, regenerate this file.
+    Do Not Modify It.
+
+    !DESCRIPTION!
+
+    Last generated time:
+    !LAST_GENERATE_TIME!
+*/
+public class !TEST_CLASS! {
+!XUNIT_DEFINITIONS!
+    private static volatile XunitFactory factory;
+    private static XunitFactory load() {
+        if(factory == null) {
+            synchronized(!TEST_CLASS!.class) {
+                if(factory == null) {
+                    try {
+                        factory = XunitFactory.load("!MODEL_PATH!");
+                    } catch(Exception e) {
+                        throw new IllegalArgumentException(e);
+                    }
+                }
+            }
+        }
+        return factory;
+    }
+}

@@ -22,4 +22,7 @@ public interface  XrossUnitIcons {
     Icon While_loop = IconLoader.getIcon(Activator.getIconPath(Activator.WHILE), XrossUnitIcons.class);
     Icon Do_while_loop = IconLoader.getIcon(Activator.getIconPath(Activator.DO_WHILE), XrossUnitIcons.class);
     Icon Parallel_branch = IconLoader.getIcon(Activator.getIconPath(Activator.PARALLEL_BRANCH), XrossUnitIcons.class);
+
+    Icon GENERATE_HLPER = IconLoader.getIcon("/icons/generate_helper.png", XrossUnitIcons.class);
+    Icon GENERATE_TEST = IconLoader.getIcon("/icons/generate_test.png", XrossUnitIcons.class);
 }
