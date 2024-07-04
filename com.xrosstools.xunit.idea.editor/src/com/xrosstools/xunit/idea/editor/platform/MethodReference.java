@@ -48,4 +48,8 @@ public class MethodReference extends PsiReferenceBase implements PsiPolyVariantR
         value.getParent().replace(attribute);
         return attribute;
     }
+
+    public Object[] getVariants() {
+        return new Object[0];
+    }
 }

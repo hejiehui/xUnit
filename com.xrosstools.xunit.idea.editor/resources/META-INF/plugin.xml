@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xunit.editor</id>
   <name>Xross Unit Editor</name>
-  <version>2.5.0</version>
+  <version>2.5.1</version>
   <vendor email="he_jiehui@163.com" url="https://www.xrosstools.com">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -11,6 +11,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>2.5.1</em> Minor fix for class and method reference implementation.<br>
       <em>2.5.0</em> Support find usage/rename actions for class and method used in model file.<br>
       <em>2.4.1</em> Optimize unit test skeleton.<br>
       <em>2.4.0</em> Support generate helper class and unit test skeleton.<br>

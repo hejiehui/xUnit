@@ -18,11 +18,16 @@ public class ClassReference extends PsiReferenceBase implements PsiReference {
     public PsiElement resolve() {
         PsiElement element = getElement();
         return element;
-//        Project project = element.getProject();
+//        Project project = getElement().getProject();
 //        PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(className, GlobalSearchScope.allScope(project));
 //
-//        if (psiClass == null) return null;
+//        if (psiClass == null)
+//            return null;
 //
 //        return psiClass;
+    }
+
+    public Object[] getVariants() {
+        return new Object[0];
     }
 }
