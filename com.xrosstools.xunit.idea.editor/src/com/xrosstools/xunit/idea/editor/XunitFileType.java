@@ -1,19 +1,24 @@
 package com.xrosstools.xunit.idea.editor;
 
-import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.ide.highlighter.XmlLikeFileType;
+import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class XunitFileType implements FileType {
+public class XunitFileType extends XmlLikeFileType {
     public static final String NAME = "Xross Unit Model File";
     public static final String DESCRIPTION = "Xross Unit Model File";//A rapid system builder based on flow diagram";
     public static final String EXTENSION = "xunit";
     public static final Icon ICON = XrossUnitIcons.Chain;
 
     public static final XunitFileType INSTANCE = new XunitFileType();
+
+    protected XunitFileType() {
+        super(XMLLanguage.INSTANCE);
+    }
 
     @NotNull
     @Override
@@ -38,11 +43,11 @@ public class XunitFileType implements FileType {
     public Icon getIcon() {
         return ICON;
     }
-
-    @Override
-    public boolean isBinary() {
-        return false;
-    }
+//
+//    @Override
+//    public boolean isBinary() {
+//        return false;
+//    }
 
     @Override
     public boolean isReadOnly() {

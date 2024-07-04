@@ -50,7 +50,7 @@ public class UnitNodeDiagramFactory implements UnitConstants {
 	public UnitNodeDiagram getFromDocument(Document doc){
 		return reader.getFromDocument(doc);
 	}
-	
+
 	public Document writeToDocument(UnitNodeDiagram model){
 		return writer.writeToDocument(model);
 	}

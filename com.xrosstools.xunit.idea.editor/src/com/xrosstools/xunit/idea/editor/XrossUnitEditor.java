@@ -1,26 +1,24 @@
 package com.xrosstools.xunit.idea.editor;
 
 import com.intellij.codeHighlighting.BackgroundEditorHighlighter;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorLocation;
-import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.fileEditor.FileEditorState;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.xrosstools.xunit.idea.editor.io.UnitNodeDiagramFactory;
-import com.xrosstools.xunit.idea.editor.model.UnitNodeDiagram;
-import com.xrosstools.xunit.idea.editor.parts.EditContext;
-import com.xrosstools.xunit.idea.editor.parts.EditPart;
-import com.xrosstools.xunit.idea.editor.parts.UnitNodePartFactory;
+import com.intellij.openapi.vfs.VirtualFileEvent;
+import com.intellij.openapi.vfs.VirtualFileListener;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.beans.PropertyChangeListener;
 
-public class XrossUnitEditor implements FileEditor, FileEditorManagerListener {
+public class XrossUnitEditor extends PsiTreeChangeAdapter implements FileEditor, VirtualFileListener {
     private Project project;
     private VirtualFile virtualFile;
     private JComponent panel;
@@ -28,6 +26,8 @@ public class XrossUnitEditor implements FileEditor, FileEditorManagerListener {
     public XrossUnitEditor(Project project, VirtualFile virtualFile) {
         this.project = project;
         this.virtualFile = virtualFile;
+        PsiManager.getInstance(project).addPsiTreeChangeListener(this);
+        VirtualFileManager.getInstance().addVirtualFileListener(this);
     }
 
     public void select(String name) {
@@ -61,7 +61,53 @@ public class XrossUnitEditor implements FileEditor, FileEditorManagerListener {
         return "Xunit designer";
     }
 
+    private void refresh() {
+        ((UnitNodeDiagramPanel)panel).contentsChanged();
+    }
+
     @Override
+    public void contentsChanged(VirtualFileEvent event) {
+        if(event.getFile() == virtualFile)
+            refresh();
+    }
+
+    @Override
+    public void childReplaced(PsiTreeChangeEvent event) {
+
+        PsiElement oldChild = event.getOldChild();
+        PsiElement newChild = event.getNewChild();
+
+        if (oldChild instanceof PsiIdentifier && newChild instanceof PsiIdentifier) {
+            PsiIdentifier oldMethod = (PsiIdentifier) oldChild;
+            PsiIdentifier newMethod = (PsiIdentifier) newChild;
+
+            if (!oldMethod.getText().equals(newMethod.getText())) {
+                FileDocumentManager.getInstance().saveAllDocuments();
+            }
+        }
+    }
+
+    public void childrenChanged(@NotNull PsiTreeChangeEvent event) {
+        FileDocumentManager.getInstance().saveAllDocuments();
+    }
+
+    @Override
+    public void propertyChanged(@NotNull PsiTreeChangeEvent event) {
+        if (PsiTreeChangeEvent.PROP_FILE_NAME.equals(event.getPropertyName())) {
+            PsiElement element = event.getElement();
+            if (element instanceof PsiNamedElement && element.isValid()) {
+                if(element instanceof PsiJavaFile) {
+                    PsiClass[] classes = ((PsiJavaFile)element).getClasses();
+                    if(classes.length > 0) {
+                        FileDocumentManager.getInstance().saveAllDocuments();
+                        refresh();
+                    }
+                }
+            }
+        }
+    }
+
+        @Override
     public void setState(@NotNull FileEditorState fileEditorState) {
     }
 
@@ -82,7 +128,6 @@ public class XrossUnitEditor implements FileEditor, FileEditorManagerListener {
 
     @Override
     public void deselectNotify() {
-
     }
 
     @Override

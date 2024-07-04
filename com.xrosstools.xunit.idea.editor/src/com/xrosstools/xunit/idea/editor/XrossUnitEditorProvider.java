@@ -1,11 +1,14 @@
 package com.xrosstools.xunit.idea.editor;
 
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
 import com.intellij.openapi.fileEditor.FileEditorProvider;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.PsiDocumentManager;
 import org.jetbrains.annotations.NotNull;
 
 public class XrossUnitEditorProvider implements FileEditorProvider, DumbAware {
@@ -17,6 +20,7 @@ public class XrossUnitEditorProvider implements FileEditorProvider, DumbAware {
     @NotNull
     @Override
     public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
+        FileDocumentManager.getInstance().saveAllDocuments();
         return new XrossUnitEditor(project, virtualFile);
     }
 

@@ -19,18 +19,18 @@ public class GenerateTestAction extends WorkbenchPartAction {
 
     private static final String PROCESSOR_CASE_BODY =
             "        Processor processor = %1$s.create();\n" +  //unit
-            "        Context ctx = null;//new XxxContext();\n" +
+            "        Context ctx = new Context();\n" +
             "        processor.process(ctx);\n" +
             "        Object expected = null;\n" +
-            "        assertEquals(expected, ctx.getXxx());\n" + //machine, next node
+            "        assertEquals(expected, ctx.get());\n" + //machine, next node
             "    }\n\n";
 
     private static final String CONVERTER_CASE_BODY =
             "        Converter converter = %1$s.create();\n" +  //unit
-            "        Context ctx = null;//new XxxContext();\n" +
-            "        converter.convert(ctx);\n" +
+            "        Context ctx = new Context();\n" +
+            "        NewContext result = (NewContext)converter.convert(ctx);\n" +
             "        Object expected = null;\n" +
-            "        assertEquals(expected, ctx.getXxx());\n" + //machine, next node
+            "        assertEquals(expected, result.get());\n" + //machine, next node
             "    }\n\n";
 
     private UnitNodeDiagram diagram;

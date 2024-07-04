@@ -32,7 +32,10 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
     public abstract String getDefaultImplName();
 
     public String getImplClassName(){
-        if(className == null || !MSG_DEFAULT.equalsIgnoreCase(className))
+        if(className == null)
+            return null;
+
+        if(!MSG_DEFAULT.equalsIgnoreCase(className))
             return getClassNamePart();
 
         return getDefaultImplName();
@@ -186,12 +189,21 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
     }
 
     public String getClassNamePart() {
-        return className.contains(SEPARATOR) ? className.split(SEPARATOR)[0] : className;
+        return getClassNamePart(className);
     }
 
     public String getMethodName() {
+        return getMethodName(className);
+    }
+
+    public static String getClassNamePart(String className) {
+        return className.contains(SEPARATOR) ? className.split(SEPARATOR)[0] : className;
+    }
+
+    public static String getMethodName(String className) {
         return className.contains(SEPARATOR) ? className.split(SEPARATOR)[1] : DEFAULT_METHOD;
     }
+
 
     public boolean isValid(String value){
         if(value == null)

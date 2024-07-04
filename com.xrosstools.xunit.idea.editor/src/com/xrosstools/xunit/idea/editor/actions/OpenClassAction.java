@@ -16,41 +16,42 @@ import com.intellij.util.xml.ui.UndoHelper;
 import com.xrosstools.xunit.idea.editor.XrossUnitEditor;
 import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
+import com.xrosstools.xunit.idea.editor.model.XunitConstants;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
 
-public class OpenClassAction extends WorkbenchPartAction implements UnitActionConstants {
+public class OpenClassAction extends WorkbenchPartAction implements UnitActionConstants, XunitConstants {
 	private Project project;
     private UnitNode node;
-	private String className;
 	public OpenClassAction(Project project, BaseNodePart nodePart) {
 		setText(OPEN_CLASS);
 		this.project = project;
         node = (UnitNode)nodePart.getModel();
-        className = node.getImplClassName();
 	}
 
 	public Command createCommand() {
-		openClass(project, className);
+		openClass(project, node.getImplClassName(), node.getMethodName());
 		return null;
 	}
 
     public static void openClassOrReference(Project project, UnitNode node) {
 	    if(node.isValid(node.getClassName()))
-            openClass(project, node.getImplClassName());
+            openClass(project, node.getImplClassName(), node.getMethodName());
 	    else
 	        openReference(project, node.getHelper().findResourcesRoot().findFileByRelativePath(node.getModuleName()), node.getReferenceName());
     }
 
-	public static void openClass(Project project, String className){
+	public static void openClass(Project project, String classImpName, String methodName){
 		GlobalSearchScope scope = GlobalSearchScope.allScope (project);
-
-		//VirtualFileManager.getInstance().findFileByUrl("jar://path/to/file.jar!/path/to/file.class");
-
-        PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(className, scope);
+        PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(classImpName, scope);
         if (null == psiClass) {
-            Messages.showErrorDialog("Can not open " + className, "Error");
-        }else
-            OpenSourceUtil.navigate(psiClass);
+            Messages.showErrorDialog("Can not open " + classImpName, "Error");
+        }else {
+            if(DEFAULT_METHOD.equals(methodName))
+                OpenSourceUtil.navigate(psiClass);
+            else {
+                OpenSourceUtil.navigate(psiClass.findMethodsByName(methodName, false)[0]);
+            }
+        }
 	}
 
 	public static void openReference(Project project, VirtualFile module, String name) {
