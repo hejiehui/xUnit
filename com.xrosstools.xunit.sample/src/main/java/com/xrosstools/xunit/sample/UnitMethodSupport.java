@@ -39,6 +39,11 @@ public class UnitMethodSupport implements UnitDefinitionAware, ApplicationProper
         txt.setValue(unitProperties.get("stringValue"));
     }
 
+    private void processMethodPrivate(Context ctx) {
+        TextContext txt =(TextContext)ctx;
+        txt.setValue(unitProperties.get("stringValue"));
+    }
+
     public Context convertMethod(Context ctx) {
         return new IntegerContext(Integer.valueOf(unitProperties.get("intValue")));
     }

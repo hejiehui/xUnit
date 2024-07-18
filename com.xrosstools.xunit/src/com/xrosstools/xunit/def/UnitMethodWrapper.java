@@ -52,6 +52,9 @@ public class UnitMethodWrapper implements Unit {
 		try {
 			wrapper.instance = instance;
 			wrapper.method = instance.getClass().getDeclaredMethod(methodName, wrapper.parameterClasses);
+
+			//Allow for invoke private method
+			wrapper.method.setAccessible(true);  
 			return wrapper;
 		} catch (Exception e) {
 			throw new IllegalArgumentException(e);

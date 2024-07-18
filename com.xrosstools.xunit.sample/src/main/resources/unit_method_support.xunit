@@ -9,6 +9,9 @@
   <processor class="com.xrosstools.xunit.sample.UnitMethodSupport::processMethod" description="" module="" name="processor" reference="">
    <property key="stringValue" value="abc"/>
   </processor>
+  <processor class="com.xrosstools.xunit.sample.UnitMethodSupport::processMethodPrivate" description="" module="" name="private processor" reference="">
+   <property key="stringValue" value="abc"/>
+  </processor>
   <converter class="com.xrosstools.xunit.sample.UnitMethodSupport::convertMethod" description="" module="" name="converter" reference="">
    <property key="intValue" value="123"/>
   </converter>
@@ -27,13 +30,13 @@
   </bi_branch>
   <branch class="default" description="" name="locator" type="converter">
    <locator class="com.xrosstools.xunit.sample.UnitMethodSupport::locateMethodApp" default_key="" description="" module="" name="locator" reference=""/>
-   <branch_unit key="key1" label="">
+   <branch_unit key="key1">
     <converter class="com.xrosstools.xunit.sample.UnitMethodSupport::convertMethodApp" description="" module="" name="converter" reference=""/>
    </branch_unit>
-   <branch_unit key="key2" label="">
+   <branch_unit key="key2">
     <processor class="default" description="" module="" name="node 2" reference=""/>
    </branch_unit>
-   <branch_unit key="key3" label="">
+   <branch_unit key="key3">
     <processor class="default" description="" module="" name="node 3" reference=""/>
    </branch_unit>
   </branch>

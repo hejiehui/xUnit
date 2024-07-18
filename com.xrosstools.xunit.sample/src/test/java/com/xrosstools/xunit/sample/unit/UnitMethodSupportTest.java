@@ -22,6 +22,13 @@ public class UnitMethodSupportTest {
     }
 
     @Test
+    public void testProcessorPrivate() throws Exception {
+        TextContext t = new TextContext("123");
+        factory.getProcessor("private processor").process(t);
+        assertEquals("abc", t.getValue());
+    }
+
+    @Test
     public void testConverter() throws Exception {
         TextContext t = new TextContext("abc");
         IntegerContext ctx = (IntegerContext)factory.getConverter("converter").convert(t);
