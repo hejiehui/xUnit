@@ -18,8 +18,8 @@ import java.util.List;
 public class ChangeMethodAction extends WorkbenchPartAction implements UnitActionConstants {
     private UnitNode node;
     private String methodName;
-    public ChangeMethodAction(UnitNode node, String methodName) {
-        setText(methodName);
+    public ChangeMethodAction(UnitNode node, String methodName, boolean isPrivate) {
+        setText(isPrivate ? '-' + methodName : methodName);
         this.node = node;
         this.methodName = methodName;
     }
@@ -32,18 +32,18 @@ public class ChangeMethodAction extends WorkbenchPartAction implements UnitActio
         return node instanceof PrimaryNode && node.getType() != BehaviorType.dispatcher;
     }
 
-    public static List<String> getMethods(Project project, String currentImpl) {
+    public static List<PsiMethod> getMethods(Project project, String currentImpl) {
         GlobalSearchScope scope = GlobalSearchScope.allScope(project);
         PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(currentImpl, scope);
 
         if (psiClass == null)
             return Collections.emptyList();
 
-        List<String> methods = new ArrayList<>();
+        List<PsiMethod> methods = new ArrayList<>();
         for (PsiMethod m : psiClass.getMethods()) {
             if (m.isConstructor()) continue;
 
-            methods.add(m.getName());
+            methods.add(m);
         }
 
         return methods;

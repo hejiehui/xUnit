@@ -57,9 +57,9 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     		return;
 
 		JMenu methodMenu = new JMenu(REFERENCE_METHOD_MSG + node.getMethodName());
-		methodMenu.add(createItem(new ChangeMethodAction(node, XunitConstants.DEFAULT_METHOD)));
-		for(String m: ChangeMethodAction.getMethods(project, node.getClassNamePart())) {
-			methodMenu .add(createItem(new ChangeMethodAction(node, m)));
+		methodMenu.add(createItem(new ChangeMethodAction(node, XunitConstants.DEFAULT_METHOD, false)));
+		for(PsiMethod m: ChangeMethodAction.getMethods(project, node.getClassNamePart())) {
+			methodMenu .add(createItem(new ChangeMethodAction(node, m.getName(), m.hasModifierProperty(PsiModifier.PRIVATE))));
 		}
 		menu.add(methodMenu);
 	}
