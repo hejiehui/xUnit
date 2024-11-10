@@ -146,7 +146,7 @@ public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer
         TextPropertyDescriptor[] p1 = new TextPropertyDescriptor[]{
                 new TextPropertyDescriptor(PROP_NAME),
                 new TextPropertyDescriptor(PROP_DESCRIPTION),
-                new TextPropertyDescriptor(PACKAGE_ID)
+                new TextPropertyDescriptor(PROP_PACKAGE)
         };
 //		p1[0].setCategory(CATEGORY_COMMON);
 //		p1[1].setCategory(CATEGORY_COMMON);
@@ -169,7 +169,7 @@ public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer
                 return name;
             if (PROP_DESCRIPTION.equals(propName))
                 return description;
-            if (PACKAGE_ID.equals(propName))
+            if (PROP_PACKAGE.equals(propName))
                 return packageId;
         }
         return properties.getPropertyValue(id);
@@ -191,7 +191,7 @@ public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer
             setName((String)value);
         else if (PROP_DESCRIPTION.equals(id))
             setDescription((String)value);
-        else if (PACKAGE_ID.equals(id))
+        else if (PROP_PACKAGE.equals(id))
             setPackageId((String)value);
         else
             properties.setPropertyValue(id, value);

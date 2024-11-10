@@ -42,6 +42,7 @@ public interface UnitConstants extends XunitConstants {
     String CATEGORY_COMMON = "Common";
     String CATEGORY_OPTIONAL = "Optional";
 
+    String PROP_PACKAGE = "Package";
     String PROP_NAME = "Name";
     String PROP_DESCRIPTION = "Description";
     String PROP_BEHAVIOR_TYPE = "Behavior type";
@@ -70,6 +71,6 @@ public interface UnitConstants extends XunitConstants {
     String DEFAULT_DECORATOR_IMPL = DEFAULT_PRIMARY_IMPL;
     String DEFAULT_ADAPTER_IMPL = DEFAULT_PRIMARY_IMPL;
 
-    String GENERATE_HELPER = "Generate helper";
+    String GENERATE_FACTORY = "Generate factory";
     String GENERATE_TEST = "Generate test";
 }

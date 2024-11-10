@@ -5,13 +5,14 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileEvent;
-import com.intellij.openapi.vfs.VirtualFileListener;
 import com.intellij.ui.JBSplitter;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.intellij.ui.treeStructure.Tree;
-import com.xrosstools.xunit.idea.editor.actions.*;
+import com.xrosstools.xunit.idea.editor.actions.GenerateFactoryAction;
+import com.xrosstools.xunit.idea.editor.actions.GenerateTestAction;
+import com.xrosstools.xunit.idea.editor.actions.OpenClassAction;
+import com.xrosstools.xunit.idea.editor.actions.WorkbenchPartAction;
 import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.commands.CommandStack;
 import com.xrosstools.xunit.idea.editor.commands.DeleteNodeCommand;
@@ -130,7 +131,7 @@ public class UnitNodeDiagramPanel extends JPanel implements PropertyChangeListen
         toolbar.add(createButton("Adapter", XrossUnitIcons.Adapter, AdapterNode.class));
 
         //Add code gen
-        toolbar.add(createPaletteButton(new GenerateHelperAction(project, virtualFile, diagram), XrossUnitIcons.GENERATE_HLPER, GENERATE_HELPER));
+        toolbar.add(createPaletteButton(new GenerateFactoryAction(project, virtualFile, diagram), XrossUnitIcons.GENERATE_HLPER, GENERATE_FACTORY));
         toolbar.add(createPaletteButton(new GenerateTestAction(diagram), XrossUnitIcons.GENERATE_TEST, GENERATE_TEST));
 
         mainPanel.add(toolbar, BorderLayout.WEST);

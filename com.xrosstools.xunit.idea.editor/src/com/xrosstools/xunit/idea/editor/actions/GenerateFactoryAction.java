@@ -19,23 +19,27 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.ZonedDateTime;
 
-public class GenerateHelperAction extends WorkbenchPartAction {
+public class GenerateFactoryAction extends WorkbenchPartAction {
+    private static final String MODEL_DESCRIPTION =
+            "\n    %s\n";
+
+
     private static final String UNIT_COMMENTS =
             "    //%s\n";
 
     private static final String PROCESSOR_DEF =
-            "    public static ProcessorCreator %s = processor(\"%s\");\n\n"; //xunit id
+            "    public static ProcessorCreator %s = processorCreator(\"%s\");\n\n"; //xunit id
 
     private static final String CONVERTER_DEF =
-            "    public static ConverterCreator %s = converter(\"%s\");\n\n"; //xunit id
+            "    public static ConverterCreator %s = converterCreator(\"%s\");\n\n"; //xunit id
 
     private static final String PROCESSOR_FACTORY =
-            "    private static ProcessorCreator processor(String id) {\n" +
+            "    private static ProcessorCreator processorCreator(String id) {\n" +
             "        return load().processorCreator(id);\n"+
             "    }\n";
 
     private static final String CONVERTER_FACTORY =
-            "    private static ConverterCreator converter(String id) {\n" +
+            "    private static ConverterCreator converterCreator(String id) {\n" +
             "        return load().converterCreator(id);\n"+
             "    }\n";
 
@@ -43,7 +47,7 @@ public class GenerateHelperAction extends WorkbenchPartAction {
     private VirtualFile file;
     private UnitNodeDiagram diagram;
 
-    public GenerateHelperAction(Project project, VirtualFile file, UnitNodeDiagram diagram){
+    public GenerateFactoryAction(Project project, VirtualFile file, UnitNodeDiagram diagram){
         this.project = project;
         this.file = file;
         this.diagram = diagram;
@@ -51,9 +55,13 @@ public class GenerateHelperAction extends WorkbenchPartAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        StringBuffer codeBuf = getTemplate("/template/HelperTemplate.txt");
+        StringBuffer codeBuf = getTemplate("/template/FactoryTemplate.txt");
         replace(codeBuf, "!PACKAGE!", getValue(diagram.getPackageId()));
-        replace(codeBuf, "!DESCRIPTION!", getValue(diagram.getDescription()));
+
+        String description = getValue(diagram.getDescription()).equals("") ? "": String.format(MODEL_DESCRIPTION, getValue(diagram.getDescription()));
+
+        replace(codeBuf, "!DESCRIPTION!", description);
+
         replace(codeBuf, "!LAST_GENERATE_TIME!", ZonedDateTime.now().toString());
         replace(codeBuf, "!TEST_CLASS!", toClassName(diagram.getName()));
         replace(codeBuf, "!MODEL_PATH!", findResourcesPath());
@@ -102,7 +110,7 @@ public class GenerateHelperAction extends WorkbenchPartAction {
     public static StringBuffer getTemplate(String filePath){
         StringBuffer codeBuf = new StringBuffer();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(GenerateHelperAction.class.getResourceAsStream(filePath)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(GenerateFactoryAction.class.getResourceAsStream(filePath)));
         String line;
         try {
             while((line = reader.readLine()) != null)

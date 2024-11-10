@@ -5,15 +5,10 @@ import static com.xrosstools.xunit.XunitFactory.ProcessorCreator;
 import static com.xrosstools.xunit.XunitFactory.ConverterCreator;
 
 /**
-    IMPORTANT NOTE!
-    This is generated code based on Xross Unit model file !MODEL_FILE!.
-    In case the model file changes, regenerate this file.
-    Do Not Modify It.
-
+    This factory class is generated based on model file: !MODEL_PATH!.
+    Regenerate it when number, name or behavior type of top level units changed.
     !DESCRIPTION!
-
-    Last generated time:
-    !LAST_GENERATE_TIME!
+    Last generated time: !LAST_GENERATE_TIME!
 */
 public class !TEST_CLASS! {
 !XUNIT_DEFINITIONS!

@@ -7,7 +7,7 @@ import com.xrosstools.xunit.idea.editor.model.UnitNodeDiagram;
 
 import java.awt.event.ActionEvent;
 
-import static com.xrosstools.xunit.idea.editor.actions.GenerateHelperAction.*;
+import static com.xrosstools.xunit.idea.editor.actions.GenerateFactoryAction.*;
 
 public class GenerateTestAction extends WorkbenchPartAction {
     private static final String UNIT_CASE_HEADER =
@@ -18,7 +18,7 @@ public class GenerateTestAction extends WorkbenchPartAction {
             "        //Comments: %s\n "; //unit comments
 
     private static final String PROCESSOR_CASE_BODY =
-            "        Processor processor = %1$s.create();\n" +  //unit
+            "        Processor processor = %s.%s.create();\n" +  //unit
             "        Context ctx = new Context();\n" +
             "        processor.process(ctx);\n" +
             "        Object expected = null;\n" +
@@ -26,7 +26,7 @@ public class GenerateTestAction extends WorkbenchPartAction {
             "    }\n\n";
 
     private static final String CONVERTER_CASE_BODY =
-            "        Converter converter = %1$s.create();\n" +  //unit
+            "        Converter converter = %s.%s.create();\n" +  //unit
             "        Context ctx = new Context();\n" +
             "        NewContext result = (NewContext)converter.convert(ctx);\n" +
             "        Object expected = null;\n" +
@@ -42,7 +42,7 @@ public class GenerateTestAction extends WorkbenchPartAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        StringBuffer classBuf = GenerateHelperAction.getTemplate("/template/TestCaseTemplate.txt");
+        StringBuffer classBuf = GenerateFactoryAction.getTemplate("/template/TestCaseTemplate.txt");
         replace(classBuf, "!PACKAGE!", getValue(diagram.getPackageId()));
         replace(classBuf, "!TEST_CLASS!", toClassName(diagram.getName()));
 
@@ -58,7 +58,7 @@ public class GenerateTestAction extends WorkbenchPartAction {
 
             String template = unit.getType() == BehaviorType.processor ? PROCESSOR_CASE_BODY : CONVERTER_CASE_BODY;
 
-            constants.append(String.format(template, constDef));
+            constants.append(String.format(template, toClassName(diagram.getName()), constDef));
         }
 
         String codeBody = constants.toString();

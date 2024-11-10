@@ -17,7 +17,6 @@ public class UnitNodeDiagramWriter implements UnitConstants {
 			doc.appendChild(root);
 
 			appendDescription(doc, root, model);
-			appendImports(doc, root, model);
 			root.appendChild(createAppProperties(doc, model.getProperties()));
 			
 			Element unitsNode = (Element)doc.createElement(UNITS);
@@ -36,25 +35,6 @@ public class UnitNodeDiagramWriter implements UnitConstants {
 		root.setAttribute(PACKAGE_ID, model.getPackageId());
 		root.setAttribute(NAME, model.getName());
 		root.setAttribute(DESCRIPTION, model.getDescription());
-//		if(model.getDescription() == null)
-//			return;
-//		
-//		Element commentsNode = (Element)doc.createElement(DESCRIPTION);
-//		commentsNode.appendChild(doc.createTextNode(model.getDescription()));
-//		root.appendChild(commentsNode);
-	}
-	
-	private void appendImports(Document doc, Element root, UnitNodeDiagram model){
-		if(model.getImports().size() == 0)
-			return;
-		
-		Element importsNode = (Element)doc.createElement(IMPORTS);
-		root.appendChild(importsNode);
-		for(String importStr: model.getImports()){
-			Element importNode = (Element)doc.createElement(IMPORT);
-			importNode.setAttribute(PACKAGE_ID, importStr);
-			importsNode.appendChild(importNode);
-		}
 	}
 	
 	private Element createAppProperties(Document doc, UnitNodeProperties properties){

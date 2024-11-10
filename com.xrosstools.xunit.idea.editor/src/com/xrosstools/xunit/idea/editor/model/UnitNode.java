@@ -67,7 +67,7 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
         return descriptor;
     }
 
-        public IPropertyDescriptor[] getBasicPropertyDescriptors(){
+    public IPropertyDescriptor[] getBasicPropertyDescriptors(){
         IPropertyDescriptor[] descriptors = new IPropertyDescriptor[]{
                 getDescriptor(PROP_NAME),
                 getDescriptor(PROP_DESCRIPTION),

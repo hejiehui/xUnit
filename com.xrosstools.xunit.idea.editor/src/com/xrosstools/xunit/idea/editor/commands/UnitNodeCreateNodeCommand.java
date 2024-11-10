@@ -130,8 +130,10 @@ public class UnitNodeCreateNodeCommand extends Command {
 
     	// rename to getCombinedNode?
     	private CompositeUnitNode combineNodes(){
-    		if(combinedNode == null)
+    		if(combinedNode == null) {
 				combinedNode = createCombinedNode();
+				combinedNode.setName(unit.getName());
+			}
 
     		if(combinedNode instanceof BiBranchNode)
 				((BiBranchNode)combinedNode).setValidUnit(unit);

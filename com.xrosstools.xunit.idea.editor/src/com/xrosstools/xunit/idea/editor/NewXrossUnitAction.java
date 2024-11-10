@@ -9,9 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.InputValidator;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
+import com.xrosstools.xunit.idea.editor.actions.GenerateFactoryAction;
 
 public class NewXrossUnitAction extends AnAction {
     @Override
@@ -64,17 +62,10 @@ public class NewXrossUnitAction extends AnAction {
             public void run() {
                 try {
                     VirtualFile newFile = dir.createChildData(project, name + "." + XunitFileType.EXTENSION);
+                    StringBuffer sbf = GenerateFactoryAction.getTemplate("/template/emptyTemplate.xunit");
+                    GenerateFactoryAction.replace(sbf, "!NAME!", name.replace('_', ' '));
 
-                    BufferedInputStream in = new BufferedInputStream(getClass().getResourceAsStream("/template/emptyTemplate.xunit"));
-                    int buf_size = 1024;
-                    byte[] buffer = new byte[buf_size];
-                    int len;
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    while (-1 != (len = in.read(buffer, 0, buf_size))) {
-                        bos.write(buffer, 0, len);
-                    }
-
-                    newFile.setBinaryContent(bos.toByteArray());
+                    newFile.setBinaryContent(sbf.toString().getBytes());
                     FileEditorManager.getInstance(project).openFile(newFile, true);
                 } catch (Throwable e) {
                     throw new IllegalStateException("Can not save document " + name, e);
