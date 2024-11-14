@@ -106,14 +106,9 @@ public class XunitFactory implements XunitConstants {
 		WRAPPED_UNITS.add(BRANCH_UNIT);
 	}
 	
-	private String packageId;
 	private String name;
 	private UnitDefRepo defRepo;
 	
-	public String getPackageId() {
-		return packageId;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -175,7 +170,6 @@ public class XunitFactory implements XunitConstants {
 	private static XunitFactory getFromDocument(Document doc){
 		XunitFactory factory = new XunitFactory();
 		Element root = doc.getDocumentElement();
-		factory.packageId = root.getAttribute(PACKAGE_ID);
 		factory.name = root.getAttribute(NAME);
 		factory.defRepo = new UnitDefRepo(factory.createApplicationProperties(doc));
 		factory.readUnits(doc);
