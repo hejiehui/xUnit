@@ -1,12 +1,12 @@
-package !PACKAGE!.test;
+package !PACKAGE!;
 
 import com.xrosstools.xunit.*;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import !PACKAGE!.!TEST_CLASS!;
+import !FACTORY_CLASS!;
 
-public class !TEST_CLASS!Test {
+public class !TEST_CLASS! {
 !TEST_BODY!
 }

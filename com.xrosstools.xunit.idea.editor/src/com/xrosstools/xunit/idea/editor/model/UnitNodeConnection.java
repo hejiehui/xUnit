@@ -1,17 +1,16 @@
 package com.xrosstools.xunit.idea.editor.model;
 
-import com.xrosstools.xunit.idea.editor.util.IPropertyDescriptor;
-import com.xrosstools.xunit.idea.editor.util.IPropertySource;
-import com.xrosstools.xunit.idea.editor.util.TextPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertySource;
+import com.xrosstools.idea.gef.util.TextPropertyDescriptor;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnitNodeConnection extends PropertySource implements PropertyChangeListener, Serializable {
+public class UnitNodeConnection extends PropertyAdapter implements PropertyChangeListener, Serializable {
     private boolean firstHalf;
     private UnitNodePanel byPassed;
     private String key;
@@ -105,7 +104,7 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
             };
         }
 
-        if(label == null && srcPropName == null)
+        if(srcPropName == null)
             return new IPropertyDescriptor[0];
 
         IPropertyDescriptor[] descriptors;
@@ -157,7 +156,7 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
 
     public void setKey(String key) {
         this.key = key;
-        this.firePropertyChange(PROP_KEY, null, label);
+        this.firePropertyChange(PROP_KEY, null, key);
     }
 
     public void setLabel(String label){
@@ -193,24 +192,15 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
         if(input == null || output== null)
             return;
 
-        unit.removeAllConnections();
-        input.restoreInput(unit);
-        output.restoreOutput(unit);
+        input.restore(unit.getInput());
+        output.restore(unit.getOutput());
     }
 
-    public void restore() {
-        if(source == null || target == null)
-            return;
-
-        link(source, target);
-    }
-
-    public void restoreInput(UnitNode unit) {
-        link(source, unit);
-    }
-
-    public void restoreOutput(UnitNode unit) {
-        link(unit, target);
+    public void restore(UnitNodeConnection conn) {
+        conn.setKey(key);
+        conn.setLabel(label);
+        if(srcPropName != null)
+            conn.setPropName(srcPropName);
     }
 
     public void link(UnitNode source, UnitNode target) {
@@ -244,15 +234,15 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
     }
 
     private boolean isValidatorLink(){
-        return source != null && source.getType() == BehaviorType.validator;
+        return source != null && source.getType() == BehaviorType.validator && target.getClass() != EndPointNode.class;
     }
 
     private boolean isLocatorLink(){
-        return source != null && source.getType() == BehaviorType.locator;
+        return source != null && source.getType() == BehaviorType.locator && target.getClass() != EndPointNode.class;
     }
 
     private boolean isDispatcherLink(){
-        return source != null && source.getType() == BehaviorType.dispatcher;
+        return source != null && source.getType() == BehaviorType.dispatcher && target.getClass() != EndPointNode.class;
     }
 
     public void setPropName(String propName){
@@ -267,5 +257,10 @@ public class UnitNodeConnection extends PropertySource implements PropertyChange
             return;
 
         setLabel((String)((IPropertySource)source).getPropertyValue(srcPropName));
+    }
+
+    @Override
+    protected String getCategory(String id) {
+        return null;
     }
 }

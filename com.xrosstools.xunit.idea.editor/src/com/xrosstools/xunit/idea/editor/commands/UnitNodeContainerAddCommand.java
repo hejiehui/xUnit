@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor.commands;
 
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeConnection;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeContainer;

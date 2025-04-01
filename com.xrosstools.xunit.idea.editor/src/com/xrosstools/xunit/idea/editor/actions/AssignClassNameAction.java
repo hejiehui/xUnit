@@ -5,12 +5,13 @@ import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
+import com.xrosstools.idea.gef.actions.Action;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.commands.AssignClassCommand;
-import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
 
-public class AssignClassNameAction extends WorkbenchPartAction implements UnitActionConstants {
+public class AssignClassNameAction extends Action implements UnitActionConstants {
 	private Project project;
 	private BaseNodePart nodePart;
 

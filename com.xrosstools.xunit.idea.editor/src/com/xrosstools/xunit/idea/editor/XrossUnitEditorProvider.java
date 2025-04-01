@@ -1,43 +1,33 @@
 package com.xrosstools.xunit.idea.editor;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.application.TransactionGuard;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorPolicy;
-import com.intellij.openapi.fileEditor.FileEditorProvider;
-import com.intellij.openapi.project.DumbAware;
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.psi.PsiDocumentManager;
+import com.xrosstools.idea.gef.AbstractDiagramEditorProvider;
+import com.xrosstools.idea.gef.PanelContentProvider;
 import org.jetbrains.annotations.NotNull;
 
-public class XrossUnitEditorProvider implements FileEditorProvider, DumbAware {
+public class XrossUnitEditorProvider extends AbstractDiagramEditorProvider {
     @Override
-    public boolean accept(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        return virtualFile.getFileType() == XunitFileType.INSTANCE || XunitFileType.EXTENSION.equalsIgnoreCase(virtualFile.getExtension());
+    public FileType getFileType() {
+        return XunitFileType.INSTANCE;
     }
 
-    @NotNull
     @Override
-    public FileEditor createEditor(@NotNull Project project, @NotNull VirtualFile virtualFile) {
-        ModalityState modalityState = ModalityState.defaultModalityState();
-
-        TransactionGuard.getInstance().submitTransaction(project, () ->
-            ApplicationManager.getApplication().invokeAndWait(() ->
-                FileDocumentManager.getInstance().saveAllDocuments()
-            , modalityState)
-        );
-
-        return new XrossUnitEditor(project, virtualFile);
+    public String getExtention() {
+        return XunitFileType.EXTENSION;
     }
 
     @NotNull
     @Override
     public String getEditorTypeId() {
         return "Xross Unit Model Editor";
+    }
+
+    @Override
+    public PanelContentProvider createPanelContentProvider(@NotNull Project project, @NotNull VirtualFile virtualFile) {
+        return new XrossUnitPanelContentProvider(project, virtualFile);
     }
 
     @NotNull

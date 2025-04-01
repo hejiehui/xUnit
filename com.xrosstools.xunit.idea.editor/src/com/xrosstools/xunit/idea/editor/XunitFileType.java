@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class XunitFileType extends XmlLikeFileType {
     public static final String NAME = "Xross Unit Model File";
-    public static final String DESCRIPTION = "Xross Unit Model File";//A rapid system builder based on flow diagram";
+    public static final String DESCRIPTION = "Xross Unit Model File";
     public static final String EXTENSION = "xunit";
     public static final Icon ICON = XrossUnitIcons.Chain;
 
@@ -43,11 +43,6 @@ public class XunitFileType extends XmlLikeFileType {
     public Icon getIcon() {
         return ICON;
     }
-//
-//    @Override
-//    public boolean isBinary() {
-//        return false;
-//    }
 
     @Override
     public boolean isReadOnly() {

@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.xrosstools.xunit.editor</id>
   <name>Xross Unit Editor</name>
-  <version>2.6.1</version>
+  <version>2.6.2</version>
   <vendor email="he_jiehui@163.com" url="https://www.xrosstools.com">Xross Tools</vendor>
 
   <description><![CDATA[
@@ -11,6 +11,7 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      <em>2.6.2</em> Migrate to Xross IDEA GEF, optimize code generation and fix reordering bug for container.<br>
       <em>2.6.1</em> Fix editor can not be opened on MAC for IDEA 2024.<br>
       <em>2.6.0</em> Optimize generate factory and unit combination.<br>
       <em>2.5.2</em> Add "-" sign before private method in chose method context menu.<br>
@@ -35,6 +36,7 @@
        on how to target different products -->
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.java</depends>
+  <depends>com.xrosstools.idea.gef</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <fileEditorProvider implementation="com.xrosstools.xunit.idea.editor.XrossUnitEditorProvider"/>

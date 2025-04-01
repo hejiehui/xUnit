@@ -1,7 +1,7 @@
 package com.xrosstools.xunit.idea.editor.model;
 
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
 import com.xrosstools.xunit.idea.editor.Activator;
-import com.xrosstools.xunit.idea.editor.util.IPropertyDescriptor;
 
 public class EndPointNode extends IconNode{
     public EndPointNode(){

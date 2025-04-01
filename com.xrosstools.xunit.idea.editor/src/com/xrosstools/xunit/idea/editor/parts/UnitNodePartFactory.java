@@ -1,24 +1,22 @@
 package com.xrosstools.xunit.idea.editor.parts;
 
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
+import com.xrosstools.idea.gef.parts.EditPart;
+import com.xrosstools.idea.gef.parts.EditPartFactory;
 import com.xrosstools.xunit.idea.editor.model.*;
 
-public class UnitNodePartFactory {
+public class UnitNodePartFactory implements EditPartFactory {
     private UnitNodeHelper helper;
-    private EditContext editContext;
-
-    public UnitNodePartFactory(EditContext editContext) {
-        this.editContext = editContext;
-    }
-
     public EditPart createEditPart(EditPart parent, Object model) {
-        EditPart part = null;
+        AbstractGraphicalEditPart part = null;
         if(model == null)
             return part;
 
         if (model instanceof UnitNodeDiagram){
-            if(helper == null)
-                helper = new UnitNodeHelper((UnitNodeDiagram)model);
             part = new UnitNodeDiagramPart();
+            part.setModel(model);
+            if(helper == null)
+                helper = new UnitNodeHelper(part);
         }
         else if (model instanceof CompositeUnitNode)
             part = new CompositeUnitNodePart();
@@ -35,14 +33,9 @@ public class UnitNodePartFactory {
 
         if(model instanceof UnitNode){
             ((UnitNode)model).setHelper(helper);
-            ((UnitNode)model).setPart(part);
         }
 
-        part.setEditPartFactory(this);
         part.setModel(model);
-        part.setParent(parent);
-        part.setContext(editContext);
-        editContext.add(part, model);
 
         return part;
     }

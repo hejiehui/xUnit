@@ -2,7 +2,6 @@ package com.xrosstools.xunit.idea.editor.model;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -10,29 +9,32 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiManager;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
+import com.xrosstools.idea.gef.parts.EditPart;
 import com.xrosstools.xunit.idea.editor.XunitFileType;
 import com.xrosstools.xunit.idea.editor.io.UnitNodeDiagramFactory;
-import com.xrosstools.xunit.idea.editor.parts.EditPart;
+import com.xrosstools.xunit.idea.editor.parts.UnitNodeDiagramPart;
 import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UnitNodeHelper implements UnitConstants {
+    private AbstractGraphicalEditPart root;
     private UnitNodeDiagram diagram;
+
+    public UnitNodeHelper(AbstractGraphicalEditPart root){
+        this.root = root;
+        this.diagram = (UnitNodeDiagram)root.getModel();
+    }
+
     public UnitNodeHelper(UnitNodeDiagram diagram){
         this.diagram = diagram;
     }
-
-    public String[] getReferenceNames(UnitNode node, EditPart curPart){
+    public String[] getReferenceNames(UnitNode node){
+        EditPart curPart = root.findEditPart(node);
         if(!node.isValid(node.getModuleName()) || node.getModuleName().equals(diagram.getFilePath().getName())) {
             String excluded = getTopLevelNodeName(curPart);
             if(node instanceof CompositeUnitNode)
@@ -135,6 +137,8 @@ public class UnitNodeHelper implements UnitConstants {
         while(curPart.getModel() != diagram) {
             if(curPart.getModel() instanceof UnitNode)
                 excluded = ((UnitNode)curPart.getModel()).getName();
+            if(curPart.getParent() == null)
+                throw new NullPointerException();
             curPart = curPart.getParent();
         }
         return getValue(excluded);
@@ -194,5 +198,9 @@ public class UnitNodeHelper implements UnitConstants {
             if(value.equals(values[i]))
                 return i;
         return 0;
+    }
+
+    public Project getProject() {
+        return diagram.getProject();
     }
 }

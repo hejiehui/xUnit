@@ -1,6 +1,6 @@
 package com.xrosstools.xunit.idea.editor.commands;
 
-import com.intellij.openapi.project.Project;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 
 public class AssignModuleCommand extends Command {

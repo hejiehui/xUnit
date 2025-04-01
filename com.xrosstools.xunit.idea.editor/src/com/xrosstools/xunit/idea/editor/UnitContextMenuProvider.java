@@ -1,27 +1,31 @@
 package com.xrosstools.xunit.idea.editor;
 
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.xrosstools.idea.gef.ContextMenuProvider;
 import com.xrosstools.xunit.idea.editor.actions.*;
 import com.xrosstools.xunit.idea.editor.model.*;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
-import com.xrosstools.xunit.idea.editor.parts.EditPart;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class UnitContextMenuProvider  implements UnitActionConstants, UnitConstants {
-    private PropertyChangeListener listener;
-    public UnitContextMenuProvider(PropertyChangeListener listener) {
-        this.listener = listener;
-    }
+public class UnitContextMenuProvider extends ContextMenuProvider implements UnitActionConstants, UnitConstants {
+	private Project project;
+	private UnitNodeDiagram diagram;
 
-    public JPopupMenu buildContextMenu(Project project, UnitNodeDiagram diagram, EditPart selected) {
+	public UnitContextMenuProvider(Project project) {
+		this.project = project;
+	}
+
+	public void setDiagram(UnitNodeDiagram diagram) {
+		this.diagram = diagram;
+	}
+
+	@Override
+	public JPopupMenu buildContextMenu(Object selected) {
 		JPopupMenu menu = new JPopupMenu();
 
 		if(selected instanceof BaseNodePart)
@@ -32,13 +36,6 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
 		return menu;
     }
 
-    private JMenuItem createItem(WorkbenchPartAction action) {
-    	action.setListener(listener);
-		JMenuItem item = new JMenuItem(action.getText());
-		item.addActionListener(action);
-		return item;
-	}
-    
     private void getNodeActions(Project project, JPopupMenu menu, BaseNodePart nodePart, UnitNodeDiagram diagram){
     	UnitNode node = (UnitNode)nodePart.getModel();
     	menu.add(createItem(new AssignClassNameAction(project, nodePart)));
@@ -53,7 +50,7 @@ public class UnitContextMenuProvider  implements UnitActionConstants, UnitConsta
     }
 
 	private void addMethodAction(Project project, JPopupMenu menu, UnitNode node) {
-    	if(!ChangeMethodAction.isMethodSupported(node) || MSG_DEFAULT.equals(node.getClassName()))
+    	if(!ChangeMethodAction.isMethodSupported(node) || node.getClassName() == null || MSG_DEFAULT.equals(node.getClassName()))
     		return;
 
 		JMenu methodMenu = new JMenu(REFERENCE_METHOD_MSG + node.getMethodName());

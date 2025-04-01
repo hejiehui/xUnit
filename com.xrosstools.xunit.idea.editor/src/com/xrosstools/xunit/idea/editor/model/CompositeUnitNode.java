@@ -1,6 +1,6 @@
 package com.xrosstools.xunit.idea.editor.model;
 
-import com.xrosstools.xunit.idea.editor.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
 
 public abstract class CompositeUnitNode extends UnitNode {
     private boolean vertical;
@@ -58,9 +58,7 @@ public abstract class CompositeUnitNode extends UnitNode {
     public abstract UnitNodeContainer getContainerNode();
     public abstract UnitNode getEndNode();
 
-    public void reconnect(){
-
-    }
+    public void reconnect(){}
 
     public void unitSet(int index, UnitNode unit){
         reconnect();

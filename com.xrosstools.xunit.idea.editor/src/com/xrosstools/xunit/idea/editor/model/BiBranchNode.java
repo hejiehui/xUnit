@@ -5,28 +5,13 @@ public class BiBranchNode extends CompositeUnitNode {
     private UnitNodePanel unitsPanel = new UnitNodePanel(this, 2);
     private EndPointNode endPoint = new EndPointNode();
 
-    private UnitNodeConnection validUnitInput = new UnitNodeConnection();
-    private UnitNodeConnection validUnitOutput = new UnitNodeConnection();
-
-    private UnitNodeConnection invalidUnitInput = new UnitNodeConnection();
-    private UnitNodeConnection invalidUnitOutput = new UnitNodeConnection();
-
-    protected UnitNodeConnection emptyConnection = new UnitNodeConnection();
-    private UnitNodeConnection byPassConnection = new UnitNodeConnection();
-
     public BiBranchNode(boolean empty){
         super("a bibranch", StructureType.bi_branch);
-        emptyConnection.setLabel(MSG_EMPTY);
-        byPassConnection.setByPassed(unitsPanel);
-
-        validUnitInput.setFirstHalf(true);
-        invalidUnitInput.setFirstHalf(true);
-
         if(empty)
             return;
         setValidator(new ValidatorNode());
         unitsPanel.add(createSampleNode("valid node"));
-        unitsPanel.add(createSampleNode("invalide node"));
+        unitsPanel.add(createSampleNode("invalid node"));
     }
 
     public BiBranchNode(){
@@ -82,43 +67,28 @@ public class BiBranchNode extends CompositeUnitNode {
         removeAllConnections(invalidUnit);
 
         if(validUnit == null && invalidUnit == null){
-            linkEmptyConnection();
+            UnitNodeConnection.linkStart(validator, endPoint, MSG_EMPTY);
             firePropertyChange(PROP_NODE);
             return;
         }
 
-        linkUnit(validUnitInput, validUnit, validUnitOutput);
-        linkUnit(invalidUnitInput, invalidUnit, invalidUnitOutput);
+        UnitNodeConnection.linkStart(validator, validUnit).setPropName(PROP_VALID_LABEL);
+        UnitNodeConnection.linkEnd(validUnit, endPoint);
 
-        if(validUnit == null || invalidUnit == null) {
-            // Using loop router to make sure the link bypass the unit area
-            linkByPassConnection();
+        UnitNodeConnection.linkStart(validator, invalidUnit).setPropName(PROP_INVALID_LABEL);
+        UnitNodeConnection.linkEnd(invalidUnit, endPoint);
+
+        if(validUnit != null && invalidUnit != null) {
+            firePropertyChange(PROP_NODE);
+            return;
         }
 
+        // Using loop router to make sure the link bypass the unit area
+        UnitNodeConnection.linkStart(validator, endPoint, unitsPanel).setFirstHalf(invalidUnit == null);
         firePropertyChange(PROP_NODE);
     }
 
-    private void linkUnit(UnitNodeConnection input, UnitNode unit, UnitNodeConnection output) {
-        if(unit == null)
-            return;
-
-        input.link(validator, unit);
-        output.link(unit, endPoint);
-
-        input.setPropName(unit == getValidUnit() ? PROP_VALID_LABEL : PROP_INVALID_LABEL);
-
-    }
-
-    private void linkEmptyConnection() {
-        emptyConnection.link(getStartNode(), getEndNode());
-    }
-
-    private void linkByPassConnection() {
-        byPassConnection.setFirstHalf(getInvalidUnit() == null);
-        byPassConnection.link(getStartNode(), getEndNode());
-    }
-
-        public UnitNode getStartNode(){
+    public UnitNode getStartNode(){
         return getValidator();
     }
 

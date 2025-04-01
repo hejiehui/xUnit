@@ -1,11 +1,13 @@
 package com.xrosstools.xunit.idea.editor.actions;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.xunit.idea.editor.commands.Command;
+import com.xrosstools.idea.gef.actions.BaseDialogAction;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.commands.RenamePropertyCommand;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeProperties;
+import org.jetbrains.uast.values.UAbstractConstant;
 
-public class RenamePropertyAction extends BaseDialogAction {
+public class RenamePropertyAction extends BaseDialogAction implements UnitActionConstants {
 	private UnitNodeProperties properties;
 	private String oldName;
 	

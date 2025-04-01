@@ -1,16 +1,19 @@
 package com.xrosstools.xunit.idea.editor.parts;
 
-import com.xrosstools.xunit.idea.editor.figures.Figure;
+import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.parts.AbstractGraphicalEditPart;
+import com.xrosstools.idea.gef.parts.EditPart;
+import com.xrosstools.idea.gef.parts.EditPolicy;
 import com.xrosstools.xunit.idea.editor.figures.TopLevelUnitFigure;
 import com.xrosstools.xunit.idea.editor.figures.UnitNodeDiagramFigure;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeDiagram;
+import com.xrosstools.xunit.idea.editor.policies.UnitNodeContainerLayoutPolicy;
 
-import javax.swing.*;
 import java.util.List;
 
-public class UnitNodeDiagramPart extends EditPart {
-    protected List getModelChildren() {
+public class UnitNodeDiagramPart extends AbstractGraphicalEditPart {
+    public List getModelChildren() {
         return ((UnitNodeDiagram)getModel()).getUnits();
     }
 
@@ -18,18 +21,19 @@ public class UnitNodeDiagramPart extends EditPart {
         return new UnitNodeDiagramFigure();
     }
 
-    public Figure getContentPane(){
-        return ((UnitNodeDiagramFigure)getFigure()).getContentPane();
+    @Override
+    protected EditPolicy createEditPolicy() {
+        return new UnitNodeContainerLayoutPolicy();
     }
 
-    protected void addChildVisual(EditPart childEditPart, int index) {
-        Figure child = childEditPart.getFigure();
+    public void addChildVisual(EditPart childEditPart, int index) {
+        Figure child = ((AbstractGraphicalEditPart)childEditPart).getFigure();
         UnitNode unit = (UnitNode)childEditPart.getModel();
         getContentPane().add(new TopLevelUnitFigure(unit.getName(), child), index);
     }
 
     protected void removeChildVisual(EditPart childEditPart) {
-        Figure wrappedChild = childEditPart.getFigure();
+        Figure wrappedChild = ((AbstractGraphicalEditPart)childEditPart).getFigure();
         Figure wrapper = null;
         for(Object figure:getContentPane().getComponents()){
             TopLevelUnitFigure curWrapper = (TopLevelUnitFigure)figure;
@@ -41,5 +45,4 @@ public class UnitNodeDiagramPart extends EditPart {
 
         getContentPane().remove(wrapper);
     }
-
 }

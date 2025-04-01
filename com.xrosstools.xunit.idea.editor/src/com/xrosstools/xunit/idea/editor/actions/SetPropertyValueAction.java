@@ -1,11 +1,12 @@
 package com.xrosstools.xunit.idea.editor.actions;
 
 import com.intellij.openapi.project.Project;
-import com.xrosstools.xunit.idea.editor.commands.Command;
+import com.xrosstools.idea.gef.actions.BaseDialogAction;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.commands.SetPropertyValueCommand;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeProperties;
 
-public class SetPropertyValueAction extends BaseDialogAction {
+public class SetPropertyValueAction extends BaseDialogAction implements UnitActionConstants {
 	private UnitNodeProperties properties;
 	private String key;
 	

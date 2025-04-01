@@ -1,8 +1,10 @@
 package com.xrosstools.xunit.idea.editor.commands;
 
+import com.xrosstools.idea.gef.commands.Command;
+import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 
-public class AssignDefaultCommand extends Command {
+public class AssignDefaultCommand extends Command implements UnitConstants {
 	private UnitNode node;
 	private String oldClassName;
 	private String oldReferenceName;

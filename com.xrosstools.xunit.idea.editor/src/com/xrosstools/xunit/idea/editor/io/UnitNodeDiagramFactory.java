@@ -4,6 +4,17 @@ package com.xrosstools.xunit.idea.editor.io;
 import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeDiagram;
 import org.w3c.dom.Document;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
 
 /**
  * <xunit packageId name>
@@ -54,4 +65,25 @@ public class UnitNodeDiagramFactory implements UnitConstants {
 	public Document writeToDocument(UnitNodeDiagram model){
 		return writer.writeToDocument(model);
 	}
+
+	public static String format(Document doc) throws Exception {
+    	ByteArrayOutputStream out = new ByteArrayOutputStream();
+    	TransformerFactory tFactory = TransformerFactory.newInstance();
+    	Transformer transformer = tFactory.newTransformer();
+    	DOMSource source = new DOMSource(doc);
+    	StreamResult result = new StreamResult(out);
+    	transformer.transform(source, result);
+
+    	// To make well formated document
+    	SAXReader reader = new SAXReader();
+    	org.dom4j.Document document = reader.read(new ByteArrayInputStream(out.toByteArray()));
+
+    	XMLWriter writer = null;
+        StringWriter stringWriter = new StringWriter();
+        OutputFormat format = new OutputFormat(" ", true);
+        writer = new XMLWriter(stringWriter, format);
+        writer.write(document);
+        writer.flush();
+        return stringWriter.toString();
+    }
 }

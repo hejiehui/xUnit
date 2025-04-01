@@ -9,7 +9,7 @@ public abstract class BaseCompositeUnitNodeTreePart extends BaseNodeTreePart {
     	return (UnitNodePanel)((CompositeUnitNode)getModel()).getContainerNode();
     }
 
-    protected final List<UnitNode> getModelChildren() {
+	public final List<UnitNode> getModelChildren() {
     	CompositeUnitNode unit = (CompositeUnitNode)getModel();
     	List<UnitNode> list = getList();
     	addChild(list, unit.getStartNode());

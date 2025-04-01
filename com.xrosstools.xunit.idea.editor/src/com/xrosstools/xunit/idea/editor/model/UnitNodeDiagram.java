@@ -2,8 +2,9 @@ package com.xrosstools.xunit.idea.editor.model;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.xrosstools.xunit.idea.editor.util.IPropertyDescriptor;
-import com.xrosstools.xunit.idea.editor.util.TextPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.PropertySource;
+import com.xrosstools.idea.gef.util.TextPropertyDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +99,10 @@ public class UnitNodeDiagram extends PropertySource implements UnitNodeContainer
     }
 
     public void move(int newIndex, UnitNode unit){
+        int index = units.indexOf(unit);
+        if(index < newIndex)
+            newIndex-=1;
+
         remove(unit);
         add(newIndex, unit);
         firePropertyChange(PROP_NODE, null, null);

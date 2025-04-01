@@ -62,6 +62,8 @@ public class BranchNode extends CompositeUnitNode {
             node.setInputKey(key);
             node.setInputLabel(label);
         }
+
+        checkLink();
         firePropertyChange(PROP_NODE);
     }
 
@@ -95,5 +97,9 @@ public class BranchNode extends CompositeUnitNode {
         unit.removeAllConnections();
         checkLink();
         firePropertyChange(PROP_NODE);
+    }
+
+    public void reconnect() {
+        checkLink();
     }
 }

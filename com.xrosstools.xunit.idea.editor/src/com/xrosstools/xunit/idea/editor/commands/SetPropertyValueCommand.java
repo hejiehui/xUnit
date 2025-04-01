@@ -1,6 +1,7 @@
 package com.xrosstools.xunit.idea.editor.commands;
 
-import com.xrosstools.xunit.idea.editor.util.IPropertySource;
+import com.xrosstools.idea.gef.commands.Command;
+import com.xrosstools.idea.gef.util.IPropertySource;
 
 import java.beans.PropertyChangeEvent;
 

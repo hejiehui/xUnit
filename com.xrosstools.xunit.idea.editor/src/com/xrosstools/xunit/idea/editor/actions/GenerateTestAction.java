@@ -1,15 +1,18 @@
 package com.xrosstools.xunit.idea.editor.actions;
 
-import com.xrosstools.xunit.idea.editor.commands.Command;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiClass;
+import com.xrosstools.idea.gef.actions.AbstractCodeGenerator;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.BehaviorType;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeDiagram;
 
 import java.awt.event.ActionEvent;
 
-import static com.xrosstools.xunit.idea.editor.actions.GenerateFactoryAction.*;
+import static com.xrosstools.idea.gef.actions.CodeGenHelper.*;
 
-public class GenerateTestAction extends WorkbenchPartAction {
+public class GenerateTestAction extends AbstractCodeGenerator {
     private static final String UNIT_CASE_HEADER =
             "    @Test\n" +
             "    public void test%s() throws Exception {\n";//unit
@@ -35,17 +38,27 @@ public class GenerateTestAction extends WorkbenchPartAction {
 
     private UnitNodeDiagram diagram;
 
-    public GenerateTestAction(UnitNodeDiagram diagram) {
+    public void setDiagram(UnitNodeDiagram diagram) {
         this.diagram = diagram;
+    }
 
+    public String getDefaultFileName() {
+        return toClassName(diagram.getName()) + "Test";
+    }
+
+    public GenerateTestAction(Project project) {
+        super(project, "Generate test cases");
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        StringBuffer classBuf = GenerateFactoryAction.getTemplate("/template/TestCaseTemplate.txt");
-        replace(classBuf, "!PACKAGE!", getValue(diagram.getPackageId()));
-        replace(classBuf, "!TEST_CLASS!", toClassName(diagram.getName()));
+    public String getContent(String packageName, String fileName) {
+        PsiClass factoryClass = chooseClass("Select model factory", toClassName(diagram.getName()));
+        if(factoryClass == null) return  null;
 
+        StringBuffer classBuf = getTemplate("/template/TestCaseTemplate.txt", getClass());
+        replace(classBuf, "!PACKAGE!", packageName);
+        replace(classBuf, "!TEST_CLASS!", fileName);
+        replace(classBuf, "!FACTORY_CLASS!", factoryClass.getQualifiedName());
         StringBuffer constants = new StringBuffer();
 
         for(UnitNode unit: diagram.getUnits()) {
@@ -67,7 +80,8 @@ public class GenerateTestAction extends WorkbenchPartAction {
 
         replace(classBuf, "!TEST_BODY!", codeBody);
 
-        new CodeDisplayer("Generated test", classBuf.toString()).show();
+//        new CodeDisplayer("Generated test", classBuf.toString()).show();
+        return classBuf.toString();
     }
 
     @Override

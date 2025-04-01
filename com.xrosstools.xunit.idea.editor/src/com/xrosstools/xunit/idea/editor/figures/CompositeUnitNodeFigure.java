@@ -1,5 +1,9 @@
 package com.xrosstools.xunit.idea.editor.figures;
 
+import com.xrosstools.idea.gef.figures.ColorConstants;
+import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.figures.Text;
+import com.xrosstools.idea.gef.figures.ToolbarLayout;
 import com.xrosstools.xunit.idea.editor.model.StructureType;
 import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 
@@ -14,19 +18,12 @@ public class CompositeUnitNodeFigure extends Figure implements UnitConstants {
     private Figure endPanel;
     private Color borderColor;
 
-    public CompositeUnitNodeFigure(boolean horizontal, StructureType type) {
-        setLayout(new ToolbarLayout(horizontal, ToolbarLayout.ALIGN_CENTER, V_NODE_SPACE));
+    public CompositeUnitNodeFigure(boolean vertical, StructureType type) {
+        setLayoutManager(getPanelLayout(vertical));
 
-        startPanel = new Figure();
-        startPanel.setLayout(new ToolbarLayout(horizontal, ToolbarLayout.ALIGN_CENTER, 0));
-        containerPanel = new Figure();
-        containerPanel.setLayout(new ToolbarLayout(horizontal, ToolbarLayout.ALIGN_CENTER, 0));
-        endPanel = new Figure();
-        endPanel.setLayout(new ToolbarLayout(horizontal, ToolbarLayout.ALIGN_CENTER, 0));
-
-        add(startPanel);
-        add(containerPanel);
-        add(endPanel);
+        startPanel = addPanel(this);
+        containerPanel = addPanel(this);
+        endPanel = addPanel(this);
 
         initBorder(type);
     }
@@ -36,22 +33,37 @@ public class CompositeUnitNodeFigure extends Figure implements UnitConstants {
         if(!(type == StructureType.adapter || type == StructureType.decorator))
             return;
 
-        getLayout().setGap(V_NODE_SPACE/2);
+        ((ToolbarLayout)getLayoutManager()).setGap(V_NODE_SPACE/2);
         containerPanel.getInsets().set(0, BORDER_WIDTH, 0, BORDER_WIDTH);
 
-        borderColor = type == StructureType.adapter ? ADAPTER_TITLE_COLOR : DECORATOR_TITLE_COLOR;
         header = new Text();
         header.getInsets().set(BORDER_WIDTH, 0, BORDER_WIDTH, 0);
-        header.setForeground(Color.white);
-        header.setBackground(borderColor);
+        header.setForegroundColor(ColorConstants.white);
         startPanel.add(header);
 
         footer =  new Text();
         footer.getInsets().set(0, 0, BORDER_WIDTH, 0);
         footer.setText(type.name());
-        footer.setForeground(borderColor);
+        footer.setForegroundColor(borderColor);
         endPanel.add(footer);
     }
+
+    private ToolbarLayout getPanelLayout(boolean vertical){
+        ToolbarLayout layout= new ToolbarLayout();
+        layout.setHorizontal(!vertical);
+        layout.setSpacing(V_NODE_SPACE);
+        layout.setStretchMinorAxis(false);
+        layout.setMinorAlignment(ToolbarLayout.ALIGN_CENTER);
+        return layout;
+    }
+
+    private Figure addPanel(Figure parent){
+        Figure panel = new Figure();
+        panel.setLayoutManager(getPanelLayout(false));
+        parent.add(panel);
+        return panel;
+    }
+
 
     public Figure getStartPanel() {
         return startPanel;
@@ -74,13 +86,20 @@ public class CompositeUnitNodeFigure extends Figure implements UnitConstants {
 
     @Override
     public void paintComponent(Graphics graphics) {
-        if(type == StructureType.adapter || type == StructureType.decorator) {
-            Color oldColor = graphics.getColor();
+        if(!(type == StructureType.adapter || type == StructureType.decorator))
+            return;
 
-            graphics.setColor(isSelected() ? Color.black : borderColor);
-            graphics.drawRect(getX(), getY(), getWidth(), getHeight());
+        Font oldFont = graphics.getFont();
+        Color oldColor = graphics.getColor();
 
-            graphics.setColor(oldColor);
-        }
+        borderColor = type == StructureType.adapter ? ADAPTER_TITLE_COLOR : DECORATOR_TITLE_COLOR;
+
+        graphics.setColor(borderColor);
+        graphics.fillRect(getX(), getY(), getWidth(), startPanel.getHeight());
+        graphics.setColor(ColorConstants.white);
+        graphics.drawRect(getX(), getY(), getWidth(), getHeight());
+
+        graphics.setFont(oldFont);
+        graphics.setColor(oldColor);
     }
 }

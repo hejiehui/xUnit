@@ -1,18 +1,21 @@
 package com.xrosstools.xunit.idea.editor.figures;
 
+import com.xrosstools.idea.gef.figures.ColorConstants;
+import com.xrosstools.idea.gef.figures.Figure;
+import com.xrosstools.idea.gef.figures.Label;
+import com.xrosstools.idea.gef.figures.ToolbarLayout;
 import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 
-import java.awt.*;
 
 public class TopLevelUnitFigure extends Figure implements UnitConstants{
     private Label label;
     private Figure figure;
 
     public TopLevelUnitFigure(String name, Figure figure) {
-        setLayout(new ToolbarLayout(false, ToolbarLayout.ALIGN_TOPLEFT, V_NODE_SPACE));
+        setLayoutManager(new ToolbarLayout(false, ToolbarLayout.ALIGN_TOPLEFT, TOP_LEVEL_SPACE));
 
         label = new Label();
-        label.setForeground(Color.blue);
+//        label.setForegroundColor(ColorConstants.blue);
         label.setText(name);
 
         add(label);

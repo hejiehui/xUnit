@@ -1,14 +1,12 @@
 package com.xrosstools.xunit.idea.editor.model;
 
-import com.xrosstools.xunit.idea.editor.parts.EditPart;
-import com.xrosstools.xunit.idea.editor.util.*;
+import com.xrosstools.idea.gef.parts.EditPart;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UnitNode extends PropertySource implements XunitConstants {
+public abstract class UnitNode extends PropertyAdapter implements XunitConstants, UnitConstants {
     private String name;
     private String description;
 
@@ -23,7 +21,6 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
     private UnitNodeProperties properties = new UnitNodeProperties();
 
     protected UnitNodeHelper helper;
-    protected EditPart part;
 
     public UnitNode(String name){
         this.name = name;
@@ -61,12 +58,6 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
         firePropertyChange(PROP_NODE);
     }
 
-    protected final IPropertyDescriptor getReferenceDescriptor(String propName) {
-        ReferencePropertyDescriptor descriptor = new ReferencePropertyDescriptor(propName, this);
-        descriptor.setCategory(getCategory(propName));
-        return descriptor;
-    }
-
     public IPropertyDescriptor[] getBasicPropertyDescriptors(){
         IPropertyDescriptor[] descriptors = new IPropertyDescriptor[]{
                 getDescriptor(PROP_NAME),
@@ -83,7 +74,7 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
     private IPropertyDescriptor[] getRefencePropertyDescriptors(){
         return new IPropertyDescriptor[]{
                 getDescriptor(PROP_MODULE),
-                getReferenceDescriptor(PROP_REFERENCE),
+                getDescriptor(PROP_REFERENCE, getReferenceValues()),
         };
     }
 
@@ -92,7 +83,7 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
     }
 
     public String[] getReferenceValues(){
-        return helper.getReferenceNames(this, part);
+        return helper.getReferenceNames(this);
     }
 
     public IPropertyDescriptor[] getPropertyDescriptors() {
@@ -100,13 +91,6 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
         IPropertyDescriptor[] p2 = getAdditionalPropertyDescriptors();
 
         return combine(p1, p2);
-    }
-
-    private IPropertyDescriptor[] combine(IPropertyDescriptor[] p1, IPropertyDescriptor[] p2) {
-        IPropertyDescriptor[] descriptors = new IPropertyDescriptor[p1.length + p2.length];
-        System.arraycopy(p1, 0, descriptors, 0, p1.length);
-        System.arraycopy(p2, 0, descriptors, p1.length, p2.length);
-        return descriptors;
     }
 
     public Object getPropertyValue(Object propName) {
@@ -160,10 +144,6 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
 
     public void setHelper(UnitNodeHelper helper){
         this.helper = helper;
-    }
-
-    public void setPart(EditPart part){
-        this.part = part;
     }
 
     public String getName() {
@@ -314,22 +294,21 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
         if(!outputs.contains(output))
             return;
         outputs.remove(output);
-        output.getTarget().removeInput(output);
         firePropertyChange(PROP_OUTPUTS);
+        output.getTarget().removeInput(output);
     }
 
     public void removeAllOutputs(){
         List<UnitNodeConnection> tempOutputs = new ArrayList<UnitNodeConnection>(outputs);
         for(UnitNodeConnection output:tempOutputs)
             removeOutput(output);
-        firePropertyChange(PROP_OUTPUTS);
     }
 
     public void removeInput(UnitNodeConnection input){
         if(!inputs.contains(input))
             return;
-        inputs.remove(input);
         input.getSource().removeOutput(input);
+        inputs.remove(input);
         firePropertyChange(PROP_INPUTS);
     }
 
@@ -337,7 +316,6 @@ public abstract class UnitNode extends PropertySource implements XunitConstants 
         List<UnitNodeConnection> tempInputs = new ArrayList<UnitNodeConnection>(inputs);
         for(UnitNodeConnection input:tempInputs)
             removeInput(input);
-        firePropertyChange(PROP_INPUTS);
     }
 
     public void removeAllConnections(){

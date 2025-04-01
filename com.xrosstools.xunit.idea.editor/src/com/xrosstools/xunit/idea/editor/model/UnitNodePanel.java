@@ -89,10 +89,6 @@ public class UnitNodePanel implements UnitNodeContainer {
         return fixedSize != size();
     }
 
-    public CompositeUnitNode getParent() {
-        return parent;
-    }
-
     public boolean add(int index, UnitNode unit) {
         if(!checkDropAllowed(index))
             return false;
@@ -106,14 +102,14 @@ public class UnitNodePanel implements UnitNodeContainer {
                 set(0, unit);
             else
                 return false;
+            return true;
         }
-        else {
-            unit.removeAllConnections();
+        else
             units.add(index, unit);
-            parent.unitAdded(index, unit);
-            firePropertyChange(PROP_NODE);
-        }
 
+        forceRefresh();
+        parent.unitAdded(index, unit);
+        firePropertyChange(PROP_NODE);
         return true;
     }
 
@@ -135,9 +131,6 @@ public class UnitNodePanel implements UnitNodeContainer {
     public void set(int index, UnitNode unit){
         if(!checkDropAllowed(index))
             return;
-
-        if(unit != null)
-            unit.removeAllConnections();
 
         units.set(index, unit);
         parent.unitSet(index, unit);
@@ -161,15 +154,33 @@ public class UnitNodePanel implements UnitNodeContainer {
     public void move(int newIndex, UnitNode unit){
         // For non fixed size or full fixed size
         if(!isFixedSize()){
-            // No connection change
+            int oldIndex = indexOf(unit);
+            if(newIndex == oldIndex || newIndex == oldIndex + 1)
+                return;
+
             units.remove(unit);
-            units.add(newIndex, unit);
+            units.add(newIndex > oldIndex ? newIndex - 1 : newIndex, unit);
         }else{
             // just switch. should only be the bi-branch case
             Collections.reverse(units);
         }
 
+        forceRefresh();
         parent.unitMoved(unit);
+        firePropertyChange(PROP_NODE);
+    }
+
+    private void forceRefresh(){
+        if(!isFixedSize())
+            return;
+
+        List<UnitNode> tmpUnits = new ArrayList<UnitNode>(units);
+        // Force
+        for(int i = 0; i < fixedSize; i++)
+            units.set(i, null);
+        firePropertyChange(PROP_NODE);
+        for(int i = 0; i < fixedSize; i++)
+            units.set(i, tmpUnits.get(i));
         firePropertyChange(PROP_NODE);
     }
 

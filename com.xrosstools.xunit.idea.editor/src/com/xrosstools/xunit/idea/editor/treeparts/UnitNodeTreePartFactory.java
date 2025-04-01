@@ -1,17 +1,13 @@
 package com.xrosstools.xunit.idea.editor.treeparts;
 
+import com.xrosstools.idea.gef.parts.AbstractTreeEditPart;
+import com.xrosstools.idea.gef.parts.EditPart;
+import com.xrosstools.idea.gef.parts.EditPartFactory;
 import com.xrosstools.xunit.idea.editor.model.*;
-import com.xrosstools.xunit.idea.editor.parts.EditContext;
 
-public class UnitNodeTreePartFactory {
-	private EditContext editContext;
-
-	public UnitNodeTreePartFactory(EditContext editContext) {
-		this.editContext = editContext;
-	}
-
-	public TreeEditPart createEditPart(TreeEditPart parent, Object model) {
-		TreeEditPart part = null;
+public class UnitNodeTreePartFactory implements EditPartFactory {
+	public EditPart createEditPart(EditPart parent, Object model) {
+		AbstractTreeEditPart part = null;
 		if(model == null)
 			return part;
 		
@@ -42,12 +38,7 @@ public class UnitNodeTreePartFactory {
 		else if (model instanceof UnitNode)
 			part = new UnitNodeTreePart();
 
-		part.setEditPartFactory(this);
 		part.setModel(model);
-		part.setParent(parent);
-		part.setContext(editContext);
-		editContext.add(part, model);
-
 
 		return part;
 	}

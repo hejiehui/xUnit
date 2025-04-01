@@ -5,8 +5,9 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.xrosstools.idea.gef.actions.Action;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.commands.ChangeMethodCommand;
-import com.xrosstools.xunit.idea.editor.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.BehaviorType;
 import com.xrosstools.xunit.idea.editor.model.PrimaryNode;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ChangeMethodAction extends WorkbenchPartAction implements UnitActionConstants {
+public class ChangeMethodAction extends Action implements UnitActionConstants {
     private UnitNode node;
     private String methodName;
     public ChangeMethodAction(UnitNode node, String methodName, boolean isPrivate) {

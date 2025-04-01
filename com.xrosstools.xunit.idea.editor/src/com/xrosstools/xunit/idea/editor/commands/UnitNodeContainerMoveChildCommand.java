@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor.commands;
 
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.*;
 
 public class UnitNodeContainerMoveChildCommand extends Command {
@@ -12,12 +13,9 @@ public class UnitNodeContainerMoveChildCommand extends Command {
 	public UnitNodeContainerMoveChildCommand(UnitNodeContainer parent, UnitNode unit, int index){
 		this.parent = parent;
 		this.unit = unit;
-		oldIndex = parent.indexOf(unit);
 		this.index = index;
-
-		if(oldIndex < index)
-			this.index-=1;
-
+		oldIndex = parent.indexOf(unit);
+		oldIndex = oldIndex > index ? oldIndex + 1 : oldIndex;
 	}
 	
 	public void execute() {

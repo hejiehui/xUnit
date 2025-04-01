@@ -1,8 +1,8 @@
 package com.xrosstools.xunit.idea.editor.model;
 
-import com.xrosstools.xunit.idea.editor.util.IPropertyDescriptor;
-import com.xrosstools.xunit.idea.editor.util.IPropertySource;
-import com.xrosstools.xunit.idea.editor.util.TextPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertyDescriptor;
+import com.xrosstools.idea.gef.util.IPropertySource;
+import com.xrosstools.idea.gef.util.TextPropertyDescriptor;
 
 import java.beans.PropertyChangeSupport;
 import java.util.*;

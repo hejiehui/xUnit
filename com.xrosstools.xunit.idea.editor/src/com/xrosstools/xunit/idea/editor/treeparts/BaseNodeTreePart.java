@@ -1,13 +1,19 @@
 package com.xrosstools.xunit.idea.editor.treeparts;
 
+import com.xrosstools.idea.gef.parts.AbstractTreeEditPart;
 import com.xrosstools.xunit.idea.editor.Activator;
+import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseNodeTreePart extends TreeEditPart {
+public class BaseNodeTreePart extends AbstractTreeEditPart implements UnitConstants {
+	public BaseNodeTreePart() {
+		super(null);
+	}
+
 	protected List<UnitNode> getList(){
 		return new ArrayList<>();
 	}

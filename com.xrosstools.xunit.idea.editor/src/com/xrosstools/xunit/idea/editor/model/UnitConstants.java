@@ -1,11 +1,14 @@
 package com.xrosstools.xunit.idea.editor.model;
 
+import com.xrosstools.idea.gef.figures.ColorConstants;
+
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.util.concurrent.TimeUnit;
 
 public interface UnitConstants extends XunitConstants {
-    Color ADAPTER_TITLE_COLOR = new Color( 0, 127, 0);
-    Color DECORATOR_TITLE_COLOR = Color.lightGray;
+    Color ADAPTER_TITLE_COLOR = ColorConstants.darkGreen;
+    Color DECORATOR_TITLE_COLOR = ColorConstants.lightGray;
 
     int TOP_LEVEL_SPACE = 10;
     int LINK_HANDLE = 30;

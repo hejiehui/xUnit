@@ -1,15 +1,17 @@
 package com.xrosstools.xunit.idea.editor.figures;
 
+import com.xrosstools.idea.gef.figures.*;
+import com.xrosstools.xunit.idea.editor.Activator;
 import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 
-import java.awt.*;
-
-public class UnitFigure extends Figure implements UnitConstants {
+public class UnitFigure extends RoundedRectangle implements UnitConstants {
     private Label icon;
     private Text label;
 
     public UnitFigure() {
-        setLayout(new ToolbarLayout(false, ToolbarLayout.ALIGN_TOPLEFT,0));
+        setArcHeight(10);
+        setArcWidth(10);
+        setLayoutManager(new ToolbarLayout(false, ToolbarLayout.ALIGN_TOPLEFT,0));
         icon = new Label();
         icon .getInsets().set(BORDER_WIDTH, BORDER_WIDTH, 0, BORDER_WIDTH);
         add(icon);
@@ -24,15 +26,7 @@ public class UnitFigure extends Figure implements UnitConstants {
     }
 
     public void setIcon(String icon) {
+        this.icon.setIcon(Activator.getIcon(icon));
         this.icon.setText(icon);
-        this.icon.setIcon(icon);
-    }
-
-    public Figure findFigureAt(int x, int y) {
-        return containsPoint(x, y) ? this : null;
-    }
-
-    public void paintComponent(Graphics g) {
-        g.drawRoundRect(getInnerX(), getInnerY(), getInnerWidth(),getInnerrHeight(), 10, 10);
     }
 }

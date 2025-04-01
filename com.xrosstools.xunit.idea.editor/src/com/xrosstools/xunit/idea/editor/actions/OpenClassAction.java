@@ -3,23 +3,19 @@ package com.xrosstools.xunit.idea.editor.actions;
 
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.OpenSourceUtil;
-import com.intellij.util.xml.ui.UndoHelper;
-import com.xrosstools.xunit.idea.editor.XrossUnitEditor;
-import com.xrosstools.xunit.idea.editor.commands.Command;
+import com.xrosstools.idea.gef.actions.Action;
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.model.XunitConstants;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
 
-public class OpenClassAction extends WorkbenchPartAction implements UnitActionConstants, XunitConstants {
+public class OpenClassAction extends Action implements UnitActionConstants, XunitConstants {
 	private Project project;
     private UnitNode node;
 	public OpenClassAction(Project project, BaseNodePart nodePart) {
@@ -55,14 +51,14 @@ public class OpenClassAction extends WorkbenchPartAction implements UnitActionCo
 	}
 
 	public static void openReference(Project project, VirtualFile module, String name) {
-        if (null == module){
-            Messages.showErrorDialog("Can not open " + module, "Error");
-        }else {
-            FileEditor[] editors = FileEditorManager.getInstance(project).openFile(module, true);
-            if(editors != null && editors.length == 1 && editors[0] instanceof XrossUnitEditor) {
-                XrossUnitEditor editor = (XrossUnitEditor) editors[0];
-                editor.select(name);
-            }
-        }
+//        if (null == module){
+//            Messages.showErrorDialog("Can not open " + module, "Error");
+//        }else {
+//            FileEditor[] editors = FileEditorManager.getInstance(project).openFile(module, true);
+//            if(editors != null && editors.length == 1 && editors[0] instanceof XrossUnitEditor) {
+//                XrossUnitEditor editor = (XrossUnitEditor) editors[0];
+//                editor.select(name);
+//            }
+//        }
 	}
 }

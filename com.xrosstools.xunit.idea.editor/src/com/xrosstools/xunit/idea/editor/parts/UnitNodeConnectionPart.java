@@ -1,35 +1,48 @@
 package com.xrosstools.xunit.idea.editor.parts;
 
-import com.xrosstools.xunit.idea.editor.figures.Connection;
-import com.xrosstools.xunit.idea.editor.figures.Figure;
+import com.xrosstools.idea.gef.figures.Connection;
+import com.xrosstools.idea.gef.figures.Label;
+import com.xrosstools.idea.gef.parts.AbstractConnectionEditPart;
+import com.xrosstools.idea.gef.parts.EditPolicy;
+import com.xrosstools.idea.gef.routers.MidpointLocator;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeConnection;
 
 import javax.swing.*;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-public class UnitNodeConnectionPart extends EditPart implements PropertyChangeListener{
-    private JLabel label;
+public class UnitNodeConnectionPart extends AbstractConnectionEditPart implements PropertyChangeListener{
+    private Label label;
     public Connection createFigure() {
-        Connection figure = new Connection();
-        UnitNodeConnection model = (UnitNodeConnection)getModel();
-        figure.setConnection(model);
-        figure.setPart(this);
-        return figure;
+        Connection conn = new Connection();
+        UnitNodeConnection nodeConn = (UnitNodeConnection)getModel();
+        if(nodeConn.getByPassed() != null)
+            conn.setRouter(new LoopUnitRouter(this));
+        else
+            conn.setRouter(new UnitRouter(this));
+
+        String text = nodeConn.getDisplayText();
+        label = new Label();
+        label.setOpaque(true);
+        conn.add(label, new UnitLocator(label));
+
+        if(text != null){
+            label.setText(text);
+        }
+        return conn;
     }
 
-//    public void setSelected(int value) {
-//        super.setSelected(value);
-//        if (value != EditPart.SELECTED_NONE)
-//            ((PolylineConnection) getFigure()).setLineWidth(2);
-//        else
-//            ((PolylineConnection) getFigure()).setLineWidth(1);
-//    }
-//
-//    public void propertyChange(PropertyChangeEvent event){
-//        UnitNodeConnection nodeConn = (UnitNodeConnection)getModel();
-//        if(nodeConn.getLabel() != null)
-//            label.setText(nodeConn.getLabel());
-//        else
-//            label.setText("");
-//    }
+    public void setSelected(boolean selected) {
+        super.setSelected(selected);
+        getFigure().setLineWidth(selected ? 2 : 1);
+    }
+
+    @Override
+    public void refreshVisuals() {
+        UnitNodeConnection nodeConn = (UnitNodeConnection)getModel();
+        if(nodeConn.getDisplayText() != null)
+            label.setText(nodeConn.getDisplayText());
+        else
+            label.setText("");
+    }
 }

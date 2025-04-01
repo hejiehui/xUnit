@@ -1,5 +1,6 @@
 package com.xrosstools.xunit.idea.editor.commands;
 
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitNodeProperties;
 
 public class RenamePropertyCommand extends Command {

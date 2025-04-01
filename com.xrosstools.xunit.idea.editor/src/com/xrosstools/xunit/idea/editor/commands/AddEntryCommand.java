@@ -1,6 +1,6 @@
 package com.xrosstools.xunit.idea.editor.commands;
 
-
+import com.xrosstools.idea.gef.commands.Command;
 import com.xrosstools.xunit.idea.editor.model.UnitConfigure;
 
 public class AddEntryCommand extends Command {
