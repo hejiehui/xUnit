@@ -68,9 +68,6 @@ public class GenerateFactoryAction extends AbstractCodeGenerator {
         replace(codeBuf, "!MODEL_PATH!", findResourcesPath(project, file));
 
         replace(codeBuf, "!XUNIT_DEFINITIONS!", generateBody());
-
-//        new CodeDisplayer("Generated helper", codeBuf.toString()).show();
-
         return codeBuf.toString();
     }
 

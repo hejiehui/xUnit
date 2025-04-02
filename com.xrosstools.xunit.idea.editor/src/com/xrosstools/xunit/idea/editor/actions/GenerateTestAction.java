@@ -79,8 +79,6 @@ public class GenerateTestAction extends AbstractCodeGenerator {
             codeBody = codeBody.substring(0, codeBody.length()-2);
 
         replace(classBuf, "!TEST_BODY!", codeBody);
-
-//        new CodeDisplayer("Generated test", classBuf.toString()).show();
         return classBuf.toString();
     }
 
