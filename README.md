@@ -16,6 +16,8 @@ Xross Unit尤其适合重构老系统。特别是跨语言的重构，通过Xros
 1. 模型归模型，代码归代码，查看代码仅需双击进入
 1. 可以在应用或构建单元层次上面配置参数
 
+[xUnit 4分钟从建模到运行演示](https://www.bilibili.com/video/BV19HmiYnEno)
+
 ![overview](https://oscimg.oschina.net/oscnet/up-8c5e650e33e28e7c4a2ec1d26c6feb088d8.png) 
 
 #### Idea版
