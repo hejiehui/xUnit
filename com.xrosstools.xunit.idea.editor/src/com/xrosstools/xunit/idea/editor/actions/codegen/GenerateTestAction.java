@@ -1,4 +1,4 @@
-package com.xrosstools.xunit.idea.editor.actions;
+package com.xrosstools.xunit.idea.editor.actions.codegen;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;

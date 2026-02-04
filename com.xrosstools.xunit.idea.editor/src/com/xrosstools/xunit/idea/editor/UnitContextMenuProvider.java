@@ -5,6 +5,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.xrosstools.idea.gef.ContextMenuProvider;
 import com.xrosstools.xunit.idea.editor.actions.*;
+import com.xrosstools.xunit.idea.editor.actions.codegen.UnitGeneratorAction;
 import com.xrosstools.xunit.idea.editor.model.*;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
 
@@ -38,6 +39,9 @@ public class UnitContextMenuProvider extends ContextMenuProvider implements Unit
 
     private void getNodeActions(Project project, JPopupMenu menu, BaseNodePart nodePart, UnitNodeDiagram diagram){
     	UnitNode node = (UnitNode)nodePart.getModel();
+
+		menu.add(createItem(new UnitGeneratorAction(project, node)));
+
     	menu.add(createItem(new AssignClassNameAction(project, nodePart)));
     	menu.add(createItem(new OpenClassAction(project, nodePart)));
 		addMethodAction(project, menu, node);

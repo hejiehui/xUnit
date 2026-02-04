@@ -1,6 +1,5 @@
 package com.xrosstools.xunit.idea.editor.model;
 
-import com.xrosstools.idea.gef.parts.EditPart;
 import com.xrosstools.idea.gef.util.IPropertyDescriptor;
 
 import java.util.ArrayList;
