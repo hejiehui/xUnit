@@ -1,9 +1,5 @@
 package com.xrosstools.xunit.editor.model;
 
-import com.xrosstools.xunit.BehaviorType;
-
-
-
 public abstract class IconNode extends PrimaryNode {
 	private String iconId;
 	private boolean showTooltip;

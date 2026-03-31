@@ -1,7 +1,5 @@
 package com.xrosstools.xunit.editor.model;
 
-import com.xrosstools.xunit.TaskType;
-
 public class ParallelBranchNode extends CompositeUnitNode {
     private DispatcherNode dispatcher;
     private UnitNodePanel unitsPanel = new UnitNodePanel(this);
@@ -22,13 +20,13 @@ public class ParallelBranchNode extends CompositeUnitNode {
     public ParallelBranchNode(DispatcherNode dispatcher, UnitNode unit){
         this(true);
         setDispatcher(dispatcher);
-        addUnit("Task 1", unit, TaskType.normal);
+        addUnit("Task 1", null, unit, TaskType.normal);
     }
     
     private void init(){
         setDispatcher(new DispatcherNode());
         for(int i = 0; i < 3; i++)
-            addUnit("Task " + (i + 1), createSampleNode("node " + (i + 1)), TaskType.normal);
+            addUnit("Task " + (i + 1), null, createSampleNode("node " + (i + 1)), TaskType.normal);
     }
     
     public String getDefaultImplName(){
@@ -44,9 +42,10 @@ public class ParallelBranchNode extends CompositeUnitNode {
         return dispatcher;
     }
     
-    public void addUnit(String key, UnitNode unit, TaskType type){
+    public void addUnit(String key, String label, UnitNode unit, TaskType type){
         unitsPanel.add(unit);
-        unit.setInputLabel(key);
+        unit.setInputKey(key);
+        unit.setInputLabel(label);
         unit.setTaskType(type);
     }
     
@@ -62,6 +61,8 @@ public class ParallelBranchNode extends CompositeUnitNode {
             }
             UnitNodeConnection.linkStart(dispatcher, node, key);
         }
+
+        checkLink();
         firePropertyChange(PROP_NODE);
     }
     
@@ -94,5 +95,7 @@ public class ParallelBranchNode extends CompositeUnitNode {
 
     public void unitRemoved(UnitNode unit) {
         unit.removeAllConnections();
+        checkLink();
+        firePropertyChange(PROP_NODE);
     }
 }

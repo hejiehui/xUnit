@@ -1,7 +1,5 @@
 package com.xrosstools.xunit.editor.model;
 
-import com.xrosstools.xunit.BehaviorType;
-
 public class ProcessorNode extends PrimaryNode {
 	public ProcessorNode(){
 		this(BehaviorType.processor.name());

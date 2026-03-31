@@ -1,7 +1,5 @@
 package com.xrosstools.xunit.editor.model;
 
-import com.xrosstools.xunit.BehaviorType;
-
 public class DecoratorNode extends CompositeUnitNode {
 	// To keep it simple, we don't provide customization for decorator adapter
 	// To provide your own decorator adapter implementation, use adapter instead

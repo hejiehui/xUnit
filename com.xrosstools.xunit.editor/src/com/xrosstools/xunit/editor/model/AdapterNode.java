@@ -1,8 +1,5 @@
 package com.xrosstools.xunit.editor.model;
 
-import com.xrosstools.xunit.BehaviorType;
-
-
 public class AdapterNode extends CompositeUnitNode {
 	private UnitNode startNode;
 	private UnitNodePanel unitsPanel = new UnitNodePanel(this, 1);

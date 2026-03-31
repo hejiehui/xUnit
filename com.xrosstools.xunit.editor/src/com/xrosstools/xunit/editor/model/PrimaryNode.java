@@ -1,8 +1,5 @@
 package com.xrosstools.xunit.editor.model;
 
-import com.xrosstools.xunit.BehaviorType;
-
-
 public abstract class PrimaryNode extends UnitNode {
 	public PrimaryNode(BehaviorType type){
 		this(type.name(), type);

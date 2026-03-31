@@ -39,30 +39,4 @@ public class UnitRouter extends AbstractRouter implements UnitConstants {
 		y = firstHalf ? end.y : start.y;
 		pl.addPoint(new Point(x, y));
 	}
-	
-	private void algo2(PointList pl, Point start, Point end){
-		if(start.x == end.x || start.y == end.y)
-			return;
-		
-		int x = (start.x + end.x)/2;
-		pl.addPoint(new Point(x, start.y));
-		pl.addPoint(new Point(x, end.y));
-	}
-
-	private void algo3(PointList pl, Point start, Point end){
-		if(start.x == end.x || start.y == end.y)
-			return;
-		
-		Point p1, p2;
-		boolean firstHalf = ((UnitNodeConnection)connPart.getModel()).isFirstHalf();
-		if(firstHalf){
-			p1 = new Point(start.x + LINK_HANDLE, start.y);
-			p2 = new Point(start.x + LINK_HANDLE, end.y);
-		}else{
-			p1 = new Point(end.x - LINK_HANDLE, start.y);
-			p2 = new Point(end.x - LINK_HANDLE, end.y);
-		}
-		pl.addPoint(p1);
-		pl.addPoint(p2);
-	}
 }

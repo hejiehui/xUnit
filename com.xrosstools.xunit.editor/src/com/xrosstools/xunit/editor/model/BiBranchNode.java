@@ -12,7 +12,7 @@ public class BiBranchNode extends CompositeUnitNode {
 			return;
 		setValidator(new ValidatorNode());
 		unitsPanel.add(createSampleNode("valid node"));
-		unitsPanel.add(createSampleNode("invalide node"));
+		unitsPanel.add(createSampleNode("invalid node"));
 	}
 	
 	public BiBranchNode(){

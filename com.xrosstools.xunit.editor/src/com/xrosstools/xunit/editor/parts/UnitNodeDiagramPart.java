@@ -59,6 +59,8 @@ public class UnitNodeDiagramPart extends AbstractGraphicalEditPart implements Pr
     	layout.setMinorAlignment(ToolbarLayout.ALIGN_TOPLEFT);
     	panel.setLayoutManager(layout);
     	panel.setBorder(new MarginBorder(50));
+    	//To make insertion point visible
+    	panel.setMinimumSize(new Dimension(200, 150));
 
     	figure.add(panel);
 		Point loc = new Point(100, 100);

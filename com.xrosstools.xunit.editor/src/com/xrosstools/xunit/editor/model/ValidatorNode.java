@@ -2,7 +2,6 @@ package com.xrosstools.xunit.editor.model;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.xrosstools.xunit.BehaviorType;
 import com.xrosstools.xunit.editor.Activator;
 
 public class ValidatorNode extends IconNode {

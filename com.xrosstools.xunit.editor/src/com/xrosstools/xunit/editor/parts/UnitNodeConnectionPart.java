@@ -6,7 +6,6 @@ import java.beans.PropertyChangeListener;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MidpointLocator;
 import org.eclipse.draw2d.PolygonDecoration;
 import org.eclipse.draw2d.PolylineConnection;
 import org.eclipse.gef.EditPart;
@@ -27,10 +26,10 @@ public class UnitNodeConnectionPart extends AbstractConnectionEditPart implement
         else
         	conn.setConnectionRouter(new UnitRouter(this));
         
-        String text = nodeConn.getLabel();
+        String text = nodeConn.getDisplayText();
         label = new Label();
         label.setOpaque(true);
-        conn.add(label, new MidpointLocator(conn, 0));
+        conn.add(label, new UnitLocator(conn, label));
         
         if(text != null){
         	label.setText(text);
@@ -40,8 +39,6 @@ public class UnitNodeConnectionPart extends AbstractConnectionEditPart implement
     }
     
     protected void createEditPolicies() {
-//        installEditPolicy(EditPolicy.COMPONENT_ROLE, new DecisionTreeNodeConnectionEditPolicy());
-//        installEditPolicy(EditPolicy.CONNECTION_ENDPOINTS_ROLE, new ConnectionEndpointEditPolicy());
     }
 
     public void setSelected(int value) {
@@ -66,8 +63,8 @@ public class UnitNodeConnectionPart extends AbstractConnectionEditPart implement
     
     public void propertyChange(PropertyChangeEvent event){
     	UnitNodeConnection nodeConn = (UnitNodeConnection)getModel();
-    	if(nodeConn.getLabel() != null)
-    		label.setText(nodeConn.getLabel());
+    	if(nodeConn.getDisplayText() != null)
+    		label.setText(nodeConn.getDisplayText());
     	else
     		label.setText("");
     }

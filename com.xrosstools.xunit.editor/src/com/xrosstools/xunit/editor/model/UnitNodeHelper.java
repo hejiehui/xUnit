@@ -23,7 +23,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.xrosstools.xunit.BehaviorType;
 import com.xrosstools.xunit.editor.io.UnitNodeDiagramFactory;
 
 public class UnitNodeHelper implements UnitConstants {
@@ -33,6 +32,12 @@ public class UnitNodeHelper implements UnitConstants {
 		this.diagram = diagram;
 	}
 	
+	public String getPath() {
+	    IContainer resourceRoot = getResourceRoot();
+        String rootStr = resourceRoot.getFullPath().addTrailingSeparator().toPortableString();
+        return diagram.getFilePath().getFullPath().toPortableString().replaceFirst(rootStr, "");
+	}
+
 	private IContainer getResourceRoot() {
         IContainer parent = diagram.getFilePath().getParent();
         IJavaProject i = JavaCore.create(diagram.getFilePath().getProject());

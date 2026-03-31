@@ -2,8 +2,8 @@ package com.xrosstools.xunit.editor.commands;
 
 import org.eclipse.gef.commands.Command;
 
-import com.xrosstools.xunit.BehaviorType;
 import com.xrosstools.xunit.editor.model.AdapterNode;
+import com.xrosstools.xunit.editor.model.BehaviorType;
 import com.xrosstools.xunit.editor.model.BiBranchNode;
 import com.xrosstools.xunit.editor.model.BranchNode;
 import com.xrosstools.xunit.editor.model.ChainNode;

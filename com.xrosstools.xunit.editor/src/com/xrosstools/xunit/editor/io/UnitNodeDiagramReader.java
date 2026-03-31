@@ -12,13 +12,12 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.xrosstools.xunit.BehaviorType;
-import com.xrosstools.xunit.CompletionMode;
-import com.xrosstools.xunit.TaskType;
 import com.xrosstools.xunit.editor.model.AdapterNode;
+import com.xrosstools.xunit.editor.model.BehaviorType;
 import com.xrosstools.xunit.editor.model.BiBranchNode;
 import com.xrosstools.xunit.editor.model.BranchNode;
 import com.xrosstools.xunit.editor.model.ChainNode;
+import com.xrosstools.xunit.editor.model.CompletionMode;
 import com.xrosstools.xunit.editor.model.CompositeUnitNode;
 import com.xrosstools.xunit.editor.model.ConverterNode;
 import com.xrosstools.xunit.editor.model.DecoratorNode;
@@ -28,6 +27,7 @@ import com.xrosstools.xunit.editor.model.ParallelBranchNode;
 import com.xrosstools.xunit.editor.model.PostValidationLoopNode;
 import com.xrosstools.xunit.editor.model.PreValidationLoopNode;
 import com.xrosstools.xunit.editor.model.ProcessorNode;
+import com.xrosstools.xunit.editor.model.TaskType;
 import com.xrosstools.xunit.editor.model.UnitConstants;
 import com.xrosstools.xunit.editor.model.UnitNode;
 import com.xrosstools.xunit.editor.model.UnitNodeDiagram;
@@ -249,7 +249,8 @@ public class UnitNodeDiagramReader implements UnitConstants{
 			Node found = children.item(i);
 			UnitNode branchUnit = createUnitNode(found);
 			String key = getAttribute(found, KEY);
-			branch.addUnit(key, branchUnit);
+			String label = getAttribute(found, LABEL);
+			branch.addUnit(key, label, branchUnit);
 		}
 
 		return branch;
@@ -267,8 +268,9 @@ public class UnitNodeDiagramReader implements UnitConstants{
             Node found = children.item(i);
             UnitNode branchUnit = createUnitNode(found);
             String key = getAttribute(found, KEY);
+            String label = getAttribute(found, LABEL);
             TaskType type = TaskType.valueOf(getAttribute(found, TASK_TYPE));
-            branch.addUnit(key, branchUnit, type);
+            branch.addUnit(key, label, branchUnit, type);
         }
 
         return branch;

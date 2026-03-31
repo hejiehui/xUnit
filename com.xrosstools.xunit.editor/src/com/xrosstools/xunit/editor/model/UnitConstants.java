@@ -6,17 +6,6 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.graphics.Color;
 
-import com.xrosstools.xunit.TaskType;
-import com.xrosstools.xunit.XunitConstants;
-import com.xrosstools.xunit.impl.BiBranchImpl;
-import com.xrosstools.xunit.impl.BranchImpl;
-import com.xrosstools.xunit.impl.ChainImpl;
-import com.xrosstools.xunit.impl.DefaultUnitImpl;
-import com.xrosstools.xunit.impl.ParallelBranchImpl;
-import com.xrosstools.xunit.impl.PostValidationLoopImpl;
-import com.xrosstools.xunit.impl.PreValidationLoopImpl;
-
-//TODO move common constants into runtime
 public interface UnitConstants extends XunitConstants {
 	Color ADAPTER_TITLE_COLOR = ColorConstants.darkGreen;
 	Color DECORATOR_TITLE_COLOR = ColorConstants.lightGray;
@@ -66,6 +55,7 @@ public interface UnitConstants extends XunitConstants {
 	String PROP_MODULE = "Reference Module";
 	String PROP_VALID_LABEL = "validLabel";
 	String PROP_INVALID_LABEL = "invalidLabel";
+	String PROP_KEY = "key";
 	String PROP_LABEL = "Label";
 	String PROP_DEFAULT_KEY = "Default key";
 	String PROP_TIMEOUT = "timeout";
@@ -74,13 +64,13 @@ public interface UnitConstants extends XunitConstants {
 	String PROP_TASK_ID = "Task Id";
 	String PROP_TASK_TYPE= "Task Type";
 	
-	String DEFAULT_PRIMARY_IMPL = DefaultUnitImpl.class.getName();
-	String DEFAULT_CHAIN_IMPL = ChainImpl.class.getName();
-	String DEFAULT_BI_BRANCH_IMPL = BiBranchImpl.class.getName();
-	String DEFAULT_BRANCH_IMPL = BranchImpl.class.getName();
-	String DEFAULT_PARALLEL_BRANCH_IMPL = ParallelBranchImpl.class.getName();
-	String DEFAULT_WHILE_LOOP_IMPL = PreValidationLoopImpl.class.getName();
-	String DEFAULT_DO_WHILE_LOOP_IMPL = PostValidationLoopImpl.class.getName();
+    String DEFAULT_PRIMARY_IMPL = "com.xrosstools.xunit.impl.DefaultUnitImpl";
+    String DEFAULT_CHAIN_IMPL = "com.xrosstools.xunit.impl.ChainImpl";
+    String DEFAULT_BI_BRANCH_IMPL = "com.xrosstools.xunit.impl.BiBranchImpl";
+    String DEFAULT_BRANCH_IMPL = "com.xrosstools.xunit.impl.BranchImpl";
+    String DEFAULT_PARALLEL_BRANCH_IMPL = "com.xrosstools.xunit.impl.ParallelBranchImpl";
+    String DEFAULT_WHILE_LOOP_IMPL = "com.xrosstools.xunit.impl.PreValidationLoopImpl";
+    String DEFAULT_DO_WHILE_LOOP_IMPL = "com.xrosstools.xunit.impl.PostValidationLoopImpl";
 	String DEFAULT_DECORATOR_IMPL = DEFAULT_PRIMARY_IMPL;
 	String DEFAULT_ADAPTER_IMPL = DEFAULT_PRIMARY_IMPL;
 }

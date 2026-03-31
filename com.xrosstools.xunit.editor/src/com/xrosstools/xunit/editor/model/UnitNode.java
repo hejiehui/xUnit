@@ -8,9 +8,6 @@ import java.util.List;
 import org.eclipse.gef.EditPart;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.xrosstools.xunit.BehaviorType;
-import com.xrosstools.xunit.TaskType;
-
 /**
  * TODO 1. if using reference, type should be set to referenced unit
  * @author jiehe
@@ -189,6 +186,23 @@ public abstract class UnitNode extends PropertyAdapter {
 		return className;
 	}
 
+    public String getClassNamePart() {
+        return getClassNamePart(className);
+    }
+
+    public String getMethodName() {
+        return getMethodName(className);
+    }
+
+    public static String getClassNamePart(String className) {
+        return className.contains(SEPARATOR) ? className.split(SEPARATOR)[0] : className;
+    }
+
+    public static String getMethodName(String className) {
+        return className.contains(SEPARATOR) ? className.split(SEPARATOR)[1] : DEFAULT_METHOD;
+    }
+
+
 	public boolean isValid(String value){
 		if(value == null)
 			return false;
@@ -226,6 +240,13 @@ public abstract class UnitNode extends PropertyAdapter {
 		firePropertyChange(PROP_NODE);
 	}
 
+    public void setMethodName(String methodName) {
+        if(DEFAULT_METHOD.equals(methodName) || methodName == null || methodName.trim().length() == 0)
+            setClassName(getClassName().split(SEPARATOR)[0]);
+        else
+            setClassName(getImplClassName() + SEPARATOR + methodName);
+    }
+
 	public String getReferenceName() {
 		return referenceName;
 	}
@@ -256,6 +277,17 @@ public abstract class UnitNode extends PropertyAdapter {
 		if(input != null)
 			input.setLabel(label);
 	}
+
+    public String getInputKey(){
+        UnitNodeConnection input = getInput();
+        return input == null? null : input.getKey();
+    }
+
+    public void setInputKey(String key){
+        UnitNodeConnection input = getInput();
+        if(input != null)
+            input.setKey(key);
+    }
 
     public TaskType getTaskType(){
         UnitNodeConnection input = getInput();

@@ -2,8 +2,6 @@ package com.xrosstools.xunit.editor.model;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.xrosstools.xunit.BehaviorType;
-
 
 /**
  * TODO The reference property should not be set 

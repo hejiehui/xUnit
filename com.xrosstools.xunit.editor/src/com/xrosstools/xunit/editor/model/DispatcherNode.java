@@ -4,8 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
-import com.xrosstools.xunit.BehaviorType;
-import com.xrosstools.xunit.CompletionMode;
 import com.xrosstools.xunit.editor.Activator;
 
 public class DispatcherNode extends IconNode {

@@ -5,8 +5,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import com.xrosstools.xunit.BehaviorType;
 import com.xrosstools.xunit.editor.model.AdapterNode;
+import com.xrosstools.xunit.editor.model.BehaviorType;
 import com.xrosstools.xunit.editor.model.BiBranchNode;
 import com.xrosstools.xunit.editor.model.BranchNode;
 import com.xrosstools.xunit.editor.model.ChainNode;
