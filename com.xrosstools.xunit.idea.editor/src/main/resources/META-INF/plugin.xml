@@ -1,0 +1,31 @@
+<idea-plugin>
+  <id>com.xrosstools.xunit.editor</id>
+  <name>Xross Unit Editor</name>
+  <vendor email="he_jiehui@163.com" url="https://www.xrosstools.com">Xross Tools</vendor>
+
+  <description><![CDATA[
+      The Xross Unit Editor is a low code tool designed for backend developers.<br>
+      It models backend logic with flowchart, and linking code to node of the chart.<br>
+      For more information, please visit <a href="https://github.com/hejiehui/xUnit">Xross Unit</a>
+    ]]></description>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.java</depends>
+  <depends>com.xrosstools.idea.gef</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <fileEditorProvider implementation="com.xrosstools.xunit.idea.editor.XrossUnitEditorProvider"/>
+    <fileTypeFactory implementation="com.xrosstools.xunit.idea.editor.XunitFileTypeFactory"/>
+    <psi.referenceContributor implementation="com.xrosstools.xunit.idea.editor.platform.XunitReferenceContributor" language="XML"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+    <action id="XrossTools.CreateXrossUnit" class="com.xrosstools.xunit.idea.editor.NewXrossUnitAction" text="Xross Unit Model" description="Create new Xross Unit Model file" icon="/icons/chain.png">
+      <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFromTemplate"/>
+    </action>
+  </actions>
+
+</idea-plugin>
