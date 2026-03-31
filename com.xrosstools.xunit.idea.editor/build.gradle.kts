@@ -33,6 +33,7 @@ dependencies {
 
 intellijPlatform {
     instrumentCode = true
+    buildSearchableOptions = false
 
     pluginConfiguration {
         //<idea-version since-build="193.6911.18"/>
