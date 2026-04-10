@@ -188,7 +188,7 @@ public abstract class UnitNode extends PropertyAdapter implements XunitConstants
         if(value == null)
             return false;
 
-        return value.trim().length() > 0;
+        return !value.trim().isEmpty();
     }
 
     public UnitNodeHelper getHelper() {
@@ -222,7 +222,7 @@ public abstract class UnitNode extends PropertyAdapter implements XunitConstants
     }
 
     public void setMethodName(String methodName) {
-        if(DEFAULT_METHOD.equals(methodName) || methodName == null || methodName.trim().length() == 0)
+        if(DEFAULT_METHOD.equals(methodName) || methodName == null || methodName.trim().isEmpty())
             setClassName(getClassName().split(SEPARATOR)[0]);
         else
             setClassName(getImplClassName() + SEPARATOR + methodName);
@@ -245,7 +245,7 @@ public abstract class UnitNode extends PropertyAdapter implements XunitConstants
     }
 
     public UnitNodeConnection getInput() {
-        return inputs.size() > 0 ? inputs.get(0) : null;
+        return !inputs.isEmpty() ? inputs.get(0) : null;
     }
 
     public String getInputLabel(){
@@ -286,7 +286,7 @@ public abstract class UnitNode extends PropertyAdapter implements XunitConstants
     }
 
     public UnitNodeConnection getOutput() {
-        return outputs.size() > 0 ? outputs.get(0) : null;
+        return !outputs.isEmpty() ? outputs.get(0) : null;
     }
 
     public void removeOutput(UnitNodeConnection output){

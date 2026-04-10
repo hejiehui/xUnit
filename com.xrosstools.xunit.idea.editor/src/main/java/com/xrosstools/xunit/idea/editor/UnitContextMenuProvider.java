@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.xrosstools.idea.gef.ContextMenuProvider;
+import com.xrosstools.idea.gef.actions.ImplementationUtil;
 import com.xrosstools.xunit.idea.editor.actions.*;
 import com.xrosstools.xunit.idea.editor.actions.codegen.UnitGeneratorAction;
 import com.xrosstools.xunit.idea.editor.model.*;
@@ -54,15 +55,14 @@ public class UnitContextMenuProvider extends ContextMenuProvider implements Unit
     }
 
 	private void addMethodAction(Project project, JPopupMenu menu, UnitNode node) {
-    	if(!ChangeMethodAction.isMethodSupported(node) || node.getClassName() == null || MSG_DEFAULT.equals(node.getClassName()))
+		if(!isMethodSupported(node) || node.getClassName() == null || MSG_DEFAULT.equals(node.getClassName()))
     		return;
 
-		JMenu methodMenu = new JMenu(REFERENCE_METHOD_MSG + node.getMethodName());
-		methodMenu.add(createItem(new ChangeMethodAction(node, XunitConstants.DEFAULT_METHOD, false)));
-		for(PsiMethod m: ChangeMethodAction.getMethods(project, node.getClassNamePart())) {
-			methodMenu .add(createItem(new ChangeMethodAction(node, m.getName(), m.hasModifierProperty(PsiModifier.PRIVATE))));
-		}
-		menu.add(methodMenu);
+		ImplementationUtil.buildReferenceMethodMenu(project, menu, node, UnitConstants.PROP_CLASS, node.getClassName());
+	}
+
+	private boolean isMethodSupported(UnitNode node) {
+		return node instanceof PrimaryNode && node.getType() != BehaviorType.dispatcher;
 	}
 
     private void addReferenceAction(Project project, JPopupMenu menu, UnitNode node, UnitNodeDiagram diagram) {
@@ -75,7 +75,7 @@ public class UnitContextMenuProvider extends ContextMenuProvider implements Unit
         moduleSub.add(createItem(new AssignModuleAction(project, node)));
         UnitNodeHelper helper = new UnitNodeHelper(diagram);
         List<String> moduleNames = helper.getWorkSpaceModuleNames();
-        if(moduleNames.size() > 0) {
+        if(!moduleNames.isEmpty()) {
             moduleSub.addSeparator();
             for(String name: moduleNames)
                 moduleSub.add(createItem(new SelectModuleAction(node, name)));
@@ -138,32 +138,10 @@ public class UnitContextMenuProvider extends ContextMenuProvider implements Unit
     	List<String> propKeys = new ArrayList<>();
     	UnitNodeProperties properties = node.getProperties();
 
-    	if(node.isValid(node.getImplClassName())){
-    		try {
-                GlobalSearchScope scope = GlobalSearchScope.allScope (project);
+    	if(node.isValid(node.getImplClassName())) {
+			propKeys = ImplementationUtil.getPropertyKeysInEDT(project, node.getImplClassName());
+		}
 
-                //VirtualFileManager.getInstance().findFileByUrl("jar://path/to/file.jar!/path/to/file.class");
-
-                PsiClass type = JavaPsiFacade.getInstance(project).findClass(node.getImplClassName(), scope);
-
-                if (null != type) {
-                    for (PsiField f : type.getFields()) {
-                        if (f.getNameIdentifier().getText().startsWith(PROPERTY_KEY_PREFIX) && f.getType().getPresentableText().equals("String")) {
-                            String text = f.getText();
-                            int start =text.indexOf('"');
-                            if(start <=0)
-                                continue;
-
-                            int end = text.indexOf('"', start + 1);
-                            propKeys.add(text.substring(start +1, end));
-                        }
-                    }
-                }
-			} catch (Throwable e) {
-				e.printStackTrace();
-			}
-    	}
-    	
     	for(String key: properties.getNames())
     	    if(!propKeys.contains(key))
     	        propKeys.add(key);

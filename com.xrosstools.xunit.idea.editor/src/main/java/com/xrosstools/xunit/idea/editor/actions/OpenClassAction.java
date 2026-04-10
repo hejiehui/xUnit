@@ -9,11 +9,16 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.OpenSourceUtil;
+import com.xrosstools.idea.gef.DiagramEditor;
 import com.xrosstools.idea.gef.actions.Action;
+import com.xrosstools.idea.gef.actions.ImplementationUtil;
 import com.xrosstools.idea.gef.commands.Command;
+import com.xrosstools.xunit.idea.editor.model.UnitConstants;
 import com.xrosstools.xunit.idea.editor.model.UnitNode;
 import com.xrosstools.xunit.idea.editor.model.XunitConstants;
 import com.xrosstools.xunit.idea.editor.parts.BaseNodePart;
+
+import java.awt.event.ActionEvent;
 
 public class OpenClassAction extends Action implements UnitActionConstants, XunitConstants {
 	private Project project;
@@ -24,10 +29,15 @@ public class OpenClassAction extends Action implements UnitActionConstants, Xuni
         node = (UnitNode)nodePart.getModel();
 	}
 
-	public Command createCommand() {
-		openClass(project, node.getImplClassName(), node.getMethodName());
-		return null;
-	}
+    public void actionPerformed(ActionEvent e) {
+        //Because unit node has "default" implementation, so we can not just getClassName()
+        openClass(project, node.getImplClassName(), node.getMethodName());
+    }
+
+    @Override
+    public Command createCommand() {
+        return null;
+    }
 
     public static void openClassOrReference(Project project, UnitNode node) {
 	    if(node.isValid(node.getClassName()))
@@ -37,28 +47,19 @@ public class OpenClassAction extends Action implements UnitActionConstants, Xuni
     }
 
 	public static void openClass(Project project, String classImpName, String methodName){
-		GlobalSearchScope scope = GlobalSearchScope.allScope (project);
-        PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(classImpName, scope);
-        if (null == psiClass) {
-            Messages.showErrorDialog("Can not open " + classImpName, "Error");
-        }else {
-            if(DEFAULT_METHOD.equals(methodName))
-                OpenSourceUtil.navigate(psiClass);
-            else {
-                OpenSourceUtil.navigate(psiClass.findMethodsByName(methodName, false)[0]);
-            }
-        }
+        String implementation = ImplementationUtil.replaceMethodName(classImpName, methodName);
+        ImplementationUtil.openImpl(project, implementation);
 	}
 
 	public static void openReference(Project project, VirtualFile module, String name) {
-//        if (null == module){
-//            Messages.showErrorDialog("Can not open " + module, "Error");
-//        }else {
-//            FileEditor[] editors = FileEditorManager.getInstance(project).openFile(module, true);
-//            if(editors != null && editors.length == 1 && editors[0] instanceof XrossUnitEditor) {
-//                XrossUnitEditor editor = (XrossUnitEditor) editors[0];
-//                editor.select(name);
-//            }
-//        }
+        if (null == module){
+            Messages.showErrorDialog("Can not open " + module, "Error");
+        }else {
+            FileEditor[] editors = FileEditorManager.getInstance(project).openFile(module, true);
+            if(editors.length == 1 && editors[0] instanceof DiagramEditor) {
+                DiagramEditor<?> editor = (DiagramEditor<?>) editors[0];
+                editor.selectTopLevelElement(UnitConstants.PROP_NAME, name);
+            }
+        }
 	}
 }

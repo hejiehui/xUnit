@@ -17,7 +17,12 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <fileEditorProvider implementation="com.xrosstools.xunit.idea.editor.XrossUnitEditorProvider"/>
-    <fileTypeFactory implementation="com.xrosstools.xunit.idea.editor.XunitFileTypeFactory"/>
+    <fileType name="Xross Unit Model File"
+              implementationClass="com.xrosstools.xunit.idea.editor.XunitFileType"
+              fieldName="INSTANCE"
+              extensions="xunit"
+              language="XML"
+              description="Xross Unit Model File"/>
     <psi.referenceContributor implementation="com.xrosstools.xunit.idea.editor.platform.XunitReferenceContributor" language="XML"/>
   </extensions>
 

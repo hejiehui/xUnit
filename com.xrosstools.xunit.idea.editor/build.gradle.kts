@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.xrosstools"
-version = "2.7.0"
+version = "2.7.1"
 
 val sandbox  : String by project
 
@@ -42,6 +42,7 @@ intellijPlatform {
         }
 
         changeNotes = """
+            <em>2.7.1</em> Fix "Slow operations are prohibited on EDT" warnings.<br>
             <em>2.7.0</em> Support generate behavior and structure unit code.<br>
             <em>2.6.2</em> Migrate to Xross IDEA GEF, optimize code generation and fix reordering bug for container.<br>
             <em>2.6.1</em> Fix editor can not be opened on MAC for IDEA 2024.<br>

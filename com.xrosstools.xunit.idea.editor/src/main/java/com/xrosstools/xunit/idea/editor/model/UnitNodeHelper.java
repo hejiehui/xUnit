@@ -119,8 +119,7 @@ public class UnitNodeHelper implements UnitConstants {
         if (moduleFile != null)
             return moduleFile;
 
-        VirtualFile moduleContentRoot = ProjectRootManager.getInstance(diagram.getProject()).getFileIndex().getSourceRootForFile(diagram.getFilePath());
-        return VfsUtilCore.findRelativeFile(moduleName, moduleContentRoot);
+        return findResourcesRoot().findFileByRelativePath(moduleName);
     }
 
     private UnitNodeDiagram load(String moduleName) throws Exception {
